@@ -1,0 +1,29 @@
+# Django
+*.log
+db.sqlite3
+/media
+/staticfiles
+
+# Env files
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.Python
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Migrations cache (optional - usually you KEEP migrations, so DO NOT ignore migrations folder)
