@@ -1,35 +1,44 @@
 {% extends "base.html" %}
 
-{% block title %}Home - CMS{% endblock %}
+{% block title %} Inkflow Inspiration {% endblock %}
 
 {% block content %}
 
-<div class="container mt-4">
-    <div class="row">
+<div class="mt-5 mb-5">
 
-        {% for article in latest_articles %}
+    <div class="row g-5">
 
-            <div class="col-lg-4 col-md-6 mb-4">
+        {% for article in latest_articles|slice:":4" %}
+
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
                 <div class="card h-100">
 
                     {% if article.featured_image %}
-                        <img src="{{ article.featured_image.url }}" class="card-img-top" />
+                        <div class="ratio ratio-4x3">
+                            <img src="{{ article.featured_image.url }}"
+                                 class="card-img-top object-fit-cover"
+                                 alt="{{ article.title }}">
+                        </div>
                     {% endif %}
 
-                    <div class="card-body">
-                        <h5 class="card-title">{{ article.title }}</h5>
+                    <div class="card-body p-2">
 
-                        <p class="text-muted mb-1">
+                        <h6 class="card-title mb-1">
+                            {{ article.title }}
+                        </h6>
+
+                        <p class="text-muted small mb-1">
                             By {{ article.author }}
                         </p>
 
-                        <p class="card-text">
-                            {{ article.excerpt|truncatechars:120 }}
+                        <p class="card-text small mb-2">
+                            {{ article.excerpt|truncatechars:90 }}
                         </p>
 
                         <a href="#" class="btn btn-primary btn-sm">
                             Read more
                         </a>
+
                     </div>
 
                 </div>
@@ -40,6 +49,15 @@
         {% endfor %}
 
     </div>
+
+    {% if latest_articles %}
+        <div class="text-center mt-4">
+            <a href="#" class="btn btn-outline-primary">
+                View All Articles
+            </a>
+        </div>
+    {% endif %}
+
 </div>
 
 {% endblock %}

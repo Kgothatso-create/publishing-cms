@@ -14,61 +14,30 @@
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 
-<body class="is-preload">
+<body class="is-preload d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
     {% include "layouts/navbar.html" %}
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid flex-grow-1">
+        <div class="row h-100">
 
             <!-- Sidebar -->
-            <aside class="col-lg-2 col-md-3 d-none d-md-block p-1 sidebar">
+            <aside class="col-lg-2 col-md-3 d-none d-md-block p-1 sidebar d-flex flex-column border-end">
                 {% include "layouts/sidebar.html" with oldest_articles=oldest_articles %}
             </aside>
 
             <!-- Main Content -->
             <main class="col-lg-10 col-md-9 ms-sm-auto px-4">
                 {% block hero %}
-                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="9000">
-
-                        <div class="carousel-inner">
-
-                            <div class="carousel-item active">
-                                <div style="height: 480px;">
-                                    <img class="d-block w-100 h-100 object-fit-cover"
-                                         src="{% static 'theme/images/inspiration.png' %}">
-                                </div>
-                            </div>
-
-                            <div class="carousel-item">
-                                <div style="height: 480px;">
-                                    <img class="d-block w-100 h-100 object-fit-cover"
-                                         src="{% static 'theme/images/demographics.png' %}">
-                                </div>
-                            </div>
-
-                            <div class="carousel-item">
-                                <div style="height: 480px;">
-                                    <img class="d-block w-100 h-100 object-fit-cover"
-                                         src="{% static 'theme/images/topics.png' %}">
-                                </div>
-                            </div>
-
+                    <div class="hero-banner mt-4 mb-5">
+                        <div style="height: 100%; width: 100%; overflow: hidden; border-radius: 8px;">
+                            <img
+                                src="{% static 'theme/images/Banner.png' %}"
+                                class="w-100 h-100 object-fit-cover"
+                                alt="Hero Banner"
+                            >
                         </div>
-
-                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev"
-                           style="left: -70px;">
-                            <span class="carousel-control-prev-icon" style="filter: invert(1);"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-
-                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next"
-                           style="right: -70px;">
-                            <span class="carousel-control-next-icon" ></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-
                     </div>
                 {% endblock %}
                 {% block content %}{% endblock %}

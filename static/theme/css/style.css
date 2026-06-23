@@ -126,7 +126,6 @@ a:hover {
    ========================= */
 
 #sidebar {
-    min-height: calc(100vh - 60px);
     background: var(--inkflow-sidebar);
     border-right: 1px solid var(--inkflow-border);
     padding: 1.5rem 1.25rem;

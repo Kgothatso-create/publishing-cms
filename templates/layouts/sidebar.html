@@ -1,4 +1,4 @@
-<section id="sidebar">
+<section id="sidebar" class="p-2 d-flex flex-column h-100">
 
     <section id="intro">
         <p>
@@ -8,12 +8,12 @@
 
     <section>
         <header class="major">
-            <h2>Recent Articles</h2>
+            <h2>Previous Articles</h2>
         </header>
 
         <div class="mini-posts">
 
-            {% for article in oldest_articles %}
+            {% for article in oldest_articles|slice:":6" %}
                 <article class="mini-post">
                     {% if article.featured_image %}
                         <img src="{{ article.featured_image.url }}" class="img-fluid mb-2" />
@@ -21,7 +21,7 @@
 
                     <header>
                         <h3>{{ article.title }}</h3>
-                        <p class="mb-0">By {{ article.author }}</p>
+                        <p class="mb-0">By: {{ article.author }}</p>
                     </header>
                 </article>
             {% empty %}
