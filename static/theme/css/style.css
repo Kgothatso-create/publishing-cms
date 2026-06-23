@@ -1,0 +1,228 @@
+/* =========================
+   Inkflow Publisher Theme
+   ========================= */
+
+:root {
+    --inkflow-bg: #f8f7f4;
+    --inkflow-card: #ffffff;
+    --inkflow-text: #1c1c1c;
+    --inkflow-muted: #6b6b6b;
+    --inkflow-accent: #2c2c2c;
+    --inkflow-border: #e6e3dd;
+    --inkflow-highlight: #b08d57;
+    --inkflow-sidebar: #eef1f4;
+    --inkflow-content-bg: #fafafa;
+}
+
+/* =========================
+   Global
+   ========================= */
+
+a {
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/* =========================
+   Navbar
+   ========================= */
+
+.navbar {
+    background-color: var(--inkflow-bg) !important;
+    border-bottom: 1px solid var(--inkflow-border);
+    padding: 0.9rem 1.5rem;
+}
+
+/* =========================
+   Logo (FIXED + SAFE AGAINST BOOTSTRAP)
+   ========================= */
+
+.navbar-brand {
+    font-family: "Playfair Display", serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    color: var(--inkflow-accent) !important;
+    margin-right: 2rem;
+
+    position: relative;
+}
+
+/* Override any Bootstrap color utilities */
+.navbar-brand.text-primary,
+.navbar-brand {
+    color: var(--inkflow-accent) !important;
+}
+
+/* Underline accent */
+.navbar-brand::after {
+    content: "";
+    display: block;
+    width: 40%;
+    height: 2px;
+    margin-top: 4px;
+    background-color: var(--inkflow-highlight);
+    transition: width 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: var(--inkflow-highlight) !important;
+}
+
+.navbar-brand:hover::after {
+    width: 100%;
+}
+
+/* =========================
+   Navbar Links
+   ========================= */
+
+.navbar-nav .nav-link {
+    color: var(--inkflow-muted) !important;
+    font-weight: 500;
+    margin-right: 0.5rem;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--inkflow-accent) !important;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+}
+
+/* =========================
+   Search
+   ========================= */
+
+.navbar .form-control {
+    border-radius: 20px;
+    border: 1px solid var(--inkflow-border);
+    background-color: #fff;
+    font-size: 0.9rem;
+}
+
+.navbar .form-control:focus {
+    border-color: var(--inkflow-highlight);
+    box-shadow: 0 0 0 0.15rem rgba(176, 141, 87, 0.15);
+}
+
+.navbar .btn-outline-primary {
+    border-radius: 20px;
+    border-color: var(--inkflow-accent);
+    color: var(--inkflow-accent);
+}
+
+.navbar .btn-outline-primary:hover {
+    background-color: var(--inkflow-accent);
+    color: #fff;
+}
+
+/* =========================
+   Sidebar
+   ========================= */
+
+#sidebar {
+    min-height: calc(100vh - 60px);
+    background: var(--inkflow-sidebar);
+    border-right: 1px solid var(--inkflow-border);
+    padding: 1.5rem 1.25rem;
+    font-family: "Inter", sans-serif;
+}
+
+/* Intro */
+#intro h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 1.8rem;
+    color: var(--inkflow-accent);
+}
+
+#intro p {
+    color: var(--inkflow-muted);
+    font-size: 0.9rem;
+}
+
+/* Sidebar headings */
+#sidebar .major h2 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--inkflow-muted);
+    margin: 1.5rem 0 0.75rem;
+}
+
+/* Sidebar links */
+#sidebar .links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar .links a {
+    display: block;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    color: var(--inkflow-accent);
+}
+
+#sidebar .links a:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    padding-left: 0.9rem;
+}
+
+/* =========================
+   Mini Posts
+   ========================= */
+
+.mini-posts {
+    margin-top: 0.5rem;
+}
+
+.mini-post {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--inkflow-border);
+}
+
+.mini-post:last-child {
+    border-bottom: none;
+}
+
+.mini-post h3 {
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.mini-post h3 a {
+    color: var(--inkflow-accent);
+    text-decoration: none;
+}
+
+.mini-post h3 a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.mini-post .published {
+    font-size: 0.75rem;
+    color: var(--inkflow-muted);
+}
+
+/* =========================
+   Content Area
+   ========================= */
+
+main {
+    background-color: var(--inkflow-content-bg);
+    min-height: calc(100vh - 60px);
+}
+
+/* =========================
+   Sidebar Footer spacing
+   ========================= */
+
+#sidebar footer {
+    margin-top: 2rem;
+}

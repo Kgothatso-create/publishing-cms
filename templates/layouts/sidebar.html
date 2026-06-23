@@ -1,0 +1,36 @@
+<section id="sidebar">
+
+    <section id="intro">
+        <p>
+            Discover ideas, stories, and insights shared by real authors.
+        </p>
+    </section>
+
+    <section>
+        <header class="major">
+            <h2>Recent Articles</h2>
+        </header>
+
+        <div class="mini-posts">
+
+            {% for article in oldest_articles %}
+                <article class="mini-post">
+                    {% if article.featured_image %}
+                        <img src="{{ article.featured_image.url }}" class="img-fluid mb-2" />
+                    {% endif %}
+
+                    <header>
+                        <h3>{{ article.title }}</h3>
+                        <p class="mb-0">By {{ article.author }}</p>
+                    </header>
+                </article>
+            {% empty %}
+                <p>No articles yet.</p>
+            {% endfor %}
+
+        </div>
+    </section>
+
+    {% include "layouts/footer.html" %}
+
+</section>
