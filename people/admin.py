@@ -2,6 +2,54 @@ from django.contrib import admin
 from .models import PersonProfile, PersonIdentityDocument
 
 
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import User
+
+
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+
+    # -------------------------
+    # LIST VIEW
+    # -------------------------
+    list_display = (
+        "email",
+        "first_name",
+        "last_name",
+        "is_staff",
+        "onboarding_status",
+    )
+
+    # -------------------------
+    # EDIT USER (existing user)
+    # -------------------------
+    fieldsets = UserAdmin.fieldsets + (
+        ("Onboarding", {
+            "fields": ("onboarding_status",)
+        }),
+    )
+
+    # -------------------------
+    # CREATE USER (IMPORTANT)
+    # -------------------------
+    add_fieldsets = (
+        (None, {
+            "classes": ("wide",),
+            "fields": (
+                "email",
+                "first_name",
+                "last_name",
+                "password1",
+                "password2",
+                "onboarding_status",
+            ),
+        }),
+    )
+
+    search_fields = ("username", "email", "first_name", "last_name")
+
+
 @admin.register(PersonProfile)
 class PersonProfileAdmin(admin.ModelAdmin):
     list_display = (
