@@ -225,3 +225,58 @@ main {
 #sidebar footer {
     margin-top: 2rem;
 }
+
+/* =========================
+   articles
+   ========================= */
+
+.article-content {
+    max-width: 850px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    line-height: 1.9;
+}
+
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.article-content p {
+    margin-bottom: 1.25rem;
+}
+
+.article-header {
+    max-width: 900px;
+    margin: 0 auto 2rem;
+}
+
+.article-content {
+    max-width: 850px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.article-excerpt {
+    max-width: 850px;
+    margin: 0 auto 2rem;
+}
+
+.author-box {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.article-content img {
+    max-width: 100%;
+    height: auto;
+}

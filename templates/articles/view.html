@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block hero %}{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Featured Image -->
+    {% if article.featured_image %}
+        <div class="mb-5">
+            <img
+                src="{{ article.featured_image.url }}"
+                alt="{{ article.title }}"
+                class="img-fluid rounded w-100 shadow-sm">
+        </div>
+    {% endif %}
+
+    <!-- Article Header -->
+    <header class="text-center mb-5">
+
+        <span class="badge badge-primary px-3 py-2 mb-3">
+            {{ article.category.name }}
+        </span>
+
+        <h1 class="display-4 font-weight-bold">
+            {{ article.title }}
+        </h1>
+
+        {% if article.subheading %}
+            <p class="lead text-muted mt-3">
+                {{ article.subheading }}
+            </p>
+        {% endif %}
+
+        <div class="text-muted mt-4">
+            By
+            <strong>
+                {{ article.author.get_full_name|default:article.author.username }}
+            </strong>
+
+            {% if article.published_at %}
+                &nbsp;•&nbsp;
+                {{ article.published_at|date:"F d, Y" }}
+            {% endif %}
+        </div>
+
+    </header>
+
+    <!-- Excerpt -->
+    {% if article.excerpt %}
+        <section class="article-excerpt mb-5">
+            <div class="alert alert-light border">
+                <strong>Summary</strong>
+                <hr>
+                <p class="mb-0">
+                    {{ article.excerpt }}
+                </p>
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- Article Body -->
+    <section class="article-content mb-5">
+        {{ article.body|safe }}
+    </section>
+
+    <!-- Author Section -->
+    <section class="author-box mt-5 mb-5">
+
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    About the Author
+                </h4>
+
+                <p class="card-text mb-0">
+                    {{ article.author.get_full_name|default:article.author.username }}
+                </p>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Related Articles -->
+    {% if related_articles %}
+        <section class="related-articles mt-5">
+
+            <h3 class="mb-4">
+                More From {{ article.category.name }}
+            </h3>
+
+            <div class="row">
+
+                {% for related in related_articles %}
+
+                    <div class="col-md-4 mb-4">
+
+                        <div class="card h-100 shadow-sm">
+
+                            {% if related.featured_image %}
+                                <img
+                                    src="{{ related.featured_image.url }}"
+                                    class="card-img-top"
+                                    alt="{{ related.title }}">
+                            {% endif %}
+
+                            <div class="card-body d-flex flex-column">
+
+                                <h5 class="card-title">
+                                    <a href="{% url 'view article' related.slug %}">
+                                        {{ related.title }}
+                                    </a>
+                                </h5>
+
+                                <p class="card-text">
+                                    {{ related.excerpt|truncatewords:20 }}
+                                </p>
+
+                                <div class="mt-auto">
+                                    <a href="{% url 'view article' related.slug %}"
+                                       class="btn btn-outline-primary btn-sm">
+                                        Read More
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+    {% endif %}
+
+</div>
+
+{% endblock %}

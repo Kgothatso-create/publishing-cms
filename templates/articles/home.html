@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %} Inkflow Inspiration {% endblock %}
+
+{% block content %}
+
+<div class="mt-5 mb-5">
+
+    <div class="row g-5">
+
+        {% for article in latest_articles|slice:":4" %}
+
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                <div class="card h-100">
+
+                    {% if article.featured_image %}
+                        <div class="ratio ratio-4x3">
+                            <img src="{{ article.featured_image.url }}"
+                                 class="card-img-top object-fit-cover"
+                                 alt="{{ article.title }}">
+                        </div>
+                    {% endif %}
+
+                    <div class="card-body p-2">
+
+                        <h6 class="card-title mb-1">
+                            {{ article.title }}
+                        </h6>
+
+                        <p class="text-muted small mb-1">
+                            By {{ article.author }}
+                        </p>
+
+                        <p class="card-text small mb-2">
+                            {{ article.excerpt|truncatechars:90 }}
+                        </p>
+
+                        <a href="{% url 'view article' article.slug %}">
+                            Read Article
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+        {% empty %}
+            <p>No articles available.</p>
+        {% endfor %}
+
+    </div>
+
+    {% if latest_articles %}
+        <div class="text-center mt-4">
+            <a href="{% url 'article list' %}" class="btn btn-outline-primary">
+                View All Articles
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

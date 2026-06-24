@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-3 border-bottom">
 
   <!-- Brand -->
-  <a class="navbar-brand fw-bold text-primary" href="#">
+  <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">
     Inkflow Inspiration
   </a>
 
@@ -22,7 +22,7 @@
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'article list' %}">
           Articles
         </a>
       </li>
