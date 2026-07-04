@@ -64,6 +64,9 @@
                                             {{ related.title }}
                                         </a>
                                     </h1>
+                                    <h5 class="text-muted fw-normal mb-1">
+                                        By {{ article.author }}
+                                    </h5>
                                     <p class="card-text text-muted flex-grow-1 mb-3">
                                         {{ related.excerpt|truncatewords:18 }}
                                     </p>
