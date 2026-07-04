@@ -39,18 +39,40 @@
         </a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'register view' %}">
-          Register
-        </a>
-      </li>
+      {% if user.is_authenticated %}
+      <!-- WRITE ARTICLE -->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'article-create' %}">
+                Write Article
+            </a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'login' %}">
-          Login
-        </a>
-      </li>
+        <!-- PROFILE -->
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                Profile
+            </a>
+        </li>
 
+        <!-- LOGOUT -->
+        <li class="nav-item">
+            <a class="nav-link text-danger" href="#">
+                Logout
+            </a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'register view' %}">
+            Register
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">
+            Login
+          </a>
+        </li>
+      {% endif %}
     </ul>
 
     <!-- Right side search -->

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block hero %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>
+            {% if object %}
+                Edit Article
+            {% else %}
+                Create Article
+            {% endif %}
+        </h2>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                Please fix the errors below.
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="mb-3">
+                    {{ form.title.label_tag }}
+                    {{ form.title }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.slug.label_tag }}
+                    {{ form.slug }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.subheading.label_tag }}
+                    {{ form.subheading }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.excerpt.label_tag }}
+                    {{ form.excerpt }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.body.label_tag }}
+                    {{ form.body }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.featured_image.label_tag }}
+                    {{ form.featured_image }}
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="mb-3">
+                    {{ form.category.label_tag }}
+                    {{ form.category }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.status.label_tag }}
+                    {{ form.status }}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.is_featured }}
+                    {{ form.is_featured.label_tag }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.meta_title.label_tag }}
+                    {{ form.meta_title }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.meta_description.label_tag }}
+                    {{ form.meta_description }}
+                </div>
+
+            </div>
+        </div>
+
+        <button type="submit" class="btn" style="background-color: #bf9b30; color: #000;">
+            Save Article
+        </button>
+
+    </form>
+</div>
+{% endblock %}

@@ -1,5 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+
+from articles.forms import ArticleForm
 from articles.models import Article
 
 
@@ -61,3 +64,42 @@ def article_list(request):
     }
 
     return render(request, "articles/list.html", context)
+
+
+@login_required
+def article_create(request):
+    if request.method == "POST":
+        form = ArticleForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user
+            article.save()
+
+            return redirect("article list")
+    else:
+        form = ArticleForm()
+
+    return render(request, "articles/article_form.html", {
+        "form": form,
+        "object": None
+    })
+
+
+@login_required
+def article_edit(request, slug):
+    article = get_object_or_404(Article, slug=slug, author=request.user)
+
+    if request.method == "POST":
+        form = ArticleForm(request.POST, request.FILES, instance=article)
+
+        if form.is_valid():
+            form.save()
+            return redirect("article list")
+    else:
+        form = ArticleForm(instance=article)
+
+    return render(request, "articles/article_form.html", {
+        "form": form,
+        "object": article
+    })
