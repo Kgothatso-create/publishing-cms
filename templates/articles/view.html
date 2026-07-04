@@ -4,92 +4,82 @@
 {% block hero %}{% endblock %}
 
 {% block content %}
-
-<div class="container mt-2 mb-5">
-
-    <!-- Featured Image (Responsive Hero using Bootstrap ratio) -->
-    {% if article.featured_image %}
-        <div class="mb-1">
-            <div class="ratio ratio-21x9 rounded overflow-hidden shadow-sm">
-                <img
-                    src="{{ article.featured_image.url }}"
-                    alt="{{ article.title }}"
-                    class="w-100 h-100 object-fit-cover">
+    <div class="container mt-2 mb-5">
+        <!-- Featured Image (Responsive Hero using Bootstrap ratio) -->
+        {% if article.featured_image %}
+            <div class="mb-1">
+                <div class="ratio ratio-21x9 rounded overflow-hidden shadow-sm">
+                    <img
+                        src="{{ article.featured_image.url }}"
+                        alt="{{ article.title }}"
+                        class="w-100 h-100 object-fit-cover">
+                </div>
             </div>
-        </div>
-    {% endif %}
-
-    <!-- Article Header -->
-    <header class="text-center mb-4">
-        <h1 class="display-4 font-weight-bold article-title">
-            {{ article.title }}
-        </h1>
-
-        {% if article.subheading %}
-            <p class="lead text-muted mt-3">
-                {{ article.subheading }}
-            </p>
         {% endif %}
-
-        <div class="text-muted mt-3">
-            By
-            <strong>
-                {{ article.author.get_full_name|default:article.author.username }}
-            </strong>
-
-            {% if article.published_at %}
-                &nbsp;•&nbsp;
-                {{ article.published_at|date:"F d, Y" }}
+        <!-- Article Header -->
+        <header class="text-center mb-4">
+            <h1 class="display-4 font-weight-bold article-title">
+                {{ article.title }}
+            </h1>
+            {% if article.subheading %}
+                <p class="lead text-muted mt-1">
+                    {{ article.subheading }}
+                </p>
             {% endif %}
-        </div>
-
-    </header>
-
-    <!-- Article Body -->
-    <section class="mb-5">
-        {{ article.body|safe }}
-    </section>
-
-    <!-- Related Articles (UNCHANGED) -->
-    {% if related_articles %}
-        <section class="related-articles mt-5">
-            <h3 class="mb-4 article-title">
-                More From {{ article.category.name }}
-            </h3>
-            <div class="row g-4">
-                {% for related in related_articles %}
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 shadow-sm">
-                            {% if related.featured_image %}
-                                <img src="{{ related.featured_image.url }}"
-                                     class="card-img-top object-fit-cover p-2"
-                                     style="height: 170px;"
-                                     alt="{{ related.title }}">
-                            {% endif %}
-                            <div class="card-body p-3 d-flex flex-column">
-                                <h1 class="card-title fs-5 mb-2">
-                                    <a href="{% url 'view article' related.slug %}"
-                                       class="text-dark text-decoration-none">
-                                        {{ related.title }}
-                                    </a>
-                                </h1>
-                                <p class="card-text text-muted flex-grow-1 mb-3">
-                                    {{ related.excerpt|truncatewords:18 }}
-                                </p>
-                                <div class="mt-auto">
-                                    <a href="{% url 'view article' related.slug %}"
-                                       class="btn btn-sm align-self-start"
-                                       style="background-color:#bf9b30; color:#000;">
-                                        Read Article
-                                    </a>
+            <div class="text-muted mt-1">
+                By
+                <strong>
+                    {{ article.author.get_full_name|default:article.author.username }}
+                </strong>
+                {% if article.published_at %}
+                    &nbsp;•&nbsp;
+                    {{ article.published_at|date:"F d, Y" }}
+                {% endif %}
+            </div>
+        </header>
+        <!-- Article Body -->
+        <section class="mb-5">
+            {{ article.body|safe }}
+        </section>
+        <!-- Related Articles (UNCHANGED) -->
+        {% if related_articles %}
+            <section class="related-articles mt-5">
+                <h3 class="mb-4 article-title">
+                    More From {{ article.category.name }}
+                </h3>
+                <div class="row g-4">
+                    {% for related in related_articles %}
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card h-100 shadow-sm">
+                                {% if related.featured_image %}
+                                    <img src="{{ related.featured_image.url }}"
+                                         class="card-img-top object-fit-cover p-2"
+                                         style="height: 170px;"
+                                         alt="{{ related.title }}">
+                                {% endif %}
+                                <div class="card-body p-3 d-flex flex-column">
+                                    <h1 class="card-title fs-5 mb-2">
+                                        <a href="{% url 'view article' related.slug %}"
+                                           class="text-dark text-decoration-none">
+                                            {{ related.title }}
+                                        </a>
+                                    </h1>
+                                    <p class="card-text text-muted flex-grow-1 mb-3">
+                                        {{ related.excerpt|truncatewords:18 }}
+                                    </p>
+                                    <div class="mt-auto">
+                                        <a href="{% url 'view article' related.slug %}"
+                                           class="btn btn-sm align-self-start"
+                                           style="background-color:#bf9b30; color:#000;">
+                                            Read Article
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </section>
-    {% endif %}
-</div>
-
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </div>
 {% endblock %}
