@@ -14,6 +14,13 @@
     --inkflow-content-bg: #fafafa;
 }
 
+.article-title {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: #bf9b30;
+    text-underline-offset: 8px;
+}
+
 /* =========================
    Global
    ========================= */

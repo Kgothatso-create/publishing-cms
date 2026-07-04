@@ -5,26 +5,23 @@
 
 {% block content %}
 
-<div class="container mb-5">
+<div class="container mt-2 mb-5">
 
-    <!-- Featured Image -->
+    <!-- Featured Image (Responsive Hero using Bootstrap ratio) -->
     {% if article.featured_image %}
-        <div class="mb-5">
-            <img
-                src="{{ article.featured_image.url }}"
-                alt="{{ article.title }}"
-                class="img-fluid rounded w-100 shadow-sm">
+        <div class="mb-1">
+            <div class="ratio ratio-21x9 rounded overflow-hidden shadow-sm">
+                <img
+                    src="{{ article.featured_image.url }}"
+                    alt="{{ article.title }}"
+                    class="w-100 h-100 object-fit-cover">
+            </div>
         </div>
     {% endif %}
 
     <!-- Article Header -->
-    <header class="text-center mb-5">
-
-        <span class="badge badge-primary px-3 py-2 mb-3">
-            {{ article.category.name }}
-        </span>
-
-        <h1 class="display-4 font-weight-bold">
+    <header class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold article-title">
             {{ article.title }}
         </h1>
 
@@ -34,7 +31,7 @@
             </p>
         {% endif %}
 
-        <div class="text-muted mt-4">
+        <div class="text-muted mt-3">
             By
             <strong>
                 {{ article.author.get_full_name|default:article.author.username }}
@@ -48,47 +45,15 @@
 
     </header>
 
-    <!-- Excerpt -->
-    {% if article.excerpt %}
-        <section class="article-excerpt mb-5">
-            <div class="alert alert-light border">
-                <strong>Summary</strong>
-                <hr>
-                <p class="mb-0">
-                    {{ article.excerpt }}
-                </p>
-            </div>
-        </section>
-    {% endif %}
-
     <!-- Article Body -->
-    <section class="article-content mb-5">
+    <section class="mb-5">
         {{ article.body|safe }}
     </section>
 
-    <!-- Author Section -->
-    <section class="author-box mt-5 mb-5">
-
-        <div class="card">
-            <div class="card-body">
-
-                <h4 class="card-title">
-                    About the Author
-                </h4>
-
-                <p class="card-text mb-0">
-                    {{ article.author.get_full_name|default:article.author.username }}
-                </p>
-
-            </div>
-        </div>
-
-    </section>
-
-    <!-- Related Articles -->
+    <!-- Related Articles (UNCHANGED) -->
     {% if related_articles %}
         <section class="related-articles mt-5">
-            <h3 class="mb-4">
+            <h3 class="mb-4 article-title">
                 More From {{ article.category.name }}
             </h3>
             <div class="row g-4">
