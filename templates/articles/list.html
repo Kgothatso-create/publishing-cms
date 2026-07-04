@@ -13,56 +13,44 @@
         </p>
     </header>
 
-    <div class="row">
+    <div class="row g-4">
 
         {% for article in page_obj %}
 
-            <div class="col-lg-4 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6">
 
                 <article class="card h-100 shadow-sm">
 
                     {% if article.featured_image %}
-                        <img
-                            src="{{ article.featured_image.url }}"
-                            class="card-img-top"
-                            alt="{{ article.title }}">
+                        <img src="{{ article.featured_image.url }}"
+                             class="card-img-top object-fit-cover p-2"
+                             style="height: 170px;"
+                             alt="{{ article.title }}">
                     {% endif %}
 
-                    <div class="card-body d-flex flex-column">
+                    <div class="card-body p-3 d-flex flex-column">
 
-                        <small class="text-muted mb-2">
-                            {{ article.category.name }}
-                        </small>
-
-                        <h5 class="card-title">
-                            <a href="{% url 'view article' article.slug %}">
+                        <h1 class="card-title fs-4 mb-2">
+                            <a href="{% url 'view article' article.slug %}"
+                               class="text-dark text-decoration-none">
                                 {{ article.title }}
                             </a>
+                        </h1>
+
+                        <h5 class="text-muted fw-normal mb-2">
+                            By {{ article.author.get_full_name|default:article.author.username }}
                         </h5>
 
-                        {% if article.subheading %}
-                            <p class="text-muted">
-                                {{ article.subheading|truncatewords:15 }}
-                            </p>
-                        {% endif %}
-
-                        <p class="card-text">
-                            {{ article.excerpt|truncatewords:25 }}
+                        <p class="card-text flex-grow-1 mb-3">
+                            {{ article.excerpt|truncatewords:50 }}
                         </p>
 
                         <div class="mt-auto">
-
-                            <small class="text-muted d-block mb-3">
-                                {{ article.author.get_full_name|default:article.author.username }}
-                                •
-                                {{ article.published_at|date:"M d, Y" }}
-                            </small>
-
                             <a href="{% url 'view article' article.slug %}"
-                               class="btn btn-primary btn-sm">
+                               class="btn btn-sm align-self-start"
+                               style="background-color: #bf9b30; color: #000;">
                                 Read Article
                             </a>
-
                         </div>
 
                     </div>
