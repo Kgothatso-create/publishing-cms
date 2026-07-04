@@ -4,9 +4,9 @@
 
 {% block content %}
 
-<section class="container py-5">
+<section class="container mb-2">
 
-    <header class="text-center mb-5">
+    <header class="text-center mb-3">
         <h1>All Articles</h1>
         <p class="text-muted">
             Discover stories, insights and ideas from our community of authors.
@@ -42,7 +42,7 @@
                         </h5>
 
                         <p class="card-text flex-grow-1 mb-3">
-                            {{ article.excerpt|truncatewords:50 }}
+                            {{ article.excerpt|truncatewords:10 }}
                         </p>
 
                         <div class="mt-auto">

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import modelformset_factory
 
-from people.models import PersonIdentityDocument, PersonProfile, User
+from people.models import NewsletterSubscriber, PersonIdentityDocument, PersonProfile, User
 
 
 class OnboardingBaseForm(forms.ModelForm):
@@ -54,3 +54,34 @@ PersonIdentityDocumentFormSet = modelformset_factory(
     validate_min=False,
     validate_max=False
 )
+
+
+class NewsletterSubscriberForm(forms.ModelForm):
+    class Meta:
+        model = NewsletterSubscriber
+        fields = ["email"]
+        widgets = {
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter your email address",
+                    "autocomplete": "email",
+                }
+            ),
+        }
+        labels = {
+            "email": "",
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+
+        if NewsletterSubscriber.objects.filter(
+            email=email,
+            is_active=True,
+        ).exists():
+            raise forms.ValidationError(
+                "This email address is already subscribed."
+            )
+
+        return email

@@ -1,36 +1,80 @@
 <section id="sidebar" class="p-2 d-flex flex-column h-100">
-
-    <section id="intro">
+    <section id="intro" class="mt-3">
         <p>
-            Discover ideas, stories, and insights shared by real authors.
+            Welcome to Inkflow. A free platform where ideas, stories, and insights are shared by real authors. Our goal is to inspire, motivate, and empower through thoughtful writing that adds value to everyday life.
         </p>
     </section>
-
-    <section>
+    <section class="mb-3">
         <header class="major">
-            <h2>Previous Articles</h2>
+            <h2>Newsletter</h2>
         </header>
-
-        <div class="mini-posts">
-
-            {% for article in oldest_articles|slice:":6" %}
-                <article class="mini-post">
-                    {% if article.featured_image %}
-                        <img src="{{ article.featured_image.url }}" class="img-fluid mb-2" />
+        <div class="card shadow-sm">
+            <div class="card-body p-2">
+                <h6 class="card-title mb-1 fs-6">
+                    Stay Updated
+                </h6>
+                <p class="card-text text-muted small mb-2">
+                    Get the latest articles in your inbox.
+                </p>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} py-1 px-2 mb-2 small" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <form method="post" action="{% url 'subscribe newsletter' %}">
+                    {% csrf_token %}
+                    <div class="mb-2">
+                        {{ newsletter_form.email }}
+                    </div>
+                    {% if newsletter_form.email.errors %}
+                        <div class="text-danger small mb-2">
+                            {{ newsletter_form.email.errors }}
+                        </div>
                     {% endif %}
+                    <button type="submit"
+                            class="btn btn-sm w-100"
+                            style="background-color:#bf9b30;color:#000;">
+                        Subscribe
+                    </button>
 
-                    <header>
-                        <h3>{{ article.title }}</h3>
-                        <p class="mb-0">By: {{ article.author }}</p>
-                    </header>
-                </article>
-            {% empty %}
-                <p>No articles yet.</p>
-            {% endfor %}
-
+                </form>
+            </div>
         </div>
     </section>
-
+    <section class="mt-3 mb-3">
+        <div class="p-2 border rounded bg-light">
+            <h6 class="mb-1 fs-6">
+                Support Inkflow
+            </h6>
+            <p class="text-muted small mb-2">
+                Inkflow is a free platform dedicated to sharing ideas, stories, and insights from real authors. Help us keep publishing quality articles and stories.
+            </p>
+            <a href="#"
+               class="btn btn-sm w-100"
+               style="background-color:#bf9b30; color:#000;">
+                Please Donate
+            </a>
+        </div>
+    </section>
+    <section class="mt-3 mb-3">
+        <div class="p-2 border rounded bg-light">
+            <h6 class="mb-1 fs-6">
+                Terms & Policies
+            </h6>
+            <p class="text-muted small mb-2">
+                By using Inkflow, you agree to our policies and terms of use.
+            </p>
+            <a href="#"
+               class="text-decoration-none small d-block text-dark mb-1">
+                Privacy Policy
+            </a>
+            <a href="#"
+               class="text-decoration-none small d-block text-dark">
+                Terms of Use
+            </a>
+        </div>
+    </section>
     {% include "layouts/footer.html" %}
-
 </section>

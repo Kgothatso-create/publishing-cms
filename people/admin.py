@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PersonProfile, PersonIdentityDocument
+from .models import NewsletterSubscriber, PersonProfile, PersonIdentityDocument
 
 
 from django.contrib import admin
@@ -90,3 +90,22 @@ class PersonIdentityDocumentAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at",)
 
     ordering = ("-created_at",)
+
+
+@admin.register(NewsletterSubscriber)
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = (
+        "email",
+        "is_active",
+        "subscribed_at",
+    )
+    list_filter = (
+        "is_active",
+        "subscribed_at",
+    )
+    search_fields = (
+        "email",
+    )
+    ordering = (
+        "-subscribed_at",
+    )
