@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block hero %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+
+        <div class="col-md-7 col-lg-5">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} py-1 px-2 mb-2 small" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <h3 class="mb-4 text-center">Login</h3>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- USERNAME -->
+                        <div class="form-group mb-3">
+                            <label for="{{ form.username.id_for_label }}">Username</label>
+                            {{ form.username }}
+                            {{ form.username.errors }}
+                        </div>
+
+                        <!-- PASSWORD -->
+                        <div class="form-group mb-3">
+                            <label for="{{ form.password.id_for_label }}">Password</label>
+                            {{ form.password }}
+                            {{ form.password.errors }}
+                        </div>
+
+                        <button type="submit" class="btn btn-block w-100 mt-3"
+                                style="background-color: #bf9b30; color: #000;">
+                            Login
+                        </button>
+
+                        <hr class="my-4">
+
+                        <p class="text-center mb-0">
+                            Don't have an account?
+                            <a href="{% url 'register view' %}"
+                            style="color: #bf9b30;"
+                            >Register</a>
+                        </p>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

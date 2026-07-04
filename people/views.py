@@ -1,7 +1,8 @@
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect, render
 
-from .forms import NewsletterSubscriberForm
+from .forms import LoginForm, NewsletterSubscriberForm, UserRegisterForm
 
 
 def subscribe_newsletter(request):
@@ -21,3 +22,52 @@ def subscribe_newsletter(request):
             messages.error(request, error)
 
     return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+def register_view(request):
+    if request.method == "POST":
+        user_form = UserRegisterForm(request.POST)
+
+        if user_form.is_valid():
+            try:
+                user_form.save()
+
+                messages.success(request, "Account created successfully. Please log in.")
+                return redirect("login")
+
+            except Exception as e:
+                messages.error(request, f"Something went wrong: {e}")
+
+        else:
+            messages.error(request, "Please correct the errors below.")
+
+    else:
+        user_form = UserRegisterForm()
+
+    return render(request, "people/register.html", {
+        "user_form": user_form,
+    })
+
+
+def login_view(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.success(request, f"Welcome back, {user.username}!")
+                return redirect("login")
+
+            else:
+                messages.error(request, "Invalid username or password")
+
+    else:
+        form = LoginForm()
+
+    return render(request, "people/login.html", {"form": form})

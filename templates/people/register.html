@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block hero %}{% endblock %}
+
+{% block content %}
+  <div class="container py-5">
+      <div class="row justify-content-center">
+          <div class="col-md-8 col-lg-6">
+              <div class="card shadow-sm border-0">
+                  <div class="card-body p-5">
+                      <h3 class="mb-4 text-center">Create Account</h3>
+                      <form method="POST">
+                          {% csrf_token %}
+                          <!-- ACCOUNT DETAILS -->
+                          <h5 class="mb-3">Account Details</h5>
+                          <div class="form-group mb-3">
+                              <label for="{{ user_form.username.id_for_label }}">Username</label>
+                              {{ user_form.username }}
+                              <small class="form-text text-muted">
+                                  Choose a unique username.
+                              </small>
+                              {{ user_form.username.errors }}
+                          </div>
+                          <div class="form-group mb-3">
+                              <label for="{{ user_form.email.id_for_label }}">Email address</label>
+                              {{ user_form.email }}
+                              <small class="form-text text-muted">
+                                  We'll never share your email with anyone else.
+                              </small>
+                              {{ user_form.email.errors }}
+                          </div>
+                          <div class="form-group mb-3">
+                              <label for="{{ user_form.password1.id_for_label }}">Password</label>
+                              {{ user_form.password1 }}
+                              {{ user_form.password1.errors }}
+                          </div>
+                          <div class="form-group mb-3">
+                              <label for="{{ user_form.password2.id_for_label }}">Confirm Password</label>
+                              {{ user_form.password2 }}
+                              {{ user_form.password2.errors }}
+                          </div>
+                          <hr class="my-4">
+                          <button type="submit" class="btn btn-block"
+                            style="background-color: #bf9b30; color: #000;">
+                              Create Account
+                          </button>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+{% endblock %}
