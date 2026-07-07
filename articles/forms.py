@@ -1,8 +1,5 @@
 from django import forms
-from .models import Article
 
-
-from django import forms
 from .models import Article
 
 
@@ -12,43 +9,46 @@ class ArticleForm(forms.ModelForm):
         fields = [
             "category",
             "title",
-            "slug",
-            "subheading",
-            "excerpt",
             "body",
             "featured_image",
-            "status",
-            "is_featured",
-            "meta_title",
-            "meta_description",
         ]
 
         widgets = {
-            "excerpt": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
-            "body": forms.Textarea(attrs={"rows": 10, "class": "form-control"}),
-            "meta_description": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
+            "title": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter your article title",
+                }
+            ),
+            "body": forms.Textarea(
+                attrs={
+                    "rows": 10,
+                    "class": "form-control",
+                    "placeholder": "Write your article here...",
+                }
+            ),
+            "category": forms.Select(
+                attrs={"class": "form-select"}
+            ),
+            "featured_image": forms.ClearableFileInput(
+                attrs={"class": "form-control"}
+            ),
+        }
+
+        help_texts = {
+            "category": (
+                "Please choose the category that best matches the topic of your article."
+            ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for name, field in self.fields.items():
-
-            # Checkbox
-            if isinstance(field.widget, forms.CheckboxInput):
-                field.widget.attrs["class"] = "form-check-input"
-
-            # File input
+        # Apply Bootstrap classes to any fields not explicitly styled
+        for field in self.fields.values():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs.setdefault("class", "form-select")
             elif isinstance(field.widget, forms.ClearableFileInput):
-                field.widget.attrs["class"] = "form-control"
-
-            # Select dropdowns
-            elif isinstance(field.widget, forms.Select):
-                field.widget.attrs["class"] = "form-select"
-
-            # Default text inputs
+                field.widget.attrs.setdefault("class", "form-control")
             else:
-                field.widget.attrs["class"] = "form-control"
-
-        # Optional: ensure checkbox doesn't inherit form-control
-        self.fields["is_featured"].widget.attrs["class"] = "form-check-input"
+                field.widget.attrs.setdefault("class", "form-control")

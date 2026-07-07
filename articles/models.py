@@ -47,14 +47,10 @@ class Article(BaseModel):
     )
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
-    subheading = models.CharField(max_length=255, blank=True)
-    excerpt = models.TextField()
     body = models.TextField()
     featured_image = models.ImageField(upload_to="articles/", blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="draft")
     is_featured = models.BooleanField(default=False)
-    meta_title = models.CharField(max_length=255, blank=True)
-    meta_description = models.TextField(blank=True)
     published_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
