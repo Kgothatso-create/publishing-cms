@@ -1,10 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-3 border-bottom">
-
   <!-- Brand -->
   <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">
     Inkflow Inspiration
   </a>
-
   <!-- Mobile toggle -->
   <button class="navbar-toggler" type="button"
           data-bs-toggle="collapse"
@@ -14,46 +12,44 @@
           aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
   <!-- Navbar content -->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
     <!-- Left navigation (core CMS sections) -->
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
       <li class="nav-item">
         <a class="nav-link" href="{% url 'article list' %}">
           Articles
         </a>
       </li>
-
       <li class="nav-item">
         <a class="nav-link" href="#">
           Categories
         </a>
       </li>
-
       <li class="nav-item">
         <a class="nav-link" href="#">
           Authors
         </a>
       </li>
-
       {% if user.is_authenticated %}
-      <!-- WRITE ARTICLE -->
+        <!-- WRITE ARTICLE -->
         <li class="nav-item">
             <a class="nav-link" href="{% url 'article-create' %}">
                 Write Article
             </a>
         </li>
-
+        <!-- MY ARTICLES -->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'article-create' %}">
+                My Articles
+            </a>
+        </li>
         <!-- PROFILE -->
         <li class="nav-item">
             <a class="nav-link" href="#">
                 Profile
             </a>
         </li>
-
         <!-- LOGOUT -->
         <li class="nav-item">
             <a class="nav-link text-danger" href="#">
@@ -66,7 +62,6 @@
             Register
           </a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" href="{% url 'login' %}">
             Login
@@ -74,7 +69,6 @@
         </li>
       {% endif %}
     </ul>
-
     <!-- Right side search -->
     <form class="d-flex ms-auto" role="search">
       <input class="form-control me-2" type="search" placeholder="Search articles...">
