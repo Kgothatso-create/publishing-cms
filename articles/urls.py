@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import article_create, article_edit, home, view_article, article_list
+from .views import *
 
 urlpatterns = [
     path("", home, name="home"),
@@ -7,4 +7,8 @@ urlpatterns = [
     path("all-articles", article_list, name="article list"),
     path("articles/new/", article_create, name="article-create"),
     path("articles/<slug:slug>/edit/", article_edit, name="article-edit"),
+    path("<slug:slug>/publish/", publish_article, name="publish article"),
+    path("<slug:slug>/retract/", retract_article, name="retract article"),
+    path("<slug:slug>/unpublish/", unpublish_article, name="unpublish article"),
+    path("<slug:slug>/reject/", reject_article, name="reject article")
 ]

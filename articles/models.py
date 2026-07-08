@@ -1,4 +1,4 @@
-from datetime import timezone
+from django.utils import timezone
 
 from django.db import models
 from django.conf import settings
@@ -67,7 +67,27 @@ class Article(BaseModel):
         self.save(update_fields=["status", "published_at", "updated_at"])
 
     def unpublish(self):
+        """
+        Core CMS behavior:
+        Moves article into unpublish state safely.
+        """
         self.status = self.STATUS_DRAFT
+        self.save(update_fields=["status", "updated_at"])
+
+    def retract(self):
+        """
+        Core CMS behavior:
+        Moves a published article into a retracted state.
+        """
+        self.status = self.STATUS_RETRACTED
+        self.save(update_fields=["status", "updated_at"])
+
+    def reject(self):
+        """
+        Core CMS behavior:
+        Moves an article into a rejected state.
+        """
+        self.status = self.STATUS_REJECTED
         self.save(update_fields=["status", "updated_at"])
 
     def __str__(self):

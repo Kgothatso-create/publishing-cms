@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -72,10 +73,16 @@ def view_article(request: HttpRequest, slug: str) -> HttpResponse:
         and article.author == request.user
     )
 
+    can_moderate = (
+            request.user.is_authenticated
+            and request.user.is_staff
+    )
+
     context = {
         "article": article,
         "related_articles": related_articles,
         "can_edit": can_edit,
+        "can_moderate": can_moderate,
     }
 
     return render(request, "articles/view.html", context)
@@ -143,3 +150,107 @@ def article_edit(request, slug):
         "form": form,
         "object": article
     })
+
+
+@login_required
+def publish_article(request: HttpRequest, slug: str) -> HttpResponse:
+    """
+    Publish an article owned by the authenticated user.
+
+    Changes the article status from draft to published and records the
+    publication timestamp using the Article model publish method.
+
+    Args:
+        request (HttpRequest): The HTTP request containing the authenticated user.
+        slug (str): The unique slug identifying the article.
+
+    Returns:
+        HttpResponse: Redirects the user back to the published article.
+    """
+
+    article = get_object_or_404(
+        Article,
+        slug=slug,
+        author=request.user,
+    )
+
+    article.publish()
+
+    return redirect("view article", slug=article.slug)
+
+
+@login_required
+def retract_article(request: HttpRequest, slug: str) -> HttpResponse:
+    """
+    Retract an article owned by the authenticated user.
+
+    Changes the article status from published to retracted.
+
+    Args:
+        request (HttpRequest): The HTTP request containing the authenticated user.
+        slug (str): The unique slug identifying the article.
+
+    Returns:
+        HttpResponse: Redirects the user back to the article page.
+    """
+
+    article = get_object_or_404(
+        Article,
+        slug=slug,
+        author=request.user,
+    )
+
+    article.retract()
+
+    return redirect("view article", slug=article.slug)
+
+
+@login_required
+def unpublish_article(request: HttpRequest, slug: str) -> HttpResponse:
+    """
+    Move an article from published back into draft status.
+
+    Only the article owner can unpublish their article.
+
+    Args:
+        request (HttpRequest): The HTTP request containing the authenticated user.
+        slug (str): The unique slug identifying the article.
+
+    Returns:
+        HttpResponse: Redirects the user back to the article page.
+    """
+
+    article = get_object_or_404(
+        Article,
+        slug=slug,
+        author=request.user,
+    )
+
+    article.unpublish()
+
+    return redirect("view article", slug=article.slug)
+
+
+@staff_member_required
+def reject_article(request: HttpRequest, slug: str) -> HttpResponse:
+    """
+    Reject an article through administrative moderation.
+
+    Only Django staff users can reject articles.
+
+    Args:
+        request (HttpRequest): The HTTP request containing the authenticated staff user.
+        slug (str): The unique slug identifying the article.
+
+    Returns:
+        HttpResponse: Redirects the admin back to the article page.
+    """
+
+    article = get_object_or_404(
+        Article,
+        slug=slug,
+    )
+
+    article.reject()
+
+    return redirect("view article", slug=article.slug)
