@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.text import slugify
 from articles.forms import ArticleForm
@@ -18,26 +19,36 @@ def home(request):
 
 
 def view_article(request, slug):
-    articles = Article.objects.filter(status="published")
 
-    article = get_object_or_404(
-        Article.objects.select_related("author"),
-        slug=slug,
-        status="published",
-    )
-
-    related_articles = (
-        Article.objects.filter(
-            category=article.category,
-            status="published",
+    if request.user.is_authenticated:
+        article = get_object_or_404(
+            Article.objects.filter(
+                Q(status=Article.STATUS_PUBLISHED)
+                | Q(author=request.user)
+            ),
+            slug=slug,
         )
-        .exclude(id=article.id)
-        .order_by("-published_at")[:3]
-    )
+    else:
+        article = get_object_or_404(
+            Article,
+            slug=slug,
+            status=Article.STATUS_PUBLISHED,
+        )
+
+    related_articles = None
+
+    if article.status == Article.STATUS_PUBLISHED:
+        related_articles = (
+            Article.objects.filter(
+                category=article.category,
+                status=Article.STATUS_PUBLISHED,
+            )
+            .exclude(id=article.id)
+            .order_by("-published_at")[:3]
+        )
 
     context = {
         "article": article,
-        "oldest_articles": articles.order_by("created_at"),
         "related_articles": related_articles,
     }
 
