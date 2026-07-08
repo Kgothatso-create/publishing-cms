@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.text import slugify
 from articles.forms import ArticleForm
@@ -18,7 +19,26 @@ def home(request):
     return render(request, "articles/home.html", context)
 
 
-def view_article(request, slug):
+def view_article(request: HttpRequest, slug: str) -> HttpResponse:
+    """
+    Display a single article.
+
+    Published articles are publicly accessible. Draft articles are only
+    accessible by their author, allowing authors to preview their own
+    unpublished content.
+
+    Determines whether the current user has permission to edit the article
+    and passes this permission state to the template.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing user
+            authentication information.
+        slug (str): The unique slug identifying the article.
+
+    Returns:
+        HttpResponse: Rendered article detail page containing the article,
+            related articles, and edit permissions.
+    """
 
     if request.user.is_authenticated:
         article = get_object_or_404(
@@ -47,9 +67,15 @@ def view_article(request, slug):
             .order_by("-published_at")[:3]
         )
 
+    can_edit = (
+        request.user.is_authenticated
+        and article.author == request.user
+    )
+
     context = {
         "article": article,
         "related_articles": related_articles,
+        "can_edit": can_edit,
     }
 
     return render(request, "articles/view.html", context)
@@ -109,7 +135,7 @@ def article_edit(request, slug):
 
         if form.is_valid():
             form.save()
-            return redirect("article list")
+            return redirect("view article", slug=article.slug)
     else:
         form = ArticleForm(instance=article)
 

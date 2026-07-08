@@ -5,6 +5,15 @@
 
 {% block content %}
     <div class="container mt-2 mb-5">
+        {% if can_edit %}
+            <div class="mt-2 mb-2">
+                <a href="{% url 'article-edit' article.slug %}"
+                   class="btn "
+                   style="background-color:#bf9b30; color:#000;">
+                    Edit Article
+                </a>
+            </div>
+        {% endif %}
         <!-- Featured Image (Responsive Hero using Bootstrap ratio) -->
         {% if article.featured_image %}
             <div class="mb-1">
@@ -21,20 +30,11 @@
             <h1 class="display-4 font-weight-bold article-title">
                 {{ article.title }}
             </h1>
-            {% if article.subheading %}
-                <p class="lead text-muted mt-1">
-                    {{ article.subheading }}
-                </p>
-            {% endif %}
             <div class="text-muted mt-1">
-                By
+                Author:
                 <strong>
                     {{ article.author.get_full_name|default:article.author.username }}
                 </strong>
-                {% if article.published_at %}
-                    &nbsp;•&nbsp;
-                    {{ article.published_at|date:"F d, Y" }}
-                {% endif %}
             </div>
         </header>
         <!-- Article Body -->
