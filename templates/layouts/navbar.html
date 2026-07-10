@@ -52,7 +52,7 @@
         </li>
         <!-- LOGOUT -->
         <li class="nav-item">
-            <a class="nav-link text-danger" href="#">
+            <a class="nav-link text-danger" href="{% url 'logout' %}">
                 Logout
             </a>
         </li>
@@ -70,12 +70,17 @@
       {% endif %}
     </ul>
     <!-- Right side search -->
-    <form class="d-flex ms-auto" role="search">
-      <input class="form-control me-2" type="search" placeholder="Search articles...">
-      <button class="btn btn-outline-primary" type="submit">
-        Search
-      </button>
+    <form class="d-flex" method="get" action="{% url 'article_search' %}">
+        <input
+            class="form-control me-2"
+            type="search"
+            name="q"
+            placeholder="Search articles..."
+            aria-label="Search"
+        >
+        <button class="btn btn-outline-warning" type="submit">
+            Search
+        </button>
     </form>
-
   </div>
 </nav>

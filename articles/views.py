@@ -414,3 +414,36 @@ def terms_view(request):
 
 def privacy_policy_view(request):
     return render(request, "articles/privacy_policy.html")
+
+
+def article_search(request):
+    query = request.GET.get("q", "")
+
+    articles = Article.objects.filter(
+        status=Article.STATUS_PUBLISHED
+    )
+
+    if query:
+        articles = Article.objects.filter(
+            Q(title__icontains=query) |
+            Q(body__icontains=query) |
+            Q(author__username__icontains=query) |
+            Q(category__name__icontains=query)
+        ).distinct()
+
+    articles = articles.order_by("-published_at")
+
+    paginator = Paginator(articles, 9)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "query": query
+    }
+
+    return render(
+        request,
+    "articles/list.html",
+        context
+    )

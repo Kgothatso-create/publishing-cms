@@ -1,12 +1,8 @@
 {% extends "base.html" %}
-
 {% block hero %}{% endblock %}
-
 {% block content %}
-
 <section class="container mb-2">
-
-    <header class="text-center  mb-3">
+    <header class="text-center mb-3">
         {% if my_articles %}
             <h1 class="display-5 fw-bold article-title">
                 My Articles
@@ -15,119 +11,116 @@
                 Manage and view all articles you have written.
             </p>
         {% elif category %}
-            <h1 class="display-5 fw-bold article-title">{{ category.name }} Articles</h1>
+            <h1 class="display-5 fw-bold article-title">
+                {{ category.name }} Articles
+            </h1>
             <p class="text-muted">
                 Explore articles from {{ category.name }}.
             </p>
         {% elif author %}
-            <h1 class="display-5 fw-bold article-title">{{ author.username }} Articles</h1>
+            <h1 class="display-5 fw-bold article-title">
+                {{ author.username }} Articles
+            </h1>
             <p class="text-muted">
                 Explore articles from {{ author.username }}.
             </p>
+        {% elif query %}
+            <h1 class="display-5 fw-bold article-title">
+                Search Results
+            </h1>
+            <p class="text-muted">
+                Showing results for "{{ query }}".
+            </p>
         {% else %}
-            <h1 class="display-5 fw-bold article-title">All Articles</h1>
+            <h1 class="display-5 fw-bold article-title">
+                All Articles
+            </h1>
             <p class="text-muted">
                 Discover stories, insights and ideas from our community of authors.
             </p>
         {% endif %}
     </header>
     <div class="row g-4">
-
         {% for article in page_obj %}
-
             <div class="col-lg-4 col-md-6">
-
                 <article class="card h-100 shadow-sm">
-
                     {% if article.featured_image %}
-                        <img src="{{ article.featured_image.url }}"
-                             class="card-img-top object-fit-cover p-2"
-                             style="height: 170px;"
-                             alt="{{ article.title }}">
+                        <img
+                            src="{{ article.featured_image.url }}"
+                            class="card-img-top object-fit-cover p-2"
+                            style="height:170px;"
+                            alt="{{ article.title }}"
+                        >
                     {% endif %}
-
                     <div class="card-body p-3 d-flex flex-column">
-
                         <h1 class="card-title fs-4 mb-2">
-                            <a href="{% url 'view article' article.slug %}"
-                               class="text-dark text-decoration-none">
+                            <a
+                                href="{% url 'view article' article.slug %}"
+                                class="text-dark text-decoration-none"
+                            >
                                 {{ article.title }}
                             </a>
                         </h1>
-
                         <h5 class="text-muted fw-normal mb-2">
-                            By {{ article.author.get_full_name|default:article.author.username }}
+                            By
+                            {{ article.author.get_full_name|default:article.author.username }}
                         </h5>
-
                         <p class="card-text flex-grow-1 mb-3">
                             {{ article.excerpt|truncatewords:10 }}
                         </p>
-
                         <div class="mt-auto">
-                            <a href="{% url 'view article' article.slug %}"
-                               class="btn btn-sm align-self-start"
-                               style="background-color: #bf9b30; color: #000;">
+                            <a
+                                href="{% url 'view article' article.slug %}"
+                                class="btn btn-sm"
+                                style="background-color:#bf9b30;color:#000;"
+                            >
                                 Read Article
                             </a>
                         </div>
-
                     </div>
-
                 </article>
-
             </div>
-
         {% empty %}
-
             <div class="col-12 text-center">
-                <p>No articles available.</p>
+                <p>No articles found.</p>
             </div>
-
         {% endfor %}
-
     </div>
-
     {% if page_obj.paginator.num_pages > 1 %}
-
         <nav class="mt-5">
-
             <ul class="pagination justify-content-center">
-
                 {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link"
-                           href="?page={{ page_obj.previous_page_number }}">
+                        <a
+                            class="page-link"
+                            href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
+                        >
                             Previous
                         </a>
                     </li>
                 {% endif %}
-
                 {% for num in page_obj.paginator.page_range %}
-
                     <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                        <a class="page-link"
-                           href="?page={{ num }}">
+                        <a
+                            class="page-link"
+                            href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}"
+                        >
                             {{ num }}
                         </a>
                     </li>
-
                 {% endfor %}
-
                 {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link"
-                           href="?page={{ page_obj.next_page_number }}">
+                        <a
+                            class="page-link"
+                            href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
+                        >
                             Next
                         </a>
                     </li>
                 {% endif %}
-
             </ul>
-
         </nav>
-
     {% endif %}
-
 </section>
-
 {% endblock %}
