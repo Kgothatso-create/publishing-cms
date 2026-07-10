@@ -1,12 +1,14 @@
+from collections import OrderedDict
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Count, Prefetch, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.text import slugify
 from articles.forms import ArticleForm
-from articles.models import Article
+from articles.models import Article, Category
 
 
 def home(request):
@@ -254,3 +256,50 @@ def reject_article(request: HttpRequest, slug: str) -> HttpResponse:
     article.reject()
 
     return redirect("view article", slug=article.slug)
+
+
+def category_list(request: HttpRequest):
+    published_articles = (
+        Article.objects.filter(status=Article.STATUS_PUBLISHED)
+        .select_related("author", "category")
+        .order_by("-published_at")
+    )
+
+    categories = (
+        Category.objects.annotate(
+            article_count=Count(
+                "articles",
+                filter=Q(articles__status=Article.STATUS_PUBLISHED),
+            )
+        )
+        .filter(article_count__gt=0)
+        .order_by("name")
+        .prefetch_related(
+            Prefetch(
+                "articles",
+                queryset=published_articles,
+                to_attr="published_articles",
+            )
+        )
+    )
+
+    grouped_categories = OrderedDict()
+
+    for category in categories:
+        letter = category.name[0].upper()
+
+        grouped_categories.setdefault(letter, []).append(
+            {"category": category, "articles": category.published_articles[:4]}
+        )
+
+    context = {
+        "grouped_categories": grouped_categories,
+        "alphabet": grouped_categories.keys(),
+        "category_count": categories.count(),
+    }
+
+    return render(
+        request,
+        "articles/category_list.html",
+        context,
+    )
