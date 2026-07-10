@@ -97,6 +97,7 @@ def article_list(request, category_slug=None, author_slug=None,):
             "author", "category"
         ).filter(status="published").order_by("-published_at")
 
+    author = None
     category = None
 
     if author_slug:

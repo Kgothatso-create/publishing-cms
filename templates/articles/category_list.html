@@ -6,8 +6,8 @@
 {% block content %}
 <div class="container my-5">
     <div class="mb-5">
-        <h1 class="display-5 fw-bold">
-            Categories ({{ category_count }})
+        <h1 class="display-5 fw-bold article-title">
+            Categories
         </h1>
         <p class="text-muted">
             Browse articles by category.
@@ -15,7 +15,7 @@
     </div>
     {% if alphabet %}
         <div class="border rounded bg-light p-3 mb-5"
-        style="top:50px; background-color:rgba(248,249,250,0.85); backdrop-filter:blur(8px); z-index:1000;">
+            style="top:50px; background-color:rgba(248,249,250,0.85); backdrop-filter:blur(8px); z-index:1000;">
             <div class="d-flex flex-wrap gap-2 justify-content-center">
                 {% for letter in alphabet %}
                     <a href="#{{ letter }}"

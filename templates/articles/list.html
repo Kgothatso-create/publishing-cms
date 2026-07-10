@@ -6,13 +6,13 @@
 
 <section class="container mb-2">
 
-    <header class="text-center mb-3">
+    <header class="text-center  mb-3">
         {% if category %}
-            <h1>{{ category.name }} Articles</h1>
+            <h1 class="display-5 fw-bold article-title">{{ category.name }} Articles</h1>
         {% elif author %}
-            <h1>{{ author.get_full_name }} Articles</h1>
+            <h1 class="display-5 fw-bold article-title">{{ author.username }} Articles</h1>
         {% else %}
-            <h1>All Articles</h1>
+            <h1 class="display-5 fw-bold article-title">All Articles</h1>
         {% endif %}
         {% if category %}
             <p class="text-muted">
