@@ -21,6 +21,24 @@
     text-underline-offset: 8px;
 }
 
+#backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
+    display: none;
+    z-index: 9999;
+    background-color: #8a6700;
+    border-color: #8a6700;
+    color: black;
+}
+
+#backToTop:hover {
+    background-color: #8a6700;
+    border-color: #8a6700;
+}
+
 /* =========================
    Global
    ========================= */

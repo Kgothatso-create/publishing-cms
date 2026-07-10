@@ -15,18 +15,14 @@
 </head>
 
 <body class="is-preload d-flex flex-column min-vh-100">
-
     <!-- Navbar -->
     {% include "layouts/navbar.html" %}
-
     <div class="container-fluid flex-grow-1">
         <div class="row h-100">
-
             <!-- Sidebar -->
             <aside class="col-lg-2 col-md-3 d-none d-md-block p-1 sidebar d-flex flex-column border-end">
                 {% include "layouts/sidebar.html" with oldest_articles=oldest_articles %}
             </aside>
-
             <!-- Main Content -->
             <main class="col-lg-10 col-md-9 ms-sm-auto px-4">
                 {% block hero %}
@@ -42,12 +38,30 @@
                 {% endblock %}
                 {% block content %}{% endblock %}
             </main>
-
         </div>
+        <button id="backToTop"
+                class="btn btn-warning rounded-circle shadow position-fixed bottom-0 end-0 m-4"
+                aria-label="Back to top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
     </div>
-
+    <script>
+        const backToTopButton = document.getElementById("backToTop");
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 300) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        });
+        backToTopButton.addEventListener("click", function () {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    </script>
 </body>
-
 <!-- JS from theme -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
