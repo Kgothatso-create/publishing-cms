@@ -1,8 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .forms import LoginForm, NewsletterSubscriberForm, UserRegisterForm
+from .forms import LoginForm, NewsletterSubscriberForm, ProfileUpdateForm, UserPasswordChangeForm, UserRegisterForm
 
 
 def subscribe_newsletter(request):
@@ -71,3 +72,57 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, "people/login.html", {"form": form})
+
+
+@login_required
+def profile_view(request):
+
+    user = request.user
+    if request.method == "POST":
+        profile_form = ProfileUpdateForm(
+            request.POST,
+            instance=user
+        )
+        password_form = UserPasswordChangeForm(
+            user,
+            request.POST
+        )
+        if "update_profile" in request.POST:
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(
+                    request,
+                    "Your profile has been updated."
+                )
+                return redirect("profile")
+
+        elif "change_password" in request.POST:
+            if password_form.is_valid():
+                password_form.save()
+                update_session_auth_hash(
+                    request,
+                    password_form.user
+                )
+                messages.success(
+                    request,
+                    "Your password has been changed."
+                )
+                return redirect("profile")
+    else:
+        profile_form = ProfileUpdateForm(
+            instance=user
+        )
+        password_form = UserPasswordChangeForm(
+            user
+        )
+
+    context = {
+        "profile_form": profile_form,
+        "password_form": password_form,
+    }
+
+    return render(
+        request,
+        "people/profile.html",
+        context
+    )
