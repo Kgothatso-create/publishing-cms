@@ -127,6 +127,34 @@ def article_list(request, category_slug=None, author_slug=None,):
 
 
 @login_required
+def author_article_list(request):
+
+    articles = Article.objects.select_related(
+        "author",
+        "category"
+    ).filter(
+        author=request.user
+    ).order_by("-published_at")
+
+    paginator = Paginator(articles, 9)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "my_articles": True,
+        "author": request.user,
+    }
+
+    return render(
+        request,
+        "articles/list.html",
+        context
+    )
+
+
+@login_required
 def article_create(request):
     if request.method == "POST":
         form = ArticleForm(request.POST, request.FILES)
@@ -378,3 +406,11 @@ def author_list(request):
         "articles/author_list.html",
         context,
     )
+
+
+def terms_view(request):
+    return render(request, "articles/terms.html")
+
+
+def privacy_policy_view(request):
+    return render(request, "articles/privacy_policy.html")

@@ -7,24 +7,30 @@
 <section class="container mb-2">
 
     <header class="text-center  mb-3">
-        {% if category %}
+        {% if my_articles %}
+            <h1 class="display-5 fw-bold article-title">
+                My Articles
+            </h1>
+            <p class="text-muted">
+                Manage and view all articles you have written.
+            </p>
+        {% elif category %}
             <h1 class="display-5 fw-bold article-title">{{ category.name }} Articles</h1>
-        {% elif author %}
-            <h1 class="display-5 fw-bold article-title">{{ author.username }} Articles</h1>
-        {% else %}
-            <h1 class="display-5 fw-bold article-title">All Articles</h1>
-        {% endif %}
-        {% if category %}
             <p class="text-muted">
                 Explore articles from {{ category.name }}.
             </p>
+        {% elif author %}
+            <h1 class="display-5 fw-bold article-title">{{ author.username }} Articles</h1>
+            <p class="text-muted">
+                Explore articles from {{ author.username }}.
+            </p>
         {% else %}
+            <h1 class="display-5 fw-bold article-title">All Articles</h1>
             <p class="text-muted">
                 Discover stories, insights and ideas from our community of authors.
             </p>
         {% endif %}
     </header>
-
     <div class="row g-4">
 
         {% for article in page_obj %}

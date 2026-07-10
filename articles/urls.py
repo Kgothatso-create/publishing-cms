@@ -7,6 +7,7 @@ urlpatterns = [
     path("articles/", include([
         path("", article_list, name="article list"),
         path("new/", article_create, name="article-create"),
+        path("author-list/", author_article_list, name="author articles"),
         path("<slug:slug>/", include([
             path("", view_article, name="view article"),
             path("edit/", article_edit, name="article-edit"),
@@ -23,5 +24,9 @@ urlpatterns = [
     path("authors/", include([
         path("", author_list, name="author list"),
         path("<slug:author_slug>/", article_list, name="author articles"),
+    ])),
+    path("terms/", include([
+        path("terms/", terms_view, name="terms"),
+        path("privacy-policy/", privacy_policy_view, name="privacy_policy"),
     ]))
 ]
