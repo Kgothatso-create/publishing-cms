@@ -7,10 +7,22 @@
 <section class="container mb-2">
 
     <header class="text-center mb-3">
-        <h1>All Articles</h1>
-        <p class="text-muted">
-            Discover stories, insights and ideas from our community of authors.
-        </p>
+        {% if category %}
+            <h1>{{ category.name }} Articles</h1>
+        {% elif author %}
+            <h1>{{ author.get_full_name }} Articles</h1>
+        {% else %}
+            <h1>All Articles</h1>
+        {% endif %}
+        {% if category %}
+            <p class="text-muted">
+                Explore articles from {{ category.name }}.
+            </p>
+        {% else %}
+            <p class="text-muted">
+                Discover stories, insights and ideas from our community of authors.
+            </p>
+        {% endif %}
     </header>
 
     <div class="row g-4">

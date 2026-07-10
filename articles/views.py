@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.text import slugify
 from articles.forms import ArticleForm
 from articles.models import Article, Category
+from people.models import User
 
 
 def home(request):
@@ -90,15 +91,21 @@ def view_article(request: HttpRequest, slug: str) -> HttpResponse:
     return render(request, "articles/view.html", context)
 
 
-def article_list(request):
-    articles = (
-        Article.objects.select_related(
-            "author",
-            "category",
-        )
-        .filter(status="published")
-        .order_by("-published_at")
-    )
+def article_list(request, category_slug=None, author_slug=None,):
+
+    articles = Article.objects.select_related(
+            "author", "category"
+        ).filter(status="published").order_by("-published_at")
+
+    category = None
+
+    if author_slug:
+        author = get_object_or_404(User, slug=author_slug)
+        articles = articles.filter(author=author)
+
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        articles = articles.filter(category=category)
 
     paginator = Paginator(articles, 9)
 
@@ -107,9 +114,15 @@ def article_list(request):
 
     context = {
         "page_obj": page_obj,
+        "category": category,
+        "author": author,
     }
 
-    return render(request, "articles/list.html", context)
+    return render(
+        request,
+        "articles/list.html",
+        context
+    )
 
 
 @login_required
@@ -301,5 +314,66 @@ def category_list(request: HttpRequest):
     return render(
         request,
         "articles/category_list.html",
+        context,
+    )
+
+
+def author_list(request):
+
+    published_articles = Article.objects.filter(
+            status=Article.STATUS_PUBLISHED
+        ).select_related("author", "category").order_by("-published_at")
+
+    authors = (
+        User.objects
+        .annotate(
+            article_count=Count(
+                "articles",
+                filter=Q(
+                    articles__status=Article.STATUS_PUBLISHED
+                ),
+            )
+        )
+        .filter(
+            article_count__gt=0
+        )
+        .order_by(
+            "first_name",
+            "last_name"
+        )
+        .prefetch_related(
+            Prefetch(
+                "articles",
+                queryset=published_articles,
+                to_attr="published_articles",
+            )
+        )
+    )
+
+    grouped_authors = OrderedDict()
+
+    for author in authors:
+        name = author.get_full_name()
+        if not name:
+            name = author.username
+
+        letter = name[0].upper()
+
+        grouped_authors.setdefault(
+            letter,
+            []
+        ).append(
+            {"author": author, "articles": author.published_articles[:4]}
+        )
+
+    context = {
+        "grouped_authors": grouped_authors,
+        "alphabet": grouped_authors.keys(),
+        "author_count": authors.count(),
+    }
+
+    return render(
+        request,
+        "articles/author_list.html",
         context,
     )

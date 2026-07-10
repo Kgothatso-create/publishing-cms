@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Categories{% endblock %}
+{% block title %}Authors{% endblock %}
 {% block hero %}{% endblock %}
 
 {% block content %}
 <div class="container my-5">
     <div class="mb-5">
         <h1 class="display-5 fw-bold">
-            Categories ({{ category_count }})
+            Authors ({{ author_count }})
         </h1>
         <p class="text-muted">
-            Browse articles by category.
+            Explore articles written by our contributors.
         </p>
     </div>
     {% if alphabet %}
@@ -27,17 +27,20 @@
             </div>
         </div>
     {% endif %}
-    {% for letter, categories in grouped_categories.items %}
+    {% for letter, authors in grouped_authors.items %}
         <section id="{{ letter }}" class="mb-5">
             <h2 class="border-bottom pb-2 mb-4">
                 {{ letter }}
             </h2>
-            {% for item in categories %}
+            {% for item in authors %}
                 <div class="mb-5">
                     <h3 class="mb-4">
-                        {{ item.category.name }}
+                        <a href="{% url 'author articles' item.author.slug %}"
+                           class="text-decoration-none text-dark">
+                            {{ item.author.get_full_name|default:item.author.username }}
+                        </a>
                         <span class="text-muted fs-5">
-                            ({{ item.category.article_count }})
+                            ({{ item.author.article_count }})
                         </span>
                     </h3>
                     <div class="row g-4">
@@ -62,10 +65,9 @@
                                         <p class="card-text flex-grow-1">
                                             {{ article.excerpt|truncatechars:50 }}
                                         </p>
-                                        <a  href="{% url 'view article' article.slug %}"
-                                            class="btn btn-sm align-self-start"
-                                            style="background-color:#bf9b30;color:#000;"
-                                        >
+                                        <a href="{% url 'view article' article.slug %}"
+                                           class="btn btn-sm align-self-start"
+                                           style="background-color:#bf9b30;color:#000;">
                                             Read Article
                                         </a>
                                     </div>
@@ -74,15 +76,19 @@
                         {% endfor %}
                     </div>
                     <div class="text-center mt-4">
-                        <a  href="{% url 'category articles' item.category.slug %}" class="btn"
-                            style="background-color:#bf9b30;color:#000;"
-                        >
+                        <a href="{% url 'author articles' item.author.slug %}"
+                           class="btn"
+                           style="background-color:#bf9b30;color:#000;">
                             View More Articles
                         </a>
                     </div>
                 </div>
             {% endfor %}
         </section>
+    {% empty %}
+        <div class="text-center py-5">
+            <h3>No authors found.</h3>
+        </div>
     {% endfor %}
 </div>
 {% endblock %}

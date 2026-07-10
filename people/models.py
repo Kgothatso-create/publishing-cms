@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.text import slugify
 
 
 class OnboardingStatus(models.TextChoices):
@@ -14,6 +15,16 @@ class User(AbstractUser):
         choices=OnboardingStatus.choices,
         default=OnboardingStatus.NOT_STARTED
     )
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            name = self.get_full_name()
+            if name:
+                self.slug = slugify(name)
+            else:
+                self.slug = slugify(self.username)
+        super().save(*args, **kwargs)
 
 
 class NewsletterSubscriber(models.Model):
