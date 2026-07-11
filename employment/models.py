@@ -58,7 +58,7 @@ class Employment(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="employment",
     )
     job = models.ForeignKey(
-        "job.Job", on_delete=models.PROTECT, related_name="employments",
+        "job.Job", on_delete=models.PROTECT, related_name="employments", null=True, blank=True
     )
     role = models.ForeignKey(
         Role, on_delete=models.PROTECT, related_name="employments",

@@ -58,3 +58,30 @@ def employee_list(request):
         "employment/employees.html",
         context
     )
+
+
+from django.shortcuts import redirect
+
+from .forms import EmployeeCreateForm
+
+
+def employee_create(request):
+
+    if request.method == "POST":
+
+        form = EmployeeCreateForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("employee-list")
+
+    else:
+        form = EmployeeCreateForm()
+
+    return render(
+        request,
+        "employment/add_employee.html",
+        {
+            "form": form
+        }
+    )
