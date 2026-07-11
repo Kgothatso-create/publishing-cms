@@ -43,6 +43,22 @@ class Job(models.Model):
     This is NOT an employee record — it is a reusable position template.
     """
 
+    # Optional future expansion (useful for HR systems)
+
+    LEVEL_CHOICES = [
+        ("JUNIOR", "Junior"),
+        ("MID", "Mid Level"),
+        ("SENIOR", "Senior"),
+    ]
+
+    GRADE_CHOICES = [
+        ("G1", "Grade 1"),
+        ("G2", "Grade 2"),
+        ("G3", "Grade 3"),
+        ("G4", "Grade 4"),
+        ("G5", "Grade 5"),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     # -------------------------
@@ -68,8 +84,8 @@ class Job(models.Model):
     is_active = models.BooleanField(default=True)
 
     # Optional future expansion (useful for HR systems)
-    level = models.CharField(max_length=50, blank=True, null=True)
-    grade = models.CharField(max_length=50, blank=True, null=True)
+    level = models.CharField(max_length=50, choices=LEVEL_CHOICES, blank=True, null=True)
+    grade = models.CharField(max_length=50, choices=GRADE_CHOICES, blank=True, null=True)
 
     # -------------------------
     # System Fields

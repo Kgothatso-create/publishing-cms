@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Employment
+from .forms import EmployeeCreateForm
 
 
 def employee_dashboard(request):
@@ -58,11 +59,6 @@ def employee_list(request):
         "employment/employees.html",
         context
     )
-
-
-from django.shortcuts import redirect
-
-from .forms import EmployeeCreateForm
 
 
 def employee_create(request):
