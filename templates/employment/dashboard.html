@@ -1,0 +1,135 @@
+{% extends "employment/base.html" %}
+{% block title %}Employee Dashboard{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="display-5 fw-bold article-title mb-4">
+        Employee Dashboard
+    </h1>
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Reported Articles
+                    </h5>
+                    <p class="display-6 fw-bold">
+                        0
+                    </p>
+                    <a href="#" class="btn btn-outline-warning">
+                        Review Articles
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Reported Users
+                    </h5>
+                    <p class="display-6 fw-bold">
+                        0
+                    </p>
+                    <a href="#" class="btn btn-outline-warning">
+                        Review Users
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Employees
+                    </h5>
+                    <p class="display-6 fw-bold">
+                        0
+                    </p>
+                    <a href="#" class="btn btn-outline-warning">
+                        Manage Employees
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Active Jobs
+                    </h5>
+                    <p class="display-6 fw-bold">
+                        0
+                    </p>
+                    <a href="#" class="btn btn-outline-warning">
+                        View Jobs
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5 g-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header fw-bold">
+                    <i class="fas fa-bell me-2"></i>
+                    Notifications
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <strong>Article reported</strong>
+                            <br>
+                            <small class="text-muted">
+                                A new article requires review.
+                            </small>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <strong>User warning issued</strong>
+                            <br>
+                            <small class="text-muted">
+                                A user action requires attention.
+                            </small>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action text-center">
+                            View all notifications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header fw-bold">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    Upcoming Events
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <strong>
+                                🎂 Employee Birthday
+                            </strong>
+                            <br>
+                            <small class="text-muted">
+                                John Smith - 15 July
+                            </small>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>
+                                📅 Company Meeting
+                            </strong>
+                            <br>
+                            <small class="text-muted">
+                                Monthly operations meeting - 20 July
+                            </small>
+                        </div>
+                        <a href="#" class=" list-group-item list-group-item-action text-center">
+                            View Calendar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
