@@ -34,7 +34,16 @@ def job_list(request):
     jobs = paginator.get_page(page_number)
 
     context = {
-        "jobs": jobs,
+        "page_title": "Jobs",
+        "create_url": "job-create",
+        "create_label": "Add Job",
+        "create_icon": "fas fa-briefcase",
+        "search_placeholder": "Search jobs...",
+        "list_url": "job-list",
+        "items": jobs,
+        "pagination_object": jobs,
+        "icon": "fas fa-briefcase",
+        "empty_message": "No jobs found.",
         "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "selected_letter": letter,
         "search": search,
@@ -42,7 +51,7 @@ def job_list(request):
 
     return render(
         request,
-        "job/jobs.html",
+        "layouts/list_view.html",
         context
     )
 
@@ -91,7 +100,16 @@ def department_list(request):
     departments = paginator.get_page(page_number)
 
     context = {
-        "departments": departments,
+        "page_title": "Departments",
+        "create_url": "department-create",
+        "create_label": "Add Department",
+        "create_icon": "fas fa-building",
+        "search_placeholder": "Search departments...",
+        "list_url": "department-list",
+        "items": departments,
+        "pagination_object": departments,
+        "icon": "fas fa-building",
+        "empty_message": "No departments found.",
         "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "selected_letter": letter,
         "search": search,
@@ -99,7 +117,7 @@ def department_list(request):
 
     return render(
         request,
-        "job/departments.html",
+        "layouts/list_view.html",
         context
     )
 

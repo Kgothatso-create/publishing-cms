@@ -48,7 +48,16 @@ def employee_list(request):
     employees = paginator.get_page(page_number)
 
     context = {
-        "employees": employees,
+        "page_title": "Employees",
+        "create_url": "employee-create",
+        "create_label": "Add Employee",
+        "create_icon": "fas fa-user-plus",
+        "search_placeholder": "Search employees...",
+        "list_url": "employee-list",
+        "items": employees,
+        "pagination_object": employees,
+        "icon": "fas fa-user",
+        "empty_message": "No employees found.",
         "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "selected_letter": letter,
         "search": search,
@@ -56,7 +65,7 @@ def employee_list(request):
 
     return render(
         request,
-        "employment/employees.html",
+        "layouts/list_view.html",
         context
     )
 
@@ -105,7 +114,16 @@ def role_list(request):
     roles = paginator.get_page(page_number)
 
     context = {
-        "roles": roles,
+        "page_title": "Roles",
+        "create_url": "role-create",
+        "create_label": "Add Role",
+        "create_icon": "fas fa-user-tag",
+        "search_placeholder": "Search roles...",
+        "list_url": "role-list",
+        "items": roles,
+        "pagination_object": roles,
+        "icon": "fas fa-user-tag",
+        "empty_message": "No roles found.",
         "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "selected_letter": letter,
         "search": search,
@@ -113,7 +131,7 @@ def role_list(request):
 
     return render(
         request,
-        "employment/roles.html",
+        "layouts/list_view.html",
         context,
     )
 
