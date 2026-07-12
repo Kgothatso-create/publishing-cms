@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import Employment
-from .forms import EmployeeCreateForm
+from .models import Employment, Role
+from .forms import EmployeeCreateForm, RoleCreateForm
 
 
 def employee_dashboard(request):
@@ -80,4 +80,57 @@ def employee_create(request):
         {
             "form": form
         }
+    )
+
+
+def role_list(request):
+
+    roles = Role.objects.all()
+    letter = request.GET.get("letter")
+    if letter:
+        roles = roles.filter(
+            name__istartswith=letter
+        )
+
+    search = request.GET.get("q")
+    if search:
+        roles = roles.filter(
+            Q(name__icontains=search) |
+            Q(code__icontains=search)
+        )
+
+    roles = roles.order_by("name")
+    paginator = Paginator(roles, 100)
+    page_number = request.GET.get("page")
+    roles = paginator.get_page(page_number)
+
+    context = {
+        "roles": roles,
+        "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "selected_letter": letter,
+        "search": search,
+    }
+
+    return render(
+        request,
+        "employment/roles.html",
+        context,
+    )
+
+
+def role_create(request):
+
+    if request.method == "POST":
+        form = RoleCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("role-list")
+
+    else:
+        form = RoleCreateForm()
+
+    return render(
+        request,
+        "employment/add_role.html",
+        {"form": form,},
     )
