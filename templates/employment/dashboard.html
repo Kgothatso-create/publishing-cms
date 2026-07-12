@@ -13,9 +13,10 @@
                         Reported Articles
                     </h5>
                     <p class="display-6 fw-bold">
-                        0
+                        {{ reported_article_count }}
                     </p>
-                    <a href="#" class="btn btn-outline-warning">
+                    <a href="#" class="btn"
+                       style="border-color:#bf9b30; background-color:#bf9b30;">
                         Review Articles
                     </a>
                 </div>
@@ -30,7 +31,8 @@
                     <p class="display-6 fw-bold">
                         0
                     </p>
-                    <a href="#" class="btn btn-outline-warning">
+                    <a href="#" class="btn"
+                       style="border-color:#bf9b30; background-color:#bf9b30;">
                         Review Users
                     </a>
                 </div>
@@ -43,10 +45,11 @@
                         Employees
                     </h5>
                     <p class="display-6 fw-bold">
-                        0
+                        {{ active_employee_count }}
                     </p>
-                    <a href="#" class="btn btn-outline-warning">
-                        Manage Employees
+                    <a href="{% url 'employee-list' %}" class="btn"
+                       style="border-color:#bf9b30; background-color:#bf9b30;">
+                        View Employees
                     </a>
                 </div>
             </div>
@@ -58,9 +61,10 @@
                         Active Jobs
                     </h5>
                     <p class="display-6 fw-bold">
-                        0
+                        {{ active_job_count }}
                     </p>
-                    <a href="#" class="btn btn-outline-warning">
+                    <a href="{% url 'job-list' %}" class="btn"
+                       style="border-color:#bf9b30; background-color:#bf9b30;">
                         View Jobs
                     </a>
                 </div>

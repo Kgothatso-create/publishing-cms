@@ -1,12 +1,31 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
+
+from articles.models import ArticleReport
+from job.models import Job
 from .models import Employment, Role
 from .forms import EmployeeCreateForm, RoleCreateForm
 
 
 def employee_dashboard(request):
-    return render(request, "employment/dashboard.html")
+
+    active_job_count = Job.objects.filter(is_active=True).distinct().count()
+    active_employee_count = Employment.objects.filter(status=True).distinct().count()
+
+    reported_article_count = ArticleReport.objects.filter(
+        resolved=False
+    ).values(
+        "article"
+    ).distinct().count()
+
+    context = {
+        "reported_article_count": reported_article_count,
+        "active_job_count": active_job_count,
+        "active_employee_count": active_employee_count,
+    }
+
+    return render(request, "employment/dashboard.html", context)
 
 
 def employee_list(request):

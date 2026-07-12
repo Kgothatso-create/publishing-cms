@@ -1,5 +1,7 @@
 from collections import OrderedDict
 from datetime import timedelta
+
+from django.contrib import messages
 from django.utils import timezone
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
@@ -8,7 +10,7 @@ from django.db.models import Count, Prefetch, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.text import slugify
-from articles.forms import ArticleForm
+from articles.forms import ArticleForm, ArticleReportForm
 from articles.models import Article, Category
 from people.models import User
 
@@ -511,4 +513,59 @@ def article_review_list(request):
         request,
         "articles/article_review_list.html",
         context
+    )
+
+
+@login_required
+def report_article(request, slug):
+
+    article = get_object_or_404(
+        Article,
+        slug=slug
+    )
+
+    if request.method == "POST":
+
+        form = ArticleReportForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            # prevent duplicate reports
+            if article.reports.filter(
+                user=request.user,
+                resolved=False
+            ).exists():
+
+                messages.warning(
+                    request,
+                    "You have already reported this article."
+                )
+
+            else:
+
+                report = form.save(
+                    commit=False
+                )
+
+                report.article = article
+                report.user = request.user
+
+                report.save()
+
+                messages.success(
+                    request,
+                    "Thank you. Your report has been submitted."
+                )
+
+        else:
+            messages.error(
+                request,
+                "Unable to submit your report."
+            )
+
+    return redirect(
+        "view article",
+        slug=article.slug
     )

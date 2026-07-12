@@ -18,6 +18,7 @@ urlpatterns = [
             path("retract/", retract_article, name="retract article"),
             path("unpublish/", unpublish_article, name="unpublish article"),
             path("reject/", reject_article, name="reject article"),
+            path("report/",  report_article, name="report_article"),
         ])),
     ])),
     path("categories/", include([

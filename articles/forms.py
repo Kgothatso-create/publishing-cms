@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Article
+from .models import Article, ArticleReport
 
 
 class ArticleForm(forms.ModelForm):
@@ -52,3 +52,35 @@ class ArticleForm(forms.ModelForm):
                 field.widget.attrs.setdefault("class", "form-control")
             else:
                 field.widget.attrs.setdefault("class", "form-control")
+
+
+class ArticleReportForm(forms.ModelForm):
+
+    class Meta:
+        model = ArticleReport
+
+        fields = [
+            "reason",
+            "description",
+        ]
+
+        widgets = {
+            "reason": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
+
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 5,
+                    "placeholder": "Please provide additional details about your report (optional)."
+                }
+            ),
+        }
+
+        labels = {
+            "reason": "Reason for reporting",
+            "description": "Additional information",
+        }

@@ -32,12 +32,14 @@ class Article(BaseModel):
     STATUS_DRAFT = "draft"
     STATUS_PUBLISHED = "published"
     STATUS_REJECTED = "rejected"
+    STATUS_APPROVED = "approved"
     STATUS_RETRACTED = "retracted"
 
     STATUS_CHOICES = (
         (STATUS_DRAFT, "Draft"),
         (STATUS_PUBLISHED, "Published"),
         (STATUS_REJECTED, "Rejected"),
+        (STATUS_APPROVED, "Approved"),
         (STATUS_RETRACTED, "Retracted"),
     )
 
@@ -129,6 +131,17 @@ class Article(BaseModel):
         self.status = self.STATUS_RETRACTED
         self.save(update_fields=["status", "updated_at"])
 
+    def approve(self):
+        """
+        Core CMS behavior:
+        Moves an article into an approved state.
+        """
+        self.status = self.STATUS_REJECTED
+
+        self.save(
+            update_fields=["status", "updated_at"]
+        )
+
     def reject(self):
         """
         Core CMS behavior:
@@ -151,5 +164,73 @@ class Article(BaseModel):
             update_fields=["review_status", "last_reviewed_at", "updated_at"]
         )
 
+    def has_reports(self):
+        return self.reports.filter(resolved=False).exists()
+
     def __str__(self):
         return self.title
+
+
+class ArticleReport(BaseModel):
+
+    REASON_OFFENSIVE = "offensive"
+    REASON_DISTURBING = "disturbing"
+    REASON_MISLEADING = "misleading"
+    REASON_SPAM = "spam"
+    REASON_GUIDELINE = "guideline"
+
+    REASON_CHOICES = (
+        (REASON_OFFENSIVE, "Offensive Content"),
+        (REASON_DISTURBING, "Disturbing Content"),
+        (REASON_MISLEADING, "Misleading Information"),
+        (REASON_SPAM, "Spam"),
+        (REASON_GUIDELINE, "Violates Guidelines"),
+    )
+
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name="reports"
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="article_reports"
+    )
+
+    reason = models.CharField(
+        max_length=30,
+        choices=REASON_CHOICES
+    )
+
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    resolved = models.BooleanField(
+        default=False
+    )
+
+    resolved_at = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+
+    resolved_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="resolved_article_reports"
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    @property
+    def report_count(self):
+        return self.reports.filter(
+            resolved=False
+        ).count()

@@ -44,18 +44,35 @@
                 My Articles
             </a>
         </li>
-        <!-- PROFILE -->
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'profile' %}">
-                Profile
-            </a>
-        </li>
-        <!-- LOGOUT -->
-        <li class="nav-item">
-            <a class="nav-link text-danger" href="{% url 'logout' %}">
-                Logout
-            </a>
-        </li>
+            </ul>
+              <ul class="navbar-nav align-items-lg-center">
+                <li class="nav-item dropdown">
+                    <!-- Right side search -->
+                    <form class="d-flex" method="get" action="{% url 'article_search' %}">
+                        <input
+                            class="form-control me-2"
+                            type="search"
+                            name="q"
+                            placeholder="Search articles..."
+                            aria-label="Search"
+                        >
+                        <button class="btn" type="submit"
+                        style="border-color:#bf9b30; background-color:#bf9b30;">
+                            Search
+                        </button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' %}">
+                        <i class="fas fa-user-circle me-1"></i>My Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                </li>
+            </ul>
       {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'register view' %}">
@@ -68,19 +85,5 @@
           </a>
         </li>
       {% endif %}
-    </ul>
-    <!-- Right side search -->
-    <form class="d-flex" method="get" action="{% url 'article_search' %}">
-        <input
-            class="form-control me-2"
-            type="search"
-            name="q"
-            placeholder="Search articles..."
-            aria-label="Search"
-        >
-        <button class="btn btn-outline-warning" type="submit">
-            Search
-        </button>
-    </form>
   </div>
 </nav>
