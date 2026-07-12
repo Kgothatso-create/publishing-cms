@@ -1,5 +1,6 @@
 from collections import OrderedDict
-
+from datetime import timedelta
+from django.utils import timezone
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -23,7 +24,7 @@ def home(request):
     return render(request, "articles/home.html", context)
 
 
-def view_article(request: HttpRequest, slug: str) -> HttpResponse:
+def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
     """
     Display a single article.
 
@@ -81,14 +82,22 @@ def view_article(request: HttpRequest, slug: str) -> HttpResponse:
             and request.user.is_staff
     )
 
+    is_review = request.resolver_match.url_name == "review article"
+
     context = {
         "article": article,
         "related_articles": related_articles,
         "can_edit": can_edit,
         "can_moderate": can_moderate,
+        "is_review": is_review,
     }
 
-    return render(request, "articles/view.html", context)
+    if is_review:
+        template = "employment/article_review.html"
+    else:
+        template = "articles/view.html"
+
+    return render(request, template, context)
 
 
 def article_list(request, category_slug=None, author_slug=None,):
@@ -445,5 +454,61 @@ def article_search(request):
     return render(
         request,
     "articles/list.html",
+        context
+    )
+
+
+def article_review_list(request):
+
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+
+    articles = Article.objects.filter(
+        status=Article.STATUS_PUBLISHED,
+        published_at__gte=thirty_days_ago,
+    ).order_by(
+        "review_status",
+        "-published_at"
+    )
+
+    # Search
+    search = request.GET.get("q")
+
+    if search:
+        articles = articles.filter(
+            Q(title__icontains=search) |
+            Q(body__icontains=search) |
+            Q(author__first_name__icontains=search) |
+            Q(author__last_name__icontains=search)
+        )
+
+    # Category filter
+    category = request.GET.get("category")
+
+    if category:
+        articles = articles.filter(
+            category__slug=category
+        )
+
+    # Review status filter
+    review_status = request.GET.get("review_status")
+    if review_status:
+        articles = articles.filter(
+            review_status=review_status
+        )
+
+    paginator = Paginator(articles, 12)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "articles": page_obj,
+        "page_obj": page_obj,
+        "review_statuses": Article.REVIEW_STATUS_CHOICES,
+    }
+
+    return render(
+        request,
+        "articles/article_review_list.html",
         context
     )

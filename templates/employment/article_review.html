@@ -1,0 +1,83 @@
+{% extends "employment/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-2 mb-5">
+    <div class="d-flex align-items-center mb-4">
+        {% if can_moderate %}
+            {% if article.status != "rejected" %}
+                <a href="{% url 'reject article' article.slug %}"
+                   class="btn btn-danger">
+                    Reject Article
+                </a>
+            {% endif %}
+        {% endif %}
+        <a href="{% url 'article_review_list' %}"
+           class="btn btn-outline-secondary">
+            Back
+        </a>
+    </div>
+    <div class="mb-3">
+        {% if article.review_status == "not_reviewed" %}
+            <span class="badge bg-secondary">
+                Not Reviewed
+            </span>
+        {% elif article.review_status == "under_review" %}
+            <span class="badge bg-warning text-dark">
+                Under Review
+            </span>
+        {% elif article.review_status == "approved" %}
+            <span class="badge bg-success">
+                Approved
+            </span>
+        {% elif article.review_status == "needs_changes" %}
+            <span class="badge bg-danger">
+                Needs Changes
+            </span>
+        {% endif %}
+    </div>
+
+    {% if article.featured_image %}
+        <div class="mb-1">
+            <div class="ratio ratio-21x9 rounded overflow-hidden shadow-sm">
+                <img
+                    src="{{ article.featured_image.url }}"
+                    alt="{{ article.title }}"
+                    class="w-100 h-100 object-fit-cover">
+            </div>
+        </div>
+    {% endif %}
+
+    <header class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold article-title">
+            {{ article.title }}
+        </h1>
+
+        <div class="text-muted mt-1">
+            Author:
+            <strong>
+                {{ article.author.get_full_name|default:article.author.username }}
+            </strong>
+        </div>
+
+        <div class="text-muted mt-1">
+            Category:
+            <strong>
+                {{ article.category.name }}
+            </strong>
+        </div>
+
+        {% if article.published_at %}
+            <div class="text-muted mt-1">
+                Published:
+                <strong>
+                    {{ article.published_at|date:"d M Y" }}
+                </strong>
+            </div>
+        {% endif %}
+    </header>
+    <section class="mb-5">
+        {{ article.body|safe }}
+    </section>
+</div>
+{% endblock %}

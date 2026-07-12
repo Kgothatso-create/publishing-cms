@@ -41,15 +41,57 @@ class Article(BaseModel):
         (STATUS_RETRACTED, "Retracted"),
     )
 
-    category = models.ForeignKey("Category", on_delete=models.PROTECT, related_name="articles")
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles"
+    REVIEW_NOT_REVIEWED = "not_reviewed"
+    REVIEW_UNDER_REVIEW = "under_review"
+    REVIEW_APPROVED = "approved"
+    REVIEW_NEEDS_CHANGES = "needs_changes"
+
+    REVIEW_STATUS_CHOICES = (
+        (REVIEW_NOT_REVIEWED, "Not Reviewed"),
+        (REVIEW_UNDER_REVIEW, "Under Review"),
+        (REVIEW_APPROVED, "Approved"),
+        (REVIEW_NEEDS_CHANGES, "Needs Changes"),
     )
+
+    category = models.ForeignKey(
+        "Category",
+        on_delete=models.PROTECT,
+        related_name="articles"
+    )
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="articles"
+    )
+
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     body = models.TextField()
-    featured_image = models.ImageField(upload_to="articles/", blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="draft")
+
+    featured_image = models.ImageField(
+        upload_to="articles/",
+        blank=True,
+        null=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_DRAFT
+    )
+
+    review_status = models.CharField(
+        max_length=30,
+        choices=REVIEW_STATUS_CHOICES,
+        default=REVIEW_NOT_REVIEWED
+    )
+
+    last_reviewed_at = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+
     is_featured = models.BooleanField(default=False)
     published_at = models.DateTimeField(blank=True, null=True)
 
@@ -64,12 +106,17 @@ class Article(BaseModel):
         self.status = self.STATUS_PUBLISHED
         if not self.published_at:
             self.published_at = timezone.now()
-        self.save(update_fields=["status", "published_at", "updated_at"])
+
+        self.review_status = self.REVIEW_NOT_REVIEWED
+
+        self.save(
+            update_fields=["status", "published_at", "review_status", "updated_at"]
+        )
 
     def unpublish(self):
         """
         Core CMS behavior:
-        Moves article into unpublish state safely.
+        Moves article into draft state safely.
         """
         self.status = self.STATUS_DRAFT
         self.save(update_fields=["status", "updated_at"])
@@ -88,7 +135,21 @@ class Article(BaseModel):
         Moves an article into a rejected state.
         """
         self.status = self.STATUS_REJECTED
-        self.save(update_fields=["status", "updated_at"])
+
+        self.save(
+            update_fields=["status", "updated_at"]
+        )
+
+    def mark_reviewed(self, status):
+        """
+        Updates article review state.
+        """
+        self.review_status = status
+        self.last_reviewed_at = timezone.now()
+
+        self.save(
+            update_fields=["review_status", "last_reviewed_at", "updated_at"]
+        )
 
     def __str__(self):
         return self.title
