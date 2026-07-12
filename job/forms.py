@@ -1,6 +1,36 @@
 from django import forms
 
-from .models import Job
+from .models import Department, Job
+
+
+def generate_department_code():
+    """
+    Generates department codes in the format:
+    DEP001
+    DEP002
+    DEP003
+    """
+
+    last_department = (
+        Department.objects
+        .order_by("-code")
+        .first()
+    )
+
+    if (
+        last_department and
+        last_department.code.startswith("DEP")
+    ):
+        try:
+            last_number = int(
+                last_department.code.replace("DEP", "")
+            )
+        except ValueError:
+            last_number = 0
+    else:
+        last_number = 0
+
+    return f"DEP{last_number + 1:03d}"
 
 
 def generate_job_code():
@@ -52,3 +82,38 @@ class JobCreateForm(forms.ModelForm):
             job.save()
 
         return job
+
+
+class DepartmentCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Department
+        fields = ["name", "description", "is_active",]
+
+        widgets = {
+            "description": forms.Textarea(attrs={"rows": 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs.update(
+                {"class": "form-control"}
+            )
+
+        self.fields["is_active"].widget.attrs.update(
+            {"class": "form-check-input"}
+        )
+
+    def save(self, commit=True):
+
+        department = super().save(commit=False)
+
+        if not department.code:
+            department.code = generate_department_code()
+
+        if commit:
+            department.save()
+
+        return department
