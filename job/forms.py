@@ -6,31 +6,24 @@ from .models import Department, Job
 def generate_department_code():
     """
     Generates department codes in the format:
-    DEP001
-    DEP002
-    DEP003
+
+    DEP-001
+    DEP-002
+    DEP-003
+
+    Reuses deleted department codes.
     """
 
-    last_department = (
-        Department.objects
-        .order_by("-code")
-        .first()
+    existing_codes = set(
+        Department.objects.values_list("code",flat=True,)
     )
 
-    if (
-        last_department and
-        last_department.code.startswith("DEP")
-    ):
-        try:
-            last_number = int(
-                last_department.code.replace("DEP", "")
-            )
-        except ValueError:
-            last_number = 0
-    else:
-        last_number = 0
-
-    return f"DEP{last_number + 1:03d}"
+    number = 1
+    while True:
+        code = f"DEP-{number:03d}"
+        if code not in existing_codes:
+            return code
+        number += 1
 
 
 def generate_job_code():
