@@ -10,6 +10,7 @@ urlpatterns = [
         path("author-list/", author_article_list, name="author articles"),
         path("search/", article_search, name="article_search"),
         path("reviews/", article_review_list, name="article_review_list"),
+        path("reported-articles/", article_reported_list, name="article_reported_list"),
         path("<slug:slug>/", include([
             path("", view_article, name="view article"),
             path("review/", view_article, name="review article"),

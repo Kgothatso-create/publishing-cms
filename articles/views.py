@@ -11,7 +11,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.text import slugify
 from articles.forms import ArticleForm, ArticleReportForm
-from articles.models import Article, Category
+from articles.models import Article, ArticleReport, Category
 from people.models import User
 
 
@@ -505,11 +505,71 @@ def article_review_list(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    subheading = "Review recently published articles and ensure they meet publishing guidelines. "
 
     context = {
         "articles": page_obj,
         "page_obj": page_obj,
         "review_statuses": Article.REVIEW_STATUS_CHOICES,
+        "heading": "Article Review Queue",
+        "subheading": subheading,
+    }
+
+    return render(
+        request,
+        "articles/article_review_list.html",
+        context
+    )
+
+
+def article_reported_list(request):
+
+    articles = (
+        Article.objects
+        .filter(
+            reports__resolved=False
+        )
+        .distinct()
+    )
+
+    # Search
+    search = request.GET.get("q")
+
+    if search:
+        articles = articles.filter(
+            Q(title__icontains=search) |
+            Q(body__icontains=search) |
+            Q(author__first_name__icontains=search) |
+            Q(author__last_name__icontains=search)
+        )
+
+    # Category filter
+    category = request.GET.get("category")
+
+    if category:
+        articles = articles.filter(
+            category__slug=category
+        )
+
+    # Review status filter
+    review_status = request.GET.get("review_status")
+    if review_status:
+        articles = articles.filter(
+            review_status=review_status
+        )
+
+    paginator = Paginator(articles, 12)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    subheading = "Review recently reported articles."
+
+    context = {
+        "articles": page_obj,
+        "page_obj": page_obj,
+        "review_statuses": Article.REVIEW_STATUS_CHOICES,
+        "heading": "Reported Articles",
+        "subheading": subheading,
     }
 
     return render(
