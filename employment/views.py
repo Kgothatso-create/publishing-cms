@@ -11,7 +11,9 @@ from .forms import EmployeeCreateForm, RoleCreateForm
 def employee_dashboard(request):
 
     active_job_count = Job.objects.filter(is_active=True).distinct().count()
-    active_employee_count = Employment.objects.filter(status=True).distinct().count()
+    active_employee_count = Employment.objects.filter(
+        status=Employment.EmploymentStatus.ACTIVE
+    ).distinct().count()
 
     reported_article_count = ArticleReport.objects.filter(
         resolved=False

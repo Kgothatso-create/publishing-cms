@@ -119,66 +119,64 @@
         {% endif %}
     </div>
     <div class="modal fade"
-         id="reportArticleModal"
-         tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        Report Article
-                    </h5>
+     id="reportArticleModal"
+     tabindex="-1"
+     aria-labelledby="reportArticleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"
+                    id="reportArticleModalLabel">
+                    Report Article
+                </h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <form method="post"
+                  action="{% url 'report_article' article.slug %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="text-muted mb-4">
+                        If you believe this article violates our community guidelines,
+                        please tell us why. Your report will be reviewed by our moderation team.
+                    </p>
+                    <div class="mb-3">
+                        {{ form.reason.label_tag }}
+                        {{ form.reason }}
+                        {% if form.reason.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.reason.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.description.label_tag }}
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.description.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
                     <button type="button"
-                            class="btn-close"
+                            class="btn btn-outline-secondary"
                             data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn btn-danger">
+                        <i class="fas fa-flag me-2"></i>
+                        Submit Report
                     </button>
                 </div>
-                <form method="post"
-                      action="{% url 'report_article' article.slug %}">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <p class="text-muted">
-                            Why are you reporting this article?
-                        </p>
-                        {% for value, label in form.reason.field.choices %}
-                        {% if value %}
-                        <div class="form-check mb-2">
-                            <input class="form-check-input"
-                                   type="radio"
-                                   name="reason"
-                                   value="{{ value }}"
-                                   id="reason_{{ value }}"
-                                   required>
-                            <label class="form-check-label"
-                                   for="reason_{{ value }}">
-                                {{ label }}
-                            </label>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                        <div class="mt-3">
-                            <label class="form-label">
-                                Additional details (optional)
-                            </label>
-                            <textarea class="form-control"
-                                      name="description"
-                                      rows="3"
-                                      placeholder="Add more information if needed">
-                            </textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button"
-                                class="btn btn-secondary"
-                                data-bs-dismiss="modal">
-                            Cancel
-                        </button>
-                        <button type="submit"
-                                class="btn btn-danger">
-                            Submit Report
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 {% endblock %}

@@ -86,12 +86,15 @@ def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
 
     is_review = request.resolver_match.url_name == "review article"
 
+    report_form = ArticleReportForm()
+
     context = {
         "article": article,
         "related_articles": related_articles,
         "can_edit": can_edit,
         "can_moderate": can_moderate,
         "is_review": is_review,
+        "form": report_form,
     }
 
     if is_review:

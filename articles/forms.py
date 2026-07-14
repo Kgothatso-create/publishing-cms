@@ -67,7 +67,7 @@ class ArticleReportForm(forms.ModelForm):
         widgets = {
             "reason": forms.Select(
                 attrs={
-                    "class": "form-select"
+                    "class": "form-select select2"
                 }
             ),
 
