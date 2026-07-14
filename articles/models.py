@@ -90,8 +90,7 @@ class Article(BaseModel):
     )
 
     last_reviewed_at = models.DateTimeField(
-        blank=True,
-        null=True
+        blank=True, null=True
     )
 
     is_featured = models.BooleanField(default=False)

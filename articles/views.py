@@ -84,6 +84,15 @@ def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
             and request.user.is_staff
     )
 
+    reports = None
+    if can_moderate:
+        reports = (
+            article.reports
+            .filter(resolved=False)
+            .select_related("user")
+            .order_by("-created_at")
+        )
+
     is_review = request.resolver_match.url_name == "review article"
 
     report_form = ArticleReportForm()
@@ -95,6 +104,7 @@ def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
         "can_moderate": can_moderate,
         "is_review": is_review,
         "form": report_form,
+        "reports": reports,
     }
 
     if is_review:
@@ -632,3 +642,25 @@ def report_article(request, slug):
         "view article",
         slug=article.slug
     )
+
+
+@login_required
+def resolve_article_report(request, slug, id):
+
+    article = get_object_or_404(Article, slug=slug)
+    reports = article.reports.filter(resolved=False, id=id)
+
+    if not reports.exists():
+        messages.warning(
+            request,
+            "This article has no active reports."
+        )
+        return redirect("reported articles")
+
+    reports.update(resolved=True)
+
+    messages.success(
+        request, "Article report has been resolved."
+    )
+
+    return redirect("reported articles")

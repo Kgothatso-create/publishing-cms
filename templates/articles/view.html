@@ -8,35 +8,27 @@
         {% if can_edit %}
             <div class="mt-2 mb-2">
                 <a href="{% url 'article-edit' article.slug %}"
-                   class="btn "
-                   style="background-color:#bf9b30; color:#000;">
+                   class="btn btn-sm"
+                   style="background-color:#bf9b30;">
                     Edit Article
                 </a>
                 {% if article.status == "draft" %}
                     <a href="{% url 'publish article' article.slug %}"
-                       class="btn btn-success text-dark">
+                       class="btn btn-success btn-sm text-dark">
                         Publish Article
                     </a>
                 {% endif %}
                 {% if article.status == "published" %}
                     <a href="{% url 'unpublish article' article.slug %}"
-                       class="btn btn-warning">
+                       class="btn btn-warning btn-sm text-dark">
                         Unpublish Article
                     </a>
                     <a href="{% url 'retract article' article.slug %}"
-                       class="btn btn-danger text-dark">
+                       class="btn btn-danger btn-sm text-dark">
                         Retract Article
                     </a>
                 {% endif %}
             </div>
-        {% endif %}
-        {% if can_moderate %}
-            {% if article.status != "rejected" %}
-                <a href="{% url 'reject article' article.slug %}"
-                   class="btn btn-danger btn-sm">
-                    Reject Article
-                </a>
-            {% endif %}
         {% endif %}
         <!-- Featured Image (Responsive Hero using Bootstrap ratio) -->
         {% if article.featured_image %}
