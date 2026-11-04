@@ -645,19 +645,12 @@ def report_article(request, slug):
 
 
 @login_required
-def resolve_article_report(request, slug, id):
+def resolve_article_report(request, report_id):
 
-    article = get_object_or_404(Article, slug=slug)
-    reports = article.reports.filter(resolved=False, id=id)
+    report = get_object_or_404(ArticleReport, id=report_id, resolved=False)
 
-    if not reports.exists():
-        messages.warning(
-            request,
-            "This article has no active reports."
-        )
-        return redirect("reported articles")
-
-    reports.update(resolved=True)
+    report.resolved = True
+    report.save(update_fields=["resolved"])
 
     messages.success(
         request, "Article report has been resolved."

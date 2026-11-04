@@ -18,9 +18,11 @@
                 </p>
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} py-1 px-2 mb-2 small" role="alert">
-                            {{ message }}
-                        </div>
+                        {% if "newsletter" in message.tags %}
+                            <div class="alert alert-{{ message.level_tag }} py-1 px-2 mb-2 small" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
                 <form method="post" action="{% url 'subscribe newsletter' %}">

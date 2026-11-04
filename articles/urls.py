@@ -1,7 +1,6 @@
 from django.urls import path, include
 from .views import *
 
-
 urlpatterns = [
     path("", home, name="home"),
     path("articles/", include([
@@ -19,8 +18,12 @@ urlpatterns = [
             path("retract/", retract_article, name="retract article"),
             path("unpublish/", unpublish_article, name="unpublish article"),
             path("reject/", reject_article, name="reject article"),
-            path("report/",  report_article, name="report_article"),
-            path("resolve-report/<id:report.id>", resolve_article_report, name="resolve article report"),
+            path("report/", report_article, name="report_article"),
+            path(
+                "resolve-report/<int:report_id>",
+                resolve_article_report,
+                name="resolve article report"
+            ),
         ])),
     ])),
     path("categories/", include([

@@ -16,11 +16,12 @@ def subscribe_newsletter(request):
         form.save()
         messages.success(
             request,
-            "Thank you for subscribing to the Inkflow Inspiration newsletter!"
+            "Thank you for subscribing to the Inkflow Inspiration newsletter!",
+            extra_tags="newsletter"
         )
     else:
         for error in form.errors.get("email", []):
-            messages.error(request, error)
+            messages.error(request, error, extra_tags="newsletter")
 
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
