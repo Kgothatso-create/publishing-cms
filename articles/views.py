@@ -119,7 +119,7 @@ def article_list(request, category_slug=None, author_slug=None,):
 
     articles = Article.objects.select_related(
             "author", "category"
-        ).filter(status="published").order_by("-published_at")
+        ).filter(status=Article.STATUS_PUBLISHED).order_by("-published_at")
 
     author = None
     category = None
@@ -448,7 +448,7 @@ def article_search(request):
     )
 
     if query:
-        articles = Article.objects.filter(
+        articles = articles.filter(
             Q(title__icontains=query) |
             Q(author__username__icontains=query) |
             Q(category__name__icontains=query)
