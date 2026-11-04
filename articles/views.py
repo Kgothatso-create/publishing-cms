@@ -450,7 +450,6 @@ def article_search(request):
     if query:
         articles = Article.objects.filter(
             Q(title__icontains=query) |
-            Q(body__icontains=query) |
             Q(author__username__icontains=query) |
             Q(category__name__icontains=query)
         ).distinct()
