@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'people',
     'employment',
     'job',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,21 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": 500,
+    "menubar": False,
+    "statusbar": False,
+    "plugins": "advlist autolink lists link charmap searchreplace fullscreen",
+    "toolbar": (
+        "undo redo | blocks | "
+        "bold italic underline | "
+        "alignleft aligncenter alignright | "
+        "bullist numlist | "
+        "link charmap | removeformat"
+    ),
+    "block_formats": "Paragraph=p; Heading 2=h2; Heading 3=h3; Heading 4=h4",
+}
 
 
 # Database

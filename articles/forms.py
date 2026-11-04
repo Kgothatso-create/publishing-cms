@@ -1,4 +1,5 @@
 from django import forms
+from tinymce.widgets import TinyMCE
 
 from .models import Article, ArticleReport
 
@@ -20,13 +21,7 @@ class ArticleForm(forms.ModelForm):
                     "placeholder": "Enter your article title",
                 }
             ),
-            "body": forms.Textarea(
-                attrs={
-                    "rows": 10,
-                    "class": "form-control",
-                    "placeholder": "Write your article here...",
-                }
-            ),
+            "body": TinyMCE(),
             "category": forms.Select(
                 attrs={"class": "form-select"}
             ),

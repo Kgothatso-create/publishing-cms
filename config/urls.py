@@ -9,6 +9,7 @@ urlpatterns = [
     path("user/", include("people.urls")),
     path("operations/", include("employment.urls")),
     path("jobs/", include("job.urls")),
+    path("tinymce/", include("tinymce.urls")),
 ]
 
 if settings.DEBUG:

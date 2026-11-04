@@ -55,7 +55,7 @@
         </header>
         <!-- Article Body -->
         <section class="mb-5">
-            {{ article.body|linebreaks }}
+            {{ article.body|safe }}
         </section>
         <section class="mb-5">
             <button type="button"
