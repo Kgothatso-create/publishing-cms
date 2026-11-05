@@ -1,7 +1,8 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import authenticate, get_user_model, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 
 from .forms import LoginForm, NewsletterSubscriberForm, ProfileUpdateForm, UserPasswordChangeForm, UserRegisterForm
 
@@ -132,3 +133,22 @@ def profile_view(request):
         "people/profile.html",
         context
     )
+
+
+@require_POST
+def explorer_login(request):
+    User = get_user_model()
+
+    if request.user.is_authenticated:
+        messages.info(request, "You are already logged in.")
+        return redirect("home")
+
+    try:
+        explorer = User.objects.get(username="Explorer")
+    except User.DoesNotExist:
+        messages.error(request, "Explorer access is currently unavailable.")
+        return redirect("home")
+
+    login(request, explorer, backend="django.contrib.auth.backends.ModelBackend")
+
+    return redirect("home")
