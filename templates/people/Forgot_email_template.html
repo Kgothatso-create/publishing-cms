@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block hero %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+
+        <div class="col-md-7 col-lg-5">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} py-1 px-2 mb-2 small" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <h3 class="mb-4 text-center">{{ title }}</h3>
+
+                    <p class="text-muted text-center small mb-4">
+                        {{ description }}
+                    </p>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- EMAIL -->
+                        <div class="form-group mb-3">
+                            <label for="{{ form.email.id_for_label }}">Email Address</label>
+                            {{ form.email }}
+                            {{ form.email.errors }}
+                        </div>
+
+                        <button type="submit" class="btn btn-block w-100 mt-3 disabled"
+                                style="background-color: #bf9b30; color: #000;">
+                            {{ button_text }}
+                        </button>
+
+                        <hr class="my-4">
+
+                        <p class="text-center mb-0">
+                            Remember your login details?
+                            <a href="{% url 'login' %}"
+                               style="color: #bf9b30;">
+                                Login
+                            </a>
+                        </p>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+```

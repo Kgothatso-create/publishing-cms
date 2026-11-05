@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
+
 from people.models import NewsletterSubscriber, User
 
 
@@ -92,11 +94,6 @@ class LoginForm(forms.Form):
     )
 
 
-from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
-from django import forms
-from .models import User
-
-
 class ProfileUpdateForm(forms.ModelForm):
 
     class Meta:
@@ -144,4 +141,24 @@ class UserPasswordChangeForm(PasswordChangeForm):
                 "class": "form-control"
             }
         )
+    )
+
+
+class EmailForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            "class": "form-control",
+            "placeholder": "This feature is currently unavailable.",
+            "autocomplete": "email",
+        })
+    )
+
+
+class UserPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            "class": "form-control",
+            "placeholder": "This feature is currently unavailable.",
+            "autocomplete": "email",
+        })
     )

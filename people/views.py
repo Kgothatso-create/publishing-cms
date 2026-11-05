@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
-from .forms import LoginForm, NewsletterSubscriberForm, ProfileUpdateForm, UserPasswordChangeForm, UserRegisterForm
+from .forms import EmailForm, LoginForm, NewsletterSubscriberForm, ProfileUpdateForm, UserPasswordChangeForm, \
+    UserPasswordResetForm, UserRegisterForm
+from .utility import send_password_reset_email, send_username_recovery_email
 
 
 def subscribe_newsletter(request):
@@ -152,3 +154,71 @@ def explorer_login(request):
     login(request, explorer, backend="django.contrib.auth.backends.ModelBackend")
 
     return redirect("home")
+
+
+def forgot_username(request):
+    if request.method == "POST":
+        form = EmailForm(request.POST)
+
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+
+            send_username_recovery_email(
+                email=email,
+                request=request,
+            )
+
+            messages.success(
+                request,
+                "If an account exists with that email, a username recovery link has been sent."
+            )
+
+            return redirect("forgot_username")
+
+    else:
+        form = EmailForm()
+
+    return render(
+        request,
+        "people/forgot_email_template.html",
+        {
+            "form": form,
+            "title": "Recover Username",
+            "description": "This application is a demonstration prototype.",
+            "button_text": "Recover Username",
+        },
+    )
+
+
+def forgot_password(request):
+    if request.method == "POST":
+        form = UserPasswordResetForm(request.POST)
+
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+
+            send_password_reset_email(
+                email=email,
+                request=request,
+            )
+
+            messages.success(
+                request,
+                "If an account exists with that email, a password reset link has been sent."
+            )
+
+            return redirect("forgot_password")
+
+    else:
+        form = UserPasswordResetForm()
+
+    return render(
+        request,
+        "people/forgot_email_template.html",
+        {
+            "form": form,
+            "title": "Reset Password",
+            "description": "This application is a demonstration prototype.",
+            "button_text": "Reset Password",
+        },
+    )
