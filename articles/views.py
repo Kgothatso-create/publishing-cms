@@ -7,11 +7,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count, Prefetch, Q
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.text import slugify
+from django.views.decorators.http import require_POST
+
 from articles.forms import ArticleForm, ArticleReportForm
-from articles.models import Article, ArticleReport, Category
+from articles.models import Article, ArticleLike, ArticleReport, Category
 from people.models import User
 
 
@@ -656,3 +658,21 @@ def resolve_article_report(request, report_id):
     )
 
     return redirect("reported articles")
+
+@login_required
+@require_POST
+def toggle_article_like(request, slug):
+    article = get_object_or_404(Article, slug=slug)
+
+    like, created = ArticleLike.objects.get_or_create(
+        article=article,
+        user=request.user
+    )
+
+    if not created:
+        like.delete()
+
+    return JsonResponse({
+        "liked": created,
+        "like_count": article.likes.count()
+    })

@@ -305,3 +305,8 @@ main {
     max-width: 100%;
     height: auto;
 }
+
+.like-button.liked {
+    background-color: #dc3545;
+    color: white;
+}

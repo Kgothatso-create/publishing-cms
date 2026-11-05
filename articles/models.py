@@ -233,3 +233,28 @@ class ArticleReport(BaseModel):
         return self.reports.filter(
             resolved=False
         ).count()
+
+
+class ArticleLike(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name="likes"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="article_likes"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["article", "user"],
+                name="unique_article_user_like"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.user} likes {self.article}"

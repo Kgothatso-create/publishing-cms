@@ -24,6 +24,7 @@ urlpatterns = [
                 resolve_article_report,
                 name="resolve article report"
             ),
+            path("like/", toggle_article_like, name="toggle_article_like"),
         ])),
     ])),
     path("categories/", include([

@@ -62,11 +62,16 @@
             <div class="col-lg-4 col-md-6">
                 <!-- Like Article -->
                 {% if not can_edit %}
-                    <button type="button" class="btn btn-outline-danger btn-sm me-3">
-                        <i class="fas fa-heart"></i>
-                    </button>
                 <!-- Report Article -->
                     {% if user.is_authenticated %}
+                        <button
+                                type="button"
+                                class="btn btn-outline-danger btn-sm me-3 like-button {% if is_liked %}liked{% endif %}"
+                                data-url="{% url 'toggle_article_like' article.slug %}"
+                            >
+                            <i class="fas fa-heart"></i>
+                            <span class="like-count">{{ article.likes.count }}</span>
+                        </button>
                         <button type="button"
                                 class="btn btn-outline-warning btn-sm"
                                 data-bs-toggle="modal"
@@ -175,7 +180,7 @@
                         Cancel
                     </button>
                     <button type="submit"
-                            class="btn btn-danger">
+                            class="btn btn-warning">
                         <i class="fas fa-flag me-2"></i>
                         Submit Report
                     </button>
@@ -184,4 +189,28 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll(".like-button").forEach(button => {
+    button.addEventListener("click", async () => {
+        const response = await fetch(button.dataset.url, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
+
+        if (!response.ok) {
+            return;
+        }
+
+        const data = await response.json();
+
+        button.classList.toggle("liked", data.liked);
+        button.querySelector(".like-count").textContent = data.like_count;
+    });
+});
+</script>
 {% endblock %}
