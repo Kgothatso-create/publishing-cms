@@ -44,15 +44,13 @@ class Article(BaseModel):
     )
 
     REVIEW_NOT_REVIEWED = "not_reviewed"
-    REVIEW_UNDER_REVIEW = "under_review"
     REVIEW_APPROVED = "approved"
-    REVIEW_NEEDS_CHANGES = "needs_changes"
+    REVIEW_REJECTED = "rejected"
 
     REVIEW_STATUS_CHOICES = (
         (REVIEW_NOT_REVIEWED, "Not Reviewed"),
-        (REVIEW_UNDER_REVIEW, "Under Review"),
         (REVIEW_APPROVED, "Approved"),
-        (REVIEW_NEEDS_CHANGES, "Needs Changes"),
+        (REVIEW_REJECTED, "rejected"),
     )
 
     category = models.ForeignKey(
@@ -135,7 +133,7 @@ class Article(BaseModel):
         Core CMS behavior:
         Moves an article into an approved state.
         """
-        self.status = self.STATUS_REJECTED
+        self.status = self.STATUS_APPROVED
 
         self.save(
             update_fields=["status", "updated_at"]

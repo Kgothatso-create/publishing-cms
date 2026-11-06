@@ -8,21 +8,21 @@ urlpatterns = [
         path("new/", article_create, name="article-create"),
         path("author-list/", author_article_list, name="author articles"),
         path("search/", article_search, name="article_search"),
-        path("reviews/", article_review_list, name="article_review_list"),
         path("reported-articles/", article_reported_list, name="article_reported_list"),
         path("<slug:slug>/", include([
             path("", view_article, name="view article"),
-            path("review/", view_article, name="review article"),
+            path("review/", view_article, {"review": True}, name="review_article"),
             path("edit/", article_edit, name="article-edit"),
             path("publish/", publish_article, name="publish article"),
             path("retract/", retract_article, name="retract article"),
             path("unpublish/", unpublish_article, name="unpublish article"),
-            path("reject/", reject_article, name="reject article"),
+            path("reject/", reject_article, name="reject_article"),
+            path("approve/", approve_article, name="approve_article"),
             path("report/", report_article, name="report_article"),
             path(
-                "resolve-report/<int:report_id>",
+                "resolve-report/<int:report_id>/",
                 resolve_article_report,
-                name="resolve article report"
+                name="resolve_article_report"
             ),
             path("like/", toggle_article_like, name="toggle_article_like"),
         ])),

@@ -3,21 +3,29 @@
 
 {% block content %}
 <div class="container mt-2 mb-5">
-    <div class="d-flex align-items-center mb-4">
+    <div class="d-flex align-items-center mb-4 position-relative">
         {% if can_moderate %}
-            {% if article.status != "rejected" %}
-                <a href="{% url 'reject article' article.slug %}"
-                   class="btn btn-danger btn-sm me-3 text-dark">
-                    Reject Article
-                </a>
-                <a href="{% url 'reject article' article.slug %}"
-                   class="btn btn-success btn-sm me-3 text-dark">
-                    Approve Article
-                </a>
-            {% endif %}
+            <a href="{% url 'reject_article' article.slug %}"
+               class="btn btn-danger btn-sm me-3 text-dark">
+                Reject Article
+            </a>
+            <a href="{% url 'approve_article' article.slug %}"
+               class="btn btn-success btn-sm me-3 text-dark">
+                Approve Article
+            </a>
         {% endif %}
-        <a href="{% url 'article_review_list' %}"
-           class="btn btn-outline-secondary btn-sm">
+        {% if messages %}
+            <div class="position-absolute start-50 translate-middle-x">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss mb-0" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <a href="{% url 'article_reported_list' %}"
+           class="btn btn-outline-secondary btn-sm ms-auto">
             Back
         </a>
     </div>
@@ -26,17 +34,13 @@
             <span class="badge bg-secondary">
                 Not Reviewed
             </span>
-        {% elif article.review_status == "under_review" %}
-            <span class="badge bg-warning text-dark">
-                Under Review
-            </span>
         {% elif article.review_status == "approved" %}
             <span class="badge bg-success">
                 Approved
             </span>
-        {% elif article.review_status == "needs_changes" %}
+        {% elif article.review_status == "rejected" %}
             <span class="badge bg-danger">
-                Needs Changes
+                Rejected
             </span>
         {% endif %}
     </div>
@@ -106,10 +110,10 @@
                                         {{ report.created_at|date:"d M Y H:i" }}
                                     </small>
                                     <div class="mt-3">
-                                        <a href="{% url 'resolve article report' article.slug %}"
-                                       class="btn btn-warning btn-sm me-3 text-dark">
-                                        Resolve Reports
-                                    </a>
+                                        <a href="{% url 'resolve_article_report' article.slug report.id %}"
+                                           class="btn btn-warning btn-sm me-3 text-dark">
+                                            Resolve Report
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -120,4 +124,18 @@
         {% endif %}
     </section>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const messages = document.querySelectorAll(".auto-dismiss");
+
+    messages.forEach(function (message) {
+        setTimeout(function () {
+            const alert = bootstrap.Alert.getOrCreateInstance(message);
+            alert.close();
+        }, 5000);
+    });
+});
+</script>
 {% endblock %}

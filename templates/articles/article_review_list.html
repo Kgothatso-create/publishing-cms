@@ -52,17 +52,13 @@
                                 <span class="badge bg-secondary">
                                     Not Reviewed
                                 </span>
-                            {% elif article.review_status == "under_review" %}
-                                <span class="badge bg-warning text-dark">
-                                    Under Review
-                                </span>
                             {% elif article.review_status == "approved" %}
                                 <span class="badge bg-success">
                                     Approved
                                 </span>
-                            {% elif article.review_status == "needs_changes" %}
+                            {% elif article.review_status == "rejected" %}
                                 <span class="badge bg-danger">
-                                    Needs Changes
+                                    Rejected
                                 </span>
                             {% endif %}
                         </div>
@@ -71,7 +67,7 @@
                         </p>
                         <div class="mt-auto">
                             <a
-                                href="{% url 'review article' article.slug %}"
+                                href="{% url 'review_article' article.slug %}"
                                 class="btn btn-sm"
                                 style="background-color:#bf9b30;color:#000;"
                             >

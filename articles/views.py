@@ -43,16 +43,23 @@ def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
         request (HttpRequest): The HTTP request object containing user
             authentication information.
         slug (str): The unique slug identifying the article.
+        review (bool):
 
     Returns:
         HttpResponse: Rendered article detail page containing the article,
             related articles, and edit permissions.
     """
 
-    if request.user.is_authenticated:
+    if review:
+        article = get_object_or_404(
+            Article,
+            slug=slug,
+        )
+    elif request.user.is_authenticated:
         article = get_object_or_404(
             Article.objects.filter(
                 Q(status=Article.STATUS_PUBLISHED)
+                | Q(status=Article.STATUS_APPROVED)
                 | Q(author=request.user)
             ),
             slug=slug,
@@ -95,8 +102,6 @@ def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
             .order_by("-created_at")
         )
 
-    is_review = request.resolver_match.url_name == "review article"
-
     report_form = ArticleReportForm()
 
     context = {
@@ -104,12 +109,12 @@ def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
         "related_articles": related_articles,
         "can_edit": can_edit,
         "can_moderate": can_moderate,
-        "is_review": is_review,
+        "is_review": review,
         "form": report_form,
         "reports": reports,
     }
 
-    if is_review:
+    if review:
         template = "employment/article_review.html"
     else:
         template = "articles/view.html"
@@ -120,8 +125,11 @@ def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
 def article_list(request, category_slug=None, author_slug=None,):
 
     articles = Article.objects.select_related(
-            "author", "category"
-        ).filter(status=Article.STATUS_PUBLISHED).order_by("-published_at")
+        "author", "category"
+    ).filter(
+        Q(status=Article.STATUS_PUBLISHED)
+        | Q(status=Article.STATUS_APPROVED)
+    ).order_by("-published_at")
 
     author = None
     category = None
@@ -302,6 +310,36 @@ def unpublish_article(request: HttpRequest, slug: str) -> HttpResponse:
 
 
 @staff_member_required
+def approve_article(request: HttpRequest, slug: str) -> HttpResponse:
+    """
+    Approve an article through administrative moderation.
+
+    Only Django staff users can reject articles.
+
+    Args:
+        request (HttpRequest): The HTTP request containing the authenticated staff user.
+        slug (str): The unique slug identifying the article.
+
+    Returns:
+        HttpResponse: Redirects the admin back to the article page.
+    """
+
+    article = get_object_or_404(
+        Article,
+        slug=slug,
+    )
+
+    if article.has_reports():
+        messages.warning(request, "You cannot approve an article with reports.")
+        return redirect("review_article", slug=article.slug)
+
+    article.approve()
+    article.mark_reviewed(Article.REVIEW_APPROVED)
+
+    return redirect("review_article", slug=article.slug)
+
+
+@staff_member_required
 def reject_article(request: HttpRequest, slug: str) -> HttpResponse:
     """
     Reject an article through administrative moderation.
@@ -321,9 +359,14 @@ def reject_article(request: HttpRequest, slug: str) -> HttpResponse:
         slug=slug,
     )
 
-    article.reject()
+    if article.has_reports():
+        messages.warning(request, "You cannot reject an article with reports.")
+        return redirect("review_article", slug=article.slug)
 
-    return redirect("view article", slug=article.slug)
+    article.reject()
+    article.mark_reviewed(Article.REVIEW_REJECTED)
+
+    return redirect("review_article", slug=article.slug)
 
 
 def category_list(request: HttpRequest):
@@ -474,65 +517,6 @@ def article_search(request):
     )
 
 
-def article_review_list(request):
-
-    thirty_days_ago = timezone.now() - timedelta(days=30)
-
-    articles = Article.objects.filter(
-        status=Article.STATUS_PUBLISHED,
-        published_at__gte=thirty_days_ago,
-    ).order_by(
-        "review_status",
-        "-published_at"
-    )
-
-    # Search
-    search = request.GET.get("q")
-
-    if search:
-        articles = articles.filter(
-            Q(title__icontains=search) |
-            Q(body__icontains=search) |
-            Q(author__first_name__icontains=search) |
-            Q(author__last_name__icontains=search)
-        )
-
-    # Category filter
-    category = request.GET.get("category")
-
-    if category:
-        articles = articles.filter(
-            category__slug=category
-        )
-
-    # Review status filter
-    review_status = request.GET.get("review_status")
-    if review_status:
-        articles = articles.filter(
-            review_status=review_status
-        )
-
-    paginator = Paginator(articles, 12)
-
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-    subheading = "Review recently published articles and ensure they meet publishing guidelines. "
-
-    context = {
-        "articles": page_obj,
-        "page_obj": page_obj,
-        "review_statuses": Article.REVIEW_STATUS_CHOICES,
-        "heading": "Article Review Queue",
-        "subheading": subheading,
-    }
-
-    return render(
-        request,
-        "articles/article_review_list.html",
-        context
-    )
-
-
 def article_reported_list(request):
 
     articles = (
@@ -646,18 +630,34 @@ def report_article(request, slug):
 
 
 @login_required
-def resolve_article_report(request, report_id):
+def resolve_article_report(request: HttpRequest, slug: str, report_id: int) -> HttpResponse:
+    """
+    Resolve a specific article report.
 
-    report = get_object_or_404(ArticleReport, id=report_id, resolved=False)
+    Args:
+        request: The HTTP request.
+        slug: The article slug.
+        report_id: The report ID.
+
+    Returns:
+        Redirects to the article review page.
+    """
+    report = get_object_or_404(
+        ArticleReport,
+        id=report_id,
+        article__slug=slug,
+        resolved=False,
+    )
 
     report.resolved = True
     report.save(update_fields=["resolved"])
 
     messages.success(
-        request, "Article report has been resolved."
+        request,
+        f"Article report {report.reason} has been resolved."
     )
 
-    return redirect("reported articles")
+    return redirect("review_article", slug=slug)
 
 @login_required
 @require_POST
