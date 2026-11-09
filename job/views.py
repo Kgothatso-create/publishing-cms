@@ -205,7 +205,7 @@ def department_list(request):
         "create_label": "Add Department",
         "create_icon": "fas fa-building",
         "search_placeholder": "Search departments...",
-        "list_url": "department-list",
+        "list_url": "department_list",
         "items": departments,
         "pagination_object": departments,
         "icon": "fas fa-building",
@@ -244,7 +244,7 @@ def department_create(request):
         form = DepartmentCreateForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("department-list")
+            return redirect("department_list")
 
     else:
         form = DepartmentCreateForm()
@@ -255,3 +255,90 @@ def department_create(request):
         {"form": form}
     )
 
+
+@login_required
+def department_edit(request, id):
+    """
+    Edit an existing department.
+
+    Args:
+        request: HTTP request.
+        id: UUID of the department.
+
+    Returns:
+        Rendered department edit page or redirect after successful update.
+    """
+    department = get_object_or_404(Department, id=id)
+
+    if request.method == "POST":
+        department.name = request.POST.get("name", "").strip()
+        department.code = request.POST.get("code", "").strip()
+        department.description = request.POST.get("description", "").strip() or None
+        department.is_active = request.POST.get("is_active") == "on"
+
+        department.save()
+
+        messages.success(request, "Department updated successfully.")
+
+        return redirect("department_detail", id=department.id)
+
+    context = {
+        "department": department,
+        "page_title": f"Edit {department.name}",
+    }
+
+    return render(
+        request,
+        "job/department_edit.html",
+        context
+    )
+
+
+@login_required
+def department_delete(request, id):
+    """
+    Delete an existing department.
+
+    Args:
+        request: HTTP request.
+        id: UUID of the department.
+
+    Returns:
+        Rendered confirmation page or redirect after deletion.
+    """
+    department = get_object_or_404(Department, id=id)
+
+    if request.method == "POST":
+        if department.jobs.exists():
+            messages.error(
+                request,
+                "This department cannot be deleted because it has associated jobs. "
+                "Reassign or remove those jobs first."
+            )
+
+            return redirect(
+                "department_detail",
+                id=department.id
+            )
+
+        department_name = department.name
+        department.delete()
+
+        messages.success(
+            request,
+            f"Department '{department_name}' deleted successfully."
+        )
+
+        return redirect("department_list")
+
+    context = {
+        "department": department,
+        "page_title": f"Delete {department.name}",
+        "has_jobs": department.jobs.exists(),
+    }
+
+    return render(
+        request,
+        "job/department_delete.html",
+        context
+    )

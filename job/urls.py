@@ -13,8 +13,12 @@ urlpatterns = [
              path("add/", job_create, name="job-create")
          ])),
     path("department/", include([
-        path("", department_list, name="department-list"),
+        path("", department_list, name="department_list"),
         path("add/", department_create, name="department-create"),
-        path("<uuid:id>/", department_detail, name="department_detail"),
+        path("<uuid:id>/", include([
+            path("", department_detail, name="department_detail"),
+            path("edit/", department_edit, name="department_edit"),
+            path("delete/", department_delete, name="department_delete",),
+        ])),
     ])),
 ]

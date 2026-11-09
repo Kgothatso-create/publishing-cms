@@ -1,0 +1,102 @@
+{% extends "employment/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mb-1">Edit Department</h3>
+            <p class="text-muted mb-0">Update department information and settings.</p>
+        </div>
+
+        <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Department
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h5 class="mb-3">Department Information</h5>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Department Name</label>
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            value="{{ department.name }}"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Department Code</label>
+                        <input
+                            type="text"
+                            name="code"
+                            class="form-control"
+                            value="{{ department.code }}"
+                            maxlength="50"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            rows="5"
+                        >{{ department.description|default_if_none:"" }}</textarea>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Status</label>
+
+                        <div class="form-check form-switch mt-2">
+                            <input
+                                type="checkbox"
+                                name="is_active"
+                                class="form-check-input"
+                                id="is_active"
+                                {% if department.is_active %}checked{% endif %}
+                            >
+
+                            <label class="form-check-label" for="is_active">
+                                Active
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
