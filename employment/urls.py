@@ -5,9 +5,12 @@ urlpatterns = [
     path("", employee_dashboard, name="employee_dashboard"),
     path("employees/",
          include([
-             path("", employee_list, name="employee-list"),
+             path("", employee_list, name="employee_list"),
              path("add/", employee_create, name="employee-create"),
-             path("<uuid:id>/", employee_detail, name="employee_detail"),
+             path("<uuid:id>/", include([
+                 path("", employee_detail, name="employee_detail"),
+                 path("edit/", employee_edit, name="employee_edit"),
+                 path("delete/", employee_delete, name="employee_delete"), ])),
          ])),
     path("roles/",
          include([

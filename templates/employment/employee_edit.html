@@ -1,0 +1,198 @@
+```html
+{% extends "employment/base.html" %}
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Edit Employee</h2>
+            <p class="text-muted mb-0">
+                Update employee information and employment details.
+            </p>
+        </div>
+        <a href="{% url 'employee_detail' employee.id %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Back
+        </a>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!-- Personal Information -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header fw-bold">
+                <i class="fas fa-user me-2"></i>
+                Personal Information
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.first_name.id_for_label }}">First Name</label>
+                        {{ form.first_name }}
+                        {{ form.first_name.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.last_name.id_for_label }}">Last Name</label>
+                        {{ form.last_name }}
+                        {{ form.last_name.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.email.id_for_label }}">Email Address</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.date_of_birth.id_for_label }}">Date of Birth</label>
+                        {{ form.date_of_birth }}
+                        {{ form.date_of_birth.errors }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Employment Information -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header fw-bold">
+                <i class="fas fa-briefcase me-2"></i>
+                Employment Information
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.role.id_for_label }}">Role</label>
+                        {{ form.role }}
+                        {{ form.role.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.job.id_for_label }}">Job</label>
+                        {{ form.job }}
+                        {{ form.job.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.manager.id_for_label }}">Manager</label>
+                        {{ form.manager }}
+                        {{ form.manager.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.status.id_for_label }}">Employment Status</label>
+                        {{ form.status }}
+                        {{ form.status.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.employment_type.id_for_label }}">Employment Type</label>
+                        {{ form.employment_type }}
+                        {{ form.employment_type.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.hire_date.id_for_label }}">Hire Date</label>
+                        {{ form.hire_date }}
+                        {{ form.hire_date.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.probation_end_date.id_for_label }}">Probation End Date</label>
+                        {{ form.probation_end_date }}
+                        {{ form.probation_end_date.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.termination_date.id_for_label }}">Termination Date</label>
+                        {{ form.termination_date }}
+                        {{ form.termination_date.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.location.id_for_label }}">Work Location</label>
+                        {{ form.location }}
+                        {{ form.location.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.cost_center.id_for_label }}">Cost Center</label>
+                        {{ form.cost_center }}
+                        {{ form.cost_center.errors }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Contact Information -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header fw-bold">
+                <i class="fas fa-address-card me-2"></i>
+                Contact Information
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.phone_number.id_for_label }}">Phone Number</label>
+                        {{ form.phone_number }}
+                        {{ form.phone_number.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.address_line_1.id_for_label }}">Address Line 1</label>
+                        {{ form.address_line_1 }}
+                        {{ form.address_line_1.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.address_line_2.id_for_label }}">Address Line 2</label>
+                        {{ form.address_line_2 }}
+                        {{ form.address_line_2.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.city.id_for_label }}">City</label>
+                        {{ form.city }}
+                        {{ form.city.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.province.id_for_label }}">Province</label>
+                        {{ form.province }}
+                        {{ form.province.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.postal_code.id_for_label }}">Postal Code</label>
+                        {{ form.postal_code }}
+                        {{ form.postal_code.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.country.id_for_label }}">Country</label>
+                        {{ form.country }}
+                        {{ form.country.errors }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Emergency Contact -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header fw-bold">
+                <i class="fas fa-phone-alt me-2"></i>
+                Emergency Contact
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.emergency_contact_name.id_for_label }}">Contact Name</label>
+                        {{ form.emergency_contact_name }}
+                        {{ form.emergency_contact_name.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ form.emergency_contact_phone.id_for_label }}">Contact Phone</label>
+                        {{ form.emergency_contact_phone }}
+                        {{ form.emergency_contact_phone.errors }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Actions -->
+        <div class="d-flex justify-content-end gap-2 mb-4">
+            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-outline-secondary">
+                Cancel
+            </a>
+            <button type="submit" class="btn text-white" style="background-color: #bf9b30; border-color: #bf9b30;">
+                <i class="fas fa-save me-1"></i>
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+```

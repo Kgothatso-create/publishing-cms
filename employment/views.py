@@ -10,7 +10,7 @@ from django.utils import timezone
 from articles.models import ArticleReport
 from job.models import Job
 from .models import CompanyEvent, Employment, Role
-from .forms import CompanyEventForm, EmployeeCreateForm, NotificationForm, RoleCreateForm
+from .forms import CompanyEventForm, EmployeeCreateForm, EmployeeEditForm, NotificationForm, RoleCreateForm
 
 
 def employee_dashboard(request):
@@ -84,7 +84,7 @@ def employee_list(request):
         "create_label": "Add Employee",
         "create_icon": "fas fa-user-plus",
         "search_placeholder": "Search employees...",
-        "list_url": "employee-list",
+        "list_url": "employee_list",
         "items": employees,
         "pagination_object": employees,
         "icon": "fas fa-user",
@@ -108,7 +108,7 @@ def employee_create(request):
         form = EmployeeCreateForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("employee-list")
+            return redirect("employee_list")
     else:
         form = EmployeeCreateForm()
 
@@ -126,7 +126,7 @@ def employee_detail(request, id):
 
     Args:
         request: HTTP request.
-        pk: Employee employment UUID.
+        id: Employee employment UUID.
 
     Returns:
         Rendered employee detail page.
@@ -149,6 +149,109 @@ def employee_detail(request, id):
     return render(
         request,
         "employment/employee_details.html",
+        context,
+    )
+
+
+@login_required
+def employee_edit(request, id):
+    """
+    Edit an employee's user, employment and profile information.
+
+    Args:
+        request: HTTP request.
+        id: Employee employment UUID.
+
+    Returns:
+        Rendered edit page or redirect to employee details.
+    """
+
+    employee = get_object_or_404(
+        Employment.objects.select_related(
+            "user",
+            "role",
+            "job",
+            "manager__user",
+            "profile",
+        ),
+        id=id,
+    )
+
+    if request.method == "POST":
+        form = EmployeeEditForm(
+            request.POST,
+            employee=employee,
+        )
+
+        if form.is_valid():
+            employee = form.save()
+
+            messages.success(
+                request,
+                "Employee information updated successfully.",
+            )
+
+            return redirect(
+                "employee_detail",
+                id=employee.id,
+            )
+
+    else:
+        form = EmployeeEditForm(employee=employee)
+
+    context = {
+        "employee": employee,
+        "form": form,
+        "page_title": "Edit Employee",
+    }
+
+    return render(
+        request,
+        "employment/employee_edit.html",
+        context,
+    )
+
+
+@login_required
+def employee_delete(request, id):
+    """
+    Delete an employee's employment record.
+
+    Args:
+        request: HTTP request.
+        id: Employee employment UUID.
+
+    Returns:
+        Rendered confirmation page or redirect to employee list.
+    """
+    employee = get_object_or_404(
+        Employment.objects.select_related(
+            "user",
+            "role",
+            "job",
+            "profile",
+        ),
+        id=id,
+    )
+
+    if request.method == "POST":
+        employee.delete()
+
+        messages.success(
+            request,
+            "Employee deleted successfully.",
+        )
+
+        return redirect("employee_list")
+
+    context = {
+        "employee": employee,
+        "page_title": "Delete Employee",
+    }
+
+    return render(
+        request,
+        "employment/employee_delete.html",
         context,
     )
 
