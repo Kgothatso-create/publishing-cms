@@ -1,0 +1,120 @@
+{% extends "employment/base.html" %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h4 class="fw-bold mb-1">
+                <i class="fas fa-calendar-alt me-2"></i>
+                Event Details
+            </h4>
+            <small class="text-muted">
+                View company event information.
+            </small>
+        </div>
+        <a href="{% url 'company_events' %}"
+           class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i>
+            Back to Events
+        </a>
+    </div>
+    <!-- Event Details -->
+    <div class="card shadow-sm">
+
+        <div class="card-header fw-bold">
+            <i class="fas fa-info-circle me-2"></i>
+            Company Event
+        </div>
+        <div class="card-body p-4">
+            <!-- Event Title -->
+            <h4 class="fw-bold mb-3">
+                {% if event.event_type == "BIRTHDAY" %}
+                    <i class="fas fa-birthday-cake text-warning me-2"></i>
+                {% elif event.event_type == "MEETING" %}
+                    <i class="fas fa-users text-primary me-2"></i>
+                {% elif event.event_type == "HOLIDAY" %}
+                    <i class="fas fa-umbrella-beach text-success me-2"></i>
+                {% elif event.event_type == "TRAINING" %}
+                    <i class="fas fa-graduation-cap text-info me-2"></i>
+                {% else %}
+                    <i class="fas fa-bullhorn text-secondary me-2"></i>
+                {% endif %}
+                {{ event.title }}
+            </h4>
+            <span class="badge bg-light text-dark border mb-4">
+                {{ event.get_event_type_display }}
+            </span>
+            <hr>
+            <!-- Event Date -->
+            <div class="mb-4">
+                <h6 class="fw-bold text-muted">
+                    <i class="far fa-calendar me-2"></i>
+                    Event Date
+                </h6>
+
+                <p class="mb-0">
+                    {{ event.event_date|date:"l, d F Y" }}
+                </p>
+            </div>
+            <!-- Description -->
+            <div class="mb-4">
+                <h6 class="fw-bold text-muted">
+                    <i class="fas fa-align-left me-2"></i>
+                    Description
+                </h6>
+
+                {% if event.description %}
+                    <p class="mb-0">
+                        {{ event.description|linebreaksbr }}
+                    </p>
+                {% else %}
+                    <p class="text-muted mb-0">
+                        No description provided.
+                    </p>
+                {% endif %}
+            </div>
+            <hr>
+            <!-- Created By -->
+            <div class="mb-3">
+                <h6 class="fw-bold text-muted">
+                    <i class="fas fa-user me-2"></i>
+                    Created By
+                </h6>
+                <p class="mb-0">
+                    {% if event.created_by %}
+                        {{ event.created_by.get_full_name|default:event.created_by.username }}
+                    {% else %}
+                        Unknown
+                    {% endif %}
+                </p>
+            </div>
+            <!-- Created At -->
+            <div>
+                <h6 class="fw-bold text-muted">
+                    <i class="far fa-clock me-2"></i>
+                    Created On
+                </h6>
+                <p class="mb-0">
+                    {{ event.created_at|date:"d F Y, H:i" }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% if event.created_by == request.user %}
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <a href="{% url 'edit_company_event' event.id %}"
+               class="btn btn-primary btn-sm">
+                <i class="fas fa-edit me-1"></i>
+                Edit Event
+            </a>
+            <a href="{% url 'delete_company_event' event.id %}"
+               class="btn btn-danger btn-sm">
+                <i class="fas fa-trash-alt me-1"></i>
+                Delete Event
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

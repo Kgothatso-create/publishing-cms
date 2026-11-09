@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils import timezone
@@ -186,7 +186,9 @@ def role_create(request):
 
 
 def calendar_view(request):
-    events = CompanyEvent.objects.all().order_by("event_date")
+    events = CompanyEvent.objects.filter(
+        event_date__gte=timezone.localdate() - timedelta(days=2)
+    ).order_by("event_date")
 
     calendar_events = [
         {
@@ -225,4 +227,94 @@ def create_company_event(request):
         request,
         "employment/create_event.html",
         {"form": form},
+    )
+
+
+@login_required
+def company_events(request):
+    events = CompanyEvent.objects.select_related(
+        "created_by"
+    ).order_by("-created_at")
+
+    return render(
+        request,
+        "employment/all_events.html",
+        {"events": events}
+    )
+
+
+@login_required
+def company_event_detail(request, event_id):
+    event = get_object_or_404(
+        CompanyEvent.objects.select_related("created_by"),
+        id=event_id,
+    )
+
+    return render(
+        request,
+        "employment/event_details.html",
+        {"event": event}
+    )
+
+
+@login_required
+def edit_company_event(request, event_id):
+    event = get_object_or_404(
+        CompanyEvent,
+        id=event_id,
+        created_by=request.user,
+    )
+
+    if request.method == "POST":
+        form = CompanyEventForm(request.POST, instance=event)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(
+                request,
+                "Company event updated successfully."
+            )
+
+            return redirect(
+                "company_event_detail",
+                event_id=event.id,
+            )
+    else:
+        form = CompanyEventForm(instance=event)
+
+    return render(
+        request,
+        "employment/edit_event.html",
+        {
+            "form": form,
+            "event": event,
+        },
+    )
+
+
+@login_required
+def delete_company_event(request, event_id):
+    event = get_object_or_404(
+        CompanyEvent,
+        id=event_id,
+        created_by=request.user,
+    )
+
+    if request.method == "POST":
+        event.delete()
+
+        messages.success(
+            request,
+            "Company event deleted successfully."
+        )
+
+        return redirect("company_events")
+
+    return render(
+        request,
+        "employment/delete_event.html",
+        {
+            "event": event,
+        },
     )

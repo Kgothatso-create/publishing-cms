@@ -123,7 +123,8 @@
                 <div class="card-body">
                 <div class="list-group">
                     {% for event in company_events %}
-                        <div class="list-group-item">
+                        <a href="{% url 'company_event_detail' event.id %}"
+                           class="list-group-item list-group-item-action">
                             <strong>
                                 {% if event.event_type == "BIRTHDAY" %}
                                     🎂
@@ -141,24 +142,31 @@
                             <br>
                             <small class="text-muted">
                                 {{ event.event_date|date:"d F Y" }}
+
                                 {% if event.description %}
                                     - {{ event.description|truncatewords:10 }}
                                 {% endif %}
                             </small>
-                        </div>
-                        {% empty %}
-                            <div class="list-group-item text-center text-muted">
-                                No events have been created yet.
-                            </div>
-                        {% endfor %}
-                        <a href="{% url 'calendar' %}"
-                           class="list-group-item list-group-item-action text-center">
-                            View Calendar
                         </a>
-                    </div>
+                    {% empty %}
+                        <div class="list-group-item text-center text-muted">
+                            No events have been created yet.
+                        </div>
+                    {% endfor %}
+                    <a href="{% url 'calendar' %}"
+                       class="list-group-item list-group-item-action text-center">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        View Calendar
+                    </a>
+                    <a href="{% url 'company_events' %}"
+                       class="list-group-item list-group-item-action text-center">
+                        <i class="fas fa-list me-1"></i>
+                        All Events
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}
