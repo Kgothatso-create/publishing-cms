@@ -1,41 +1,34 @@
 {% extends "employment/base.html" %}
 
 {% block content %}
-
 <div class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-header fw-bold">
             <i class="fas fa-bell me-2"></i>
             Create Notification
         </div>
-
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}
-
                 <div class="mb-3">
                     <label class="form-label fw-bold">Title</label>
                     {{ form.title }}
                     {{ form.title.errors }}
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label fw-bold">Message</label>
                     {{ form.message }}
                     {{ form.message.errors }}
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label fw-bold">Related Link (Optional)</label>
                     {{ form.link }}
                     {{ form.link.errors }}
                 </div>
-
                 <div class="mb-4">
                     <label class="form-label fw-bold d-block">
                         Notification Recipients
                     </label>
-
                     <div class="border rounded p-3">
                         {% for checkbox in form.recipients %}
                             <div class="form-check mb-2">
@@ -46,18 +39,15 @@
                             </div>
                         {% endfor %}
                     </div>
-
                     {{ form.recipients.errors }}
                     <small class="text-muted">
                         Select the employees who should receive this notification.
                     </small>
                 </div>
-
                 <div class="d-flex justify-content-between">
                     <a href="{% url 'employee_dashboard' %}" class="btn btn-secondary">
                         Cancel
                     </a>
-
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-paper-plane me-2"></i>
                         Create Notification
@@ -67,5 +57,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

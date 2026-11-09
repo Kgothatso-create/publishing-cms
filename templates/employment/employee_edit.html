@@ -1,4 +1,3 @@
-```html
 {% extends "employment/base.html" %}
 {% block content %}
 <div class="container-fluid py-4">
@@ -23,7 +22,6 @@
                 {% endfor %}
             </div>
         {% endif %}
-        <!-- Personal Information -->
         <div class="card shadow-sm mb-4">
             <div class="card-header fw-bold">
                 <i class="fas fa-user me-2"></i>
@@ -54,7 +52,6 @@
                 </div>
             </div>
         </div>
-        <!-- Employment Information -->
         <div class="card shadow-sm mb-4">
             <div class="card-header fw-bold">
                 <i class="fas fa-briefcase me-2"></i>
@@ -115,7 +112,6 @@
                 </div>
             </div>
         </div>
-        <!-- Contact Information -->
         <div class="card shadow-sm mb-4">
             <div class="card-header fw-bold">
                 <i class="fas fa-address-card me-2"></i>
@@ -161,7 +157,6 @@
                 </div>
             </div>
         </div>
-        <!-- Emergency Contact -->
         <div class="card shadow-sm mb-4">
             <div class="card-header fw-bold">
                 <i class="fas fa-phone-alt me-2"></i>
@@ -182,7 +177,6 @@
                 </div>
             </div>
         </div>
-        <!-- Actions -->
         <div class="d-flex justify-content-end gap-2 mb-4">
             <a href="{% url 'employee_detail' employee.id %}" class="btn btn-outline-secondary">
                 Cancel
@@ -195,4 +189,3 @@
     </form>
 </div>
 {% endblock %}
-```

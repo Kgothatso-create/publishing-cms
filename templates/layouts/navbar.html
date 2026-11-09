@@ -1,9 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-3 border-bottom">
-  <!-- Brand -->
   <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}">
     Inkflow Inspiration
   </a>
-  <!-- Mobile toggle -->
   <button class="navbar-toggler" type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
@@ -12,9 +10,7 @@
           aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <!-- Navbar content -->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <!-- Left navigation (core CMS sections) -->
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item">
         <a class="nav-link" href="{% url 'article list' %}">
@@ -32,13 +28,11 @@
         </a>
       </li>
       {% if user.is_authenticated %}
-        <!-- WRITE ARTICLE -->
         <li class="nav-item">
             <a class="nav-link" href="{% url 'article-create' %}">
                 Write Article
             </a>
         </li>
-        <!-- MY ARTICLES -->
         <li class="nav-item">
             <a class="nav-link" href="{% url 'author articles' %}">
                 My Articles
@@ -47,17 +41,9 @@
             </ul>
               <ul class="navbar-nav align-items-lg-center">
                 <li class="nav-item dropdown">
-                    <!-- Right side search -->
                     <form class="d-flex" method="get" action="{% url 'article_search' %}">
-                        <input
-                            class="form-control me-2"
-                            type="search"
-                            name="q"
-                            placeholder="Search articles..."
-                            aria-label="Search"
-                        >
-                        <button class="btn" type="submit"
-                        style="border-color:#bf9b30; background-color:#bf9b30;">
+                        <input class="form-control me-2" type="search" name="q" placeholder="Search articles..." aria-label="Search">
+                        <button class="btn" type="submit" style="border-color:#bf9b30; background-color:#bf9b30;">
                             Search
                         </button>
                     </form>

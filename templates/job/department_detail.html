@@ -5,8 +5,6 @@
 
 {% block content %}
 <section class="container py-5">
-
-    <!-- Page heading -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="display-5 fw-bold article-title mb-1">
@@ -16,7 +14,6 @@
                 Department information and organizational record.
             </p>
         </div>
-
         <div class="d-flex gap-2">
             <a href="{% url 'department_delete' department.id %}" class="btn btn-danger">
                 <i class="fas fa-trash me-1"></i> Delete Department
@@ -30,31 +27,24 @@
             </a>
         </div>
     </div>
-
-    <!-- Department Header -->
     <div class="card shadow-sm mb-4">
         <div class="card-body p-4">
             <div class="d-flex align-items-center gap-4 flex-wrap">
-
                 <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
                      style="width:90px;height:90px; flex-shrink:0;">
                     <i class="fas fa-building fa-3x"></i>
                 </div>
-
                 <div class="flex-grow-1">
                     <h2 class="fw-bold mb-1">
                         {{ department.name }}
                     </h2>
-
                     <p class="text-muted mb-1">
                         Organizational Department
                     </p>
-
                     <span class="badge bg-light text-dark border">
                         {{ department.code }}
                     </span>
                 </div>
-
                 <div>
                     {% if department.is_active %}
                         <span class="badge bg-success">
@@ -66,38 +56,29 @@
                         </span>
                     {% endif %}
                 </div>
-
             </div>
         </div>
     </div>
-
     <div class="row g-4">
-
-        <!-- Department Information -->
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-
                 <div class="card-header fw-bold py-3">
                     <i class="fas fa-building me-2"></i>
                     Department Information
                 </div>
-
                 <div class="card-body">
-
                     <div class="mb-3">
                         <small class="text-muted">Department Name</small>
                         <p class="fw-semibold mb-0">
                             {{ department.name }}
                         </p>
                     </div>
-
                     <div class="mb-3">
                         <small class="text-muted">Department Code</small>
                         <p class="fw-semibold mb-0">
                             {{ department.code }}
                         </p>
                     </div>
-
                     <div class="mb-0">
                         <small class="text-muted">Department Status</small>
                         <p class="fw-semibold mb-0">
@@ -108,22 +89,16 @@
                             {% endif %}
                         </p>
                     </div>
-
                 </div>
             </div>
         </div>
-
-        <!-- Department Description -->
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-
                 <div class="card-header fw-bold py-3">
                     <i class="fas fa-align-left me-2"></i>
                     Department Description
                 </div>
-
                 <div class="card-body">
-
                     {% if department.description %}
                         {{ department.description|linebreaks }}
                     {% else %}
@@ -131,20 +106,15 @@
                             No department description provided.
                         </p>
                     {% endif %}
-
                 </div>
             </div>
         </div>
-
-        <!-- Record Information -->
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-
                 <div class="card-header fw-bold py-3">
                     <i class="fas fa-info-circle me-2"></i>
                     Record Information
                 </div>
-
                 <div class="card-body">
                     <div class="mb-3">
                         <small class="text-muted">Record Created</small>
@@ -161,8 +131,6 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 </section>
 {% endblock %}

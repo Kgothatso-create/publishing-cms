@@ -5,9 +5,7 @@
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
-
         <div class="col-md-7 col-lg-5">
-
             <div class="card shadow-sm border-0">
                 <div class="card-body p-5">
                     {% if messages %}
@@ -18,54 +16,36 @@
                         {% endfor %}
                     {% endif %}
                     <h3 class="mb-4 text-center">Login</h3>
-
                     <form method="POST">
                         {% csrf_token %}
-
-                        <!-- USERNAME -->
                         <div class="form-group mb-3">
                             <label for="{{ form.username.id_for_label }}">Username</label>
                             {{ form.username }}
                             {{ form.username.errors }}
                         </div>
-
-                        <!-- PASSWORD -->
                         <div class="form-group mb-3">
                             <label for="{{ form.password.id_for_label }}">Password</label>
                             {{ form.password }}
                             {{ form.password.errors }}
                         </div>
-
-                        <button type="submit" class="btn btn-block w-100 mt-3"
-                                style="background-color: #bf9b30; color: #000;">
+                        <button type="submit" class="btn btn-block w-100 mt-3" style="background-color: #bf9b30; color: #000;">
                             Login
                         </button>
-
                         <hr class="my-4">
-
                         <p class="text-center mb-0">
                             Don't have an account?
-                            <a href="{% url 'register view' %}"
-                            style="color: #bf9b30;"
-                            >Register</a>
+                            <a href="{% url 'register view' %}" style="color: #bf9b30;">Register</a>
                         </p>
                         <hr class="my-4">
                         <div class="text-center mb-0">
-                            <a href="{% url 'forgot_username' %}"
-                            style="color: #bf9b30;"
-                            >Forgot username.</a>
+                            <a href="{% url 'forgot_username' %}" style="color: #bf9b30;" >Forgot username.</a>
                         </div>
                         <div class="text-center mb-0">
-                            <a href="{% url 'forgot_password' %}"
-                            style="color: #bf9b30;"
-                            >Forgot password.</a>
+                            <a href="{% url 'forgot_password' %}" style="color: #bf9b30;">Forgot password.</a>
                         </div>
-
                     </form>
-
                 </div>
             </div>
-
         </div>
     </div>
 </div>

@@ -22,12 +22,7 @@
                     <form method="post">
                         {% csrf_token %}
                         {{ profile_form.as_p }}
-                        <button
-                            type="submit"
-                            name="update_profile"
-                            class="btn"
-                            style="background-color:#bf9b30;color:#000;"
-                        >
+                        <button type="submit" name="update_profile" class="btn" style="background-color:#bf9b30;color:#000;">
                             Save Profile
                         </button>
                     </form>
@@ -41,12 +36,7 @@
                     <form method="post">
                         {% csrf_token %}
                         {{ password_form.as_p }}
-                        <button
-                            type="submit"
-                            name="change_password"
-                            class="btn"
-                            style="background-color:#bf9b30;color:#000;"
-                        >
+                        <button type="submit" name="change_password" class="btn" style="background-color:#bf9b30;color:#000;">
                             Change Password
                         </button>
                     </form>

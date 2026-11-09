@@ -15,8 +15,7 @@
                     <p class="display-6 fw-bold">
                         {{ reported_article_count }}
                     </p>
-                    <a href="{% url 'article_reported_list' %}" class="btn"
-                       style="border-color:#bf9b30; background-color:#bf9b30;">
+                    <a href="{% url 'article_reported_list' %}" class="btn" style="border-color:#bf9b30; background-color:#bf9b30;">
                         Review Articles
                     </a>
                 </div>
@@ -31,8 +30,7 @@
                     <p class="display-6 fw-bold">
                         {{ active_users }}
                     </p>
-                    <a href="{% url 'user_list' %}" class="btn"
-                       style="border-color:#bf9b30; background-color:#bf9b30;">
+                    <a href="{% url 'user_list' %}" class="btn" style="border-color:#bf9b30; background-color:#bf9b30;">
                         View Users
                     </a>
                 </div>
@@ -47,8 +45,7 @@
                     <p class="display-6 fw-bold">
                         {{ active_employee_count }}
                     </p>
-                    <a href="{% url 'employee_list' %}" class="btn"
-                       style="border-color:#bf9b30; background-color:#bf9b30;">
+                    <a href="{% url 'employee_list' %}" class="btn" style="border-color:#bf9b30; background-color:#bf9b30;">
                         View Employees
                     </a>
                 </div>
@@ -63,8 +60,7 @@
                     <p class="display-6 fw-bold">
                         {{ active_job_count }}
                     </p>
-                    <a href="{% url 'job_list' %}" class="btn"
-                       style="border-color:#bf9b30; background-color:#bf9b30;">
+                    <a href="{% url 'job_list' %}" class="btn" style="border-color:#bf9b30; background-color:#bf9b30;">
                         View Jobs
                     </a>
                 </div>
@@ -114,59 +110,55 @@
                         <i class="fas fa-calendar-alt me-2"></i>
                         Upcoming Events
                     </span>
-                    <a href="{% url 'create_company_event' %}"
-                       class="btn btn-info btn-sm">
+                    <a href="{% url 'create_company_event' %}" class="btn btn-info btn-sm">
                         <i class="fas fa-plus me-1"></i>
                         Create Event
                     </a>
                 </div>
                 <div class="card-body">
-                <div class="list-group">
-                    {% for event in company_events %}
-                        <a href="{% url 'company_event_detail' event.id %}"
-                           class="list-group-item list-group-item-action">
-                            <strong>
-                                {% if event.event_type == "BIRTHDAY" %}
-                                    🎂
-                                {% elif event.event_type == "MEETING" %}
-                                    📅
-                                {% elif event.event_type == "HOLIDAY" %}
-                                    🌴
-                                {% elif event.event_type == "TRAINING" %}
-                                    📚
-                                {% else %}
-                                    📢
-                                {% endif %}
-                                {{ event.title }}
-                            </strong>
-                            <br>
-                            <small class="text-muted">
-                                {{ event.event_date|date:"d F Y" }}
+                    <div class="list-group">
+                        {% for event in company_events %}
+                            <a href="{% url 'company_event_detail' event.id %}" class="list-group-item list-group-item-action">
+                                <strong>
+                                    {% if event.event_type == "BIRTHDAY" %}
+                                        🎂
+                                    {% elif event.event_type == "MEETING" %}
+                                        📅
+                                    {% elif event.event_type == "HOLIDAY" %}
+                                        🌴
+                                    {% elif event.event_type == "TRAINING" %}
+                                        📚
+                                    {% else %}
+                                        📢
+                                    {% endif %}
+                                    {{ event.title }}
+                                </strong>
+                                <br>
+                                <small class="text-muted">
+                                    {{ event.event_date|date:"d F Y" }}
 
-                                {% if event.description %}
-                                    - {{ event.description|truncatewords:10 }}
-                                {% endif %}
-                            </small>
+                                    {% if event.description %}
+                                        - {{ event.description|truncatewords:10 }}
+                                    {% endif %}
+                                </small>
+                            </a>
+                        {% empty %}
+                            <div class="list-group-item text-center text-muted">
+                                No events have been created yet.
+                            </div>
+                        {% endfor %}
+                        <a href="{% url 'calendar' %}" class="list-group-item list-group-item-action text-center">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            View Calendar
                         </a>
-                    {% empty %}
-                        <div class="list-group-item text-center text-muted">
-                            No events have been created yet.
-                        </div>
-                    {% endfor %}
-                    <a href="{% url 'calendar' %}"
-                       class="list-group-item list-group-item-action text-center">
-                        <i class="fas fa-calendar-alt me-2"></i>
-                        View Calendar
-                    </a>
-                    <a href="{% url 'company_events' %}"
-                       class="list-group-item list-group-item-action text-center">
-                        <i class="fas fa-list me-1"></i>
-                        All Events
-                    </a>
+                        <a href="{% url 'company_events' %}" class="list-group-item list-group-item-action text-center">
+                            <i class="fas fa-list me-1"></i>
+                            All Events
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 {% endblock %}

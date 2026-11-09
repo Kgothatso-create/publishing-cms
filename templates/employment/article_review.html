@@ -5,12 +5,10 @@
 <div class="container mt-2 mb-5">
     <div class="d-flex align-items-center mb-4 position-relative">
         {% if can_moderate %}
-            <a href="{% url 'reject_article' article.slug %}"
-               class="btn btn-danger btn-sm me-3 text-dark">
+            <a href="{% url 'reject_article' article.slug %}" class="btn btn-danger btn-sm me-3 text-dark">
                 Reject Article
             </a>
-            <a href="{% url 'approve_article' article.slug %}"
-               class="btn btn-success btn-sm me-3 text-dark">
+            <a href="{% url 'approve_article' article.slug %}" class="btn btn-success btn-sm me-3 text-dark">
                 Approve Article
             </a>
         {% endif %}
@@ -24,8 +22,7 @@
                 {% endfor %}
             </div>
         {% endif %}
-        <a href="{% url 'article_reported_list' %}"
-           class="btn btn-outline-secondary btn-sm ms-auto">
+        <a href="{% url 'article_reported_list' %}" class="btn btn-outline-secondary btn-sm ms-auto">
             Back
         </a>
     </div>
@@ -44,37 +41,29 @@
             </span>
         {% endif %}
     </div>
-
     {% if article.featured_image %}
         <div class="mb-1">
             <div class="ratio ratio-21x9 rounded overflow-hidden shadow-sm">
-                <img
-                    src="{{ article.featured_image.url }}"
-                    alt="{{ article.title }}"
-                    class="w-100 h-100 object-fit-cover">
+                <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-100 h-100 object-fit-cover">
             </div>
         </div>
     {% endif %}
-
     <header class="text-center mb-4">
         <h1 class="display-4 font-weight-bold article-title">
             {{ article.title }}
         </h1>
-
         <div class="text-muted mt-1">
             Author:
             <strong>
                 {{ article.author.get_full_name|default:article.author.username }}
             </strong>
         </div>
-
         <div class="text-muted mt-1">
             Category:
             <strong>
                 {{ article.category.name }}
             </strong>
         </div>
-
         {% if article.published_at %}
             <div class="text-muted mt-1">
                 Published:

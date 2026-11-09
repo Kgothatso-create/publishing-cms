@@ -5,8 +5,6 @@
 
 {% block content %}
 <section class="container py-5">
-
-    <!-- Page heading -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="display-5 fw-bold article-title mb-1">
@@ -16,7 +14,6 @@
                 Role information and organizational record.
             </p>
         </div>
-
         <div class="d-flex gap-2">
             <a href="{% url 'role_delete' role.id %}" class="btn btn-danger">
                 <i class="fas fa-trash me-1"></i> Delete Role
@@ -30,31 +27,23 @@
             </a>
         </div>
     </div>
-
-    <!-- Role Header -->
     <div class="card shadow-sm mb-4">
         <div class="card-body p-4">
             <div class="d-flex align-items-center gap-4 flex-wrap">
-
-                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
-                     style="width:90px;height:90px; flex-shrink:0;">
+                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:90px;height:90px; flex-shrink:0;">
                     <i class="fas fa-user-tag fa-3x"></i>
                 </div>
-
                 <div class="flex-grow-1">
                     <h2 class="fw-bold mb-1">
                         {{ role.name }}
                     </h2>
-
                     <p class="text-muted mb-1">
                         Employment Role
                     </p>
-
                     <span class="badge bg-light text-dark border">
                         {{ role.code }}
                     </span>
                 </div>
-
                 <div>
                     {% if role.is_active %}
                         <span class="badge bg-success">
@@ -66,38 +55,29 @@
                         </span>
                     {% endif %}
                 </div>
-
             </div>
         </div>
     </div>
-
     <div class="row g-4">
-
-        <!-- Role Information -->
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-
                 <div class="card-header fw-bold py-3">
                     <i class="fas fa-user-tag me-2"></i>
                     Role Information
                 </div>
-
                 <div class="card-body">
-
                     <div class="mb-3">
                         <small class="text-muted">Role Name</small>
                         <p class="fw-semibold mb-0">
                             {{ role.name }}
                         </p>
                     </div>
-
                     <div class="mb-3">
                         <small class="text-muted">Role Code</small>
                         <p class="fw-semibold mb-0">
                             {{ role.code }}
                         </p>
                     </div>
-
                     <div class="mb-0">
                         <small class="text-muted">Role Status</small>
                         <p class="fw-semibold mb-0">
@@ -108,22 +88,16 @@
                             {% endif %}
                         </p>
                     </div>
-
                 </div>
             </div>
         </div>
-
-        <!-- Role Description -->
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-
                 <div class="card-header fw-bold py-3">
                     <i class="fas fa-align-left me-2"></i>
                     Role Description
                 </div>
-
                 <div class="card-body">
-
                     {% if role.description %}
                         {{ role.description|linebreaks }}
                     {% else %}
@@ -131,20 +105,15 @@
                             No role description provided.
                         </p>
                     {% endif %}
-
                 </div>
             </div>
         </div>
-
-        <!-- Record Information -->
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-
                 <div class="card-header fw-bold py-3">
                     <i class="fas fa-info-circle me-2"></i>
                     Record Information
                 </div>
-
                 <div class="card-body">
                     <div class="mb-3">
                         <small class="text-muted">Record Created</small>
@@ -152,19 +121,15 @@
                             {{ role.created_at|date:"d F Y, H:i" }}
                         </p>
                     </div>
-
                     <div class="mb-0">
                         <small class="text-muted">Last Updated</small>
                         <p class="fw-semibold mb-0">
                             {{ role.updated_at|date:"d F Y, H:i" }}
                         </p>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
-
 </section>
 {% endblock %}

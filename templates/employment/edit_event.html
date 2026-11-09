@@ -3,14 +3,10 @@
 {% block title %}Edit Event{% endblock %}
 
 {% block content %}
-
 <div class="container-fluid mt-4">
-
     <div class="row justify-content-center">
         <div class="col-lg-8">
-
             <div class="d-flex justify-content-between align-items-center mb-4">
-
                 <div>
                     <h4 class="fw-bold mb-1">
                         <i class="fas fa-edit me-2"></i>
@@ -20,26 +16,18 @@
                         Update your company event.
                     </small>
                 </div>
-
-                <a href="{% url 'company_event_detail' event.id %}"
-                   class="btn btn-outline-secondary btn-sm">
+                <a href="{% url 'company_event_detail' event.id %}" class="btn btn-outline-secondary btn-sm">
                     <i class="fas fa-arrow-left me-1"></i>
                     Back
                 </a>
-
             </div>
-
             <div class="card shadow-sm">
-
                 <div class="card-header fw-bold">
                     Edit: {{ event.title }}
                 </div>
-
                 <div class="card-body">
-
                     <form method="POST">
                         {% csrf_token %}
-
                         <div class="mb-3">
                             <label class="form-label fw-bold">
                                 Event Title
@@ -47,7 +35,6 @@
                             {{ form.title }}
                             {{ form.title.errors }}
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label fw-bold">
                                 Description
@@ -55,7 +42,6 @@
                             {{ form.description }}
                             {{ form.description.errors }}
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label fw-bold">
                                 Event Type
@@ -63,7 +49,6 @@
                             {{ form.event_type }}
                             {{ form.event_type.errors }}
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label fw-bold">
                                 Event Date
@@ -71,29 +56,19 @@
                             {{ form.event_date }}
                             {{ form.event_date.errors }}
                         </div>
-
                         <div class="d-flex justify-content-end gap-2">
-
-                            <a href="{% url 'company_event_detail' event.id %}"
-                               class="btn btn-secondary">
+                            <a href="{% url 'company_event_detail' event.id %}" class="btn btn-secondary">
                                 Cancel
                             </a>
-
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-1"></i>
                                 Save Changes
                             </button>
-
                         </div>
-
                     </form>
-
                 </div>
             </div>
-
         </div>
     </div>
-
 </div>
-
 {% endblock %}

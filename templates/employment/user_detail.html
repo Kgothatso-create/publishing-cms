@@ -3,7 +3,6 @@
 {% block content %}
 
 <div class="container-fluid">
-
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="display-5 fw-bold article-title mb-1">
@@ -13,7 +12,6 @@
                 Registered User
             </p>
         </div>
-
         <div class="d-flex gap-2">
             <a href="javascript:history.back()" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-1"></i>
@@ -21,13 +19,10 @@
             </a>
         </div>
     </div>
-
-    <!-- Personal Information -->
     <div class="card mb-4">
         <div class="card-header">
             <h5 class="mb-0">Personal Information</h5>
         </div>
-
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -41,13 +36,10 @@
             </div>
         </div>
     </div>
-
-    <!-- Account Information -->
     <div class="card mb-4">
         <div class="card-header">
             <h5 class="mb-0">Account Information</h5>
         </div>
-
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -60,7 +52,6 @@
                         {% endif %}
                     </p>
                 </div>
-
                 <div class="col-md-6 mb-3">
                     <strong>Account Type</strong>
                     <p>
@@ -73,12 +64,10 @@
                         {% endif %}
                     </p>
                 </div>
-
                 <div class="col-md-6 mb-3">
                     <strong>Date Registered</strong>
                     <p>{{ user_account.date_joined|date:"d M Y" }}</p>
                 </div>
-
                 <div class="col-md-6 mb-3">
                     <strong>Last Login</strong>
                     <p>
@@ -88,72 +77,55 @@
             </div>
         </div>
     </div>
-<!-- Reported Articles -->
-<div class="card mb-4">
-
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Reported Articles</h5>
-
-        <span class="badge bg-primary">
-            {{ reported_articles_count }}
-        </span>
-    </div>
-
-    <div class="card-body">
-
-        {% if reported_articles %}
-
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-
-                    <thead>
-                        <tr>
-                            <th>Article</th>
-                            <th>Reason</th>
-                            <th>Date Reported</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for report in reported_articles %}
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Reported Articles</h5>
+            <span class="badge bg-primary">
+                {{ reported_articles_count }}
+            </span>
+        </div>
+        <div class="card-body">
+            {% if reported_articles %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
                             <tr>
-                                <td>
-                                    {{ report.article.title }}
-                                </td>
-
-                                <td>
-                                    {{ report.get_reason_display }}
-                                </td>
-
-                                <td>
-                                    {{ report.created_at|date:"d M Y" }}
-                                </td>
-
-                                <td>
-                                    {% if report.resolved %}
-                                        <span class="badge bg-success">Resolved</span>
-                                    {% else %}
-                                        <span class="badge bg-warning text-dark">Pending</span>
-                                    {% endif %}
-                                </td>
+                                <th>Article</th>
+                                <th>Reason</th>
+                                <th>Date Reported</th>
+                                <th>Status</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-
-                </table>
-            </div>
-
-        {% else %}
-
-            <p class="text-muted mb-0">
-                This user has not reported any articles.
-            </p>
-
-        {% endif %}
-
+                        </thead>
+                        <tbody>
+                            {% for report in reported_articles %}
+                                <tr>
+                                    <td>
+                                        {{ report.article.title }}
+                                    </td>
+                                    <td>
+                                        {{ report.get_reason_display }}
+                                    </td>
+                                    <td>
+                                        {{ report.created_at|date:"d M Y" }}
+                                    </td>
+                                    <td>
+                                        {% if report.resolved %}
+                                            <span class="badge bg-success">Resolved</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted mb-0">
+                    This user has not reported any articles.
+                </p>
+            {% endif %}
+        </div>
     </div>
 </div>
-</div>
-
 {% endblock %}

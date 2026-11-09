@@ -2,9 +2,7 @@
 {% block title %}{{ event.title }}{% endblock %}
 {% block content %}
 <div class="container-fluid mt-4">
-    <!-- Page Heading -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
             <h4 class="fw-bold mb-1">
                 <i class="fas fa-calendar-alt me-2"></i>
@@ -14,21 +12,17 @@
                 View company event information.
             </small>
         </div>
-        <a href="{% url 'company_events' %}"
-           class="btn btn-outline-secondary btn-sm">
+        <a href="{% url 'company_events' %}" class="btn btn-outline-secondary btn-sm">
             <i class="fas fa-arrow-left me-1"></i>
             Back to Events
         </a>
     </div>
-    <!-- Event Details -->
     <div class="card shadow-sm">
-
         <div class="card-header fw-bold">
             <i class="fas fa-info-circle me-2"></i>
             Company Event
         </div>
         <div class="card-body p-4">
-            <!-- Event Title -->
             <h4 class="fw-bold mb-3">
                 {% if event.event_type == "BIRTHDAY" %}
                     <i class="fas fa-birthday-cake text-warning me-2"></i>
@@ -47,7 +41,6 @@
                 {{ event.get_event_type_display }}
             </span>
             <hr>
-            <!-- Event Date -->
             <div class="mb-4">
                 <h6 class="fw-bold text-muted">
                     <i class="far fa-calendar me-2"></i>
@@ -58,7 +51,6 @@
                     {{ event.event_date|date:"l, d F Y" }}
                 </p>
             </div>
-            <!-- Description -->
             <div class="mb-4">
                 <h6 class="fw-bold text-muted">
                     <i class="fas fa-align-left me-2"></i>
@@ -76,7 +68,6 @@
                 {% endif %}
             </div>
             <hr>
-            <!-- Created By -->
             <div class="mb-3">
                 <h6 class="fw-bold text-muted">
                     <i class="fas fa-user me-2"></i>
@@ -90,7 +81,6 @@
                     {% endif %}
                 </p>
             </div>
-            <!-- Created At -->
             <div>
                 <h6 class="fw-bold text-muted">
                     <i class="far fa-clock me-2"></i>
@@ -104,13 +94,11 @@
     </div>
     {% if event.created_by == request.user %}
         <div class="d-flex justify-content-end gap-2 mt-4">
-            <a href="{% url 'edit_company_event' event.id %}"
-               class="btn btn-primary btn-sm">
+            <a href="{% url 'edit_company_event' event.id %}" class="btn btn-primary btn-sm">
                 <i class="fas fa-edit me-1"></i>
                 Edit Event
             </a>
-            <a href="{% url 'delete_company_event' event.id %}"
-               class="btn btn-danger btn-sm">
+            <a href="{% url 'delete_company_event' event.id %}" class="btn btn-danger btn-sm">
                 <i class="fas fa-trash-alt me-1"></i>
                 Delete Event
             </a>
