@@ -1,6 +1,7 @@
 from django.urls import include, path
 from .views import *
 
+
 urlpatterns = [
     path("", employee_dashboard, name="employee_dashboard"),
     path("employees/",
@@ -14,9 +15,13 @@ urlpatterns = [
          ])),
     path("roles/",
          include([
-             path("", role_list, name="role-list", ),
-             path("add/", role_create, name="role-create", ),
-             path("<uuid:id>/", role_detail, name="role_detail"),
+             path("", role_list, name="role_list", ),
+             path("add/", role_create, name="role_create", ),
+             path("<uuid:id>/", include([
+                 path("", role_detail, name="role_detail"),
+                 path("edit/", role_edit, name="role_edit"),
+                 path("delete/", role_delete, name="role_delete"),
+             ])),
          ])),
     path("calendar/", include([
         path("", calendar_view, name="calendar"),

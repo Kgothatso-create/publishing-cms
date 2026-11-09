@@ -279,11 +279,11 @@ def role_list(request):
 
     context = {
         "page_title": "Roles",
-        "create_url": "role-create",
+        "create_url": "role_create",
         "create_label": "Add Role",
         "create_icon": "fas fa-user-tag",
         "search_placeholder": "Search roles...",
-        "list_url": "role-list",
+        "list_url": "role_list",
         "items": roles,
         "pagination_object": roles,
         "icon": "fas fa-user-tag",
@@ -307,7 +307,7 @@ def role_create(request):
         form = RoleCreateForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("role-list")
+            return redirect("role_list")
 
     else:
         form = RoleCreateForm()
@@ -336,6 +336,109 @@ def role_detail(request, id):
         context
     )
 
+
+@login_required
+def role_edit(request, id):
+    """
+    Edit an existing employment role.
+
+    Args:
+        request: HTTP request.
+        id: UUID of the role.
+
+    Returns:
+        Rendered role edit page or redirect after successful update.
+    """
+    role = get_object_or_404(Role, id=id)
+
+    if request.method == "POST":
+        role.name = request.POST.get("name", "").strip()
+        role.code = request.POST.get("code", "").strip()
+        role.description = request.POST.get("description", "").strip() or None
+        role.is_active = request.POST.get("is_active") == "on"
+
+        role.save()
+
+        messages.success(request, "Role updated successfully.")
+
+        return redirect("role_detail", id=role.id)
+
+    context = {
+        "role": role,
+        "page_title": f"Edit {role.name}",
+    }
+
+    return render(
+        request,
+        "employment/role_edit.html",
+        context
+    )
+
+
+from django.db.models.deletion import ProtectedError
+
+
+@login_required
+def role_delete(request, id):
+    """
+    Delete an existing employment role.
+
+    Args:
+        request: HTTP request.
+        id: UUID of the role.
+
+    Returns:
+        Rendered confirmation page or redirect after deletion.
+    """
+    role = get_object_or_404(Role, id=id)
+
+    if request.method == "POST":
+        if role.employments.exists():
+            messages.error(
+                request,
+                "This role cannot be deleted because employees are assigned to it. "
+                "Reassign those employees before deleting this role."
+            )
+
+            return redirect(
+                "role_detail",
+                id=role.id
+            )
+
+        role_name = role.name
+
+        try:
+            role.delete()
+
+        except ProtectedError:
+            messages.error(
+                request,
+                "This role cannot be deleted because it is referenced by other records."
+            )
+
+            return redirect(
+                "role_detail",
+                id=role.id
+            )
+
+        messages.success(
+            request,
+            f"Role '{role_name}' deleted successfully."
+        )
+
+        return redirect("role_list")
+
+    context = {
+        "role": role,
+        "page_title": f"Delete {role.name}",
+        "has_employments": role.employments.exists(),
+    }
+
+    return render(
+        request,
+        "employment/role_delete.html",
+        context
+    )
 
 
 def calendar_view(request):

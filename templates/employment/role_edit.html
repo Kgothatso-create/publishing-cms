@@ -1,0 +1,102 @@
+{% extends "employment/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mb-1">Edit Role</h3>
+            <p class="text-muted mb-0">Update employment role information and settings.</p>
+        </div>
+
+        <a href="{% url 'role_detail' role.id %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Role
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h5 class="mb-3">Role Information</h5>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Role Name</label>
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            value="{{ role.name }}"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Role Code</label>
+                        <input
+                            type="text"
+                            name="code"
+                            class="form-control"
+                            value="{{ role.code }}"
+                            maxlength="50"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            rows="5"
+                        >{{ role.description|default_if_none:"" }}</textarea>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Status</label>
+
+                        <div class="form-check form-switch mt-2">
+                            <input
+                                type="checkbox"
+                                name="is_active"
+                                class="form-check-input"
+                                id="is_active"
+                                {% if role.is_active %}checked{% endif %}
+                            >
+
+                            <label class="form-check-label" for="is_active">
+                                Active
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a href="{% url 'role_detail' role.id %}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-warning text-dark">
+                        <i class="fas fa-save me-1"></i> Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
