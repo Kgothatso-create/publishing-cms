@@ -92,6 +92,7 @@ def employee_list(request):
         "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "selected_letter": letter,
         "search": search,
+        "detail_url_name": "employee_detail",
     }
 
     return render(
@@ -104,22 +105,51 @@ def employee_list(request):
 def employee_create(request):
 
     if request.method == "POST":
-
         form = EmployeeCreateForm(request.POST)
-
         if form.is_valid():
             form.save()
             return redirect("employee-list")
-
     else:
         form = EmployeeCreateForm()
 
     return render(
         request,
         "employment/add_employee.html",
-        {
-            "form": form
-        }
+        {"form": form}
+    )
+
+
+@login_required
+def employee_detail(request, id):
+    """
+    Display an individual employee's details.
+
+    Args:
+        request: HTTP request.
+        pk: Employee employment UUID.
+
+    Returns:
+        Rendered employee detail page.
+    """
+
+    employee = get_object_or_404(
+        Employment.objects.select_related(
+            "user",
+            "role",
+            "job",
+            "manager__user",
+        ),
+        id=id,
+    )
+
+    context = {
+        "employee": employee,
+    }
+
+    return render(
+        request,
+        "employment/employee_details.html",
+        context,
     )
 
 
@@ -158,6 +188,7 @@ def role_list(request):
         "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "selected_letter": letter,
         "search": search,
+        "detail_url_name": "role_detail",
     }
 
     return render(
@@ -183,6 +214,25 @@ def role_create(request):
         "employment/add_role.html",
         {"form": form},
     )
+
+
+def role_detail(request, id):
+    role = get_object_or_404(
+        Role,
+        id=id
+    )
+
+    context = {
+        "role": role,
+        "page_title": role.name,
+    }
+
+    return render(
+        request,
+        "employment/role_detail.html",
+        context
+    )
+
 
 
 def calendar_view(request):

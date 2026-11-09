@@ -1,3 +1,5 @@
+import random
+
 from django import forms
 
 from people.models import User
@@ -25,6 +27,20 @@ def generate_role_code():
         if code not in existing_codes:
             return code
         number += 1
+
+
+def generate_employee_number():
+    """
+    Generate a unique six-digit employee number.
+    """
+
+    while True:
+        employee_number = f"INKF-{random.randint(100000, 999999)}"
+
+        if not Employment.objects.filter(
+            employee_number=employee_number
+        ).exists():
+            return employee_number
 
 
 class RoleCreateForm(forms.ModelForm):
@@ -104,16 +120,6 @@ class EmployeeCreateForm(forms.Form):
         )
     )
 
-    employee_number = forms.CharField(
-        max_length=50,
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Employee number",
-            }
-        )
-    )
-
     role = forms.ModelChoiceField(
         queryset=Role.objects.filter(is_active=True),
         widget=forms.Select(
@@ -136,16 +142,19 @@ class EmployeeCreateForm(forms.Form):
     )
 
     def save(self):
+        DEFAULT_EMPLOYEE_PASSWORD = "ChangeMe123!"
+
         user = User.objects.create_user(
             username=self.cleaned_data["email"],
             email=self.cleaned_data["email"],
             first_name=self.cleaned_data["first_name"],
             last_name=self.cleaned_data["last_name"],
+            password=DEFAULT_EMPLOYEE_PASSWORD,
         )
 
         employment = Employment.objects.create(
             user=user,
-            employee_number=self.cleaned_data["employee_number"],
+            employee_number=generate_employee_number(),
             employee_email=self.cleaned_data["email"],
             role=self.cleaned_data["role"],
             employment_type=self.cleaned_data["employment_type"],

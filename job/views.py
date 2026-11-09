@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
 
@@ -47,11 +47,30 @@ def job_list(request):
         "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "selected_letter": letter,
         "search": search,
+        "detail_url_name": "job_detail",
     }
 
     return render(
         request,
         "layouts/list_view.html",
+        context,
+    )
+
+
+def job_detail(request, id):
+    job = get_object_or_404(
+        Job.objects.select_related("department"),
+        id=id
+    )
+
+    context = {
+        "job": job,
+        "page_title": job.title,
+    }
+
+    return render(
+        request,
+        "job/job_details.html",
         context
     )
 
@@ -113,11 +132,27 @@ def department_list(request):
         "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "selected_letter": letter,
         "search": search,
+        "detail_url_name": "department_detail",
     }
 
     return render(
         request,
         "layouts/list_view.html",
+        context
+    )
+
+
+def department_detail(request, id):
+    department = get_object_or_404(Department, id=id)
+
+    context = {
+        "department": department,
+        "page_title": department.name,
+    }
+
+    return render(
+        request,
+        "job/department_detail.html",
         context
     )
 

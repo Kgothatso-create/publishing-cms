@@ -7,11 +7,13 @@ urlpatterns = [
          include([
              path("", employee_list, name="employee-list"),
              path("add/", employee_create, name="employee-create"),
+             path("<uuid:id>/", employee_detail, name="employee_detail"),
          ])),
     path("roles/",
          include([
-             path("roles/", role_list, name="role-list", ),
-             path("roles/add/", role_create, name="role-create", ),
+             path("", role_list, name="role-list", ),
+             path("add/", role_create, name="role-create", ),
+             path("<uuid:id>/", role_detail, name="role_detail"),
          ])),
     path("calendar/", include([
         path("", calendar_view, name="calendar"),
