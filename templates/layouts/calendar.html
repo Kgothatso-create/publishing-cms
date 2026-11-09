@@ -1,0 +1,190 @@
+{% extends "employment/base.html" %}
+{% block title %}Employee Dashboard{% endblock %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Modern Calendar</title>
+
+    <!-- FullCalendar 7 -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.4/all/global.js"></script>
+
+    <!-- FullCalendar Theme -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.4/themes/monarch/global.js"></script>
+
+    <!-- FullCalendar Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.4/skeleton.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.4/themes/monarch/theme.css" rel="stylesheet">
+
+    <style>
+        .calendar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        #calendar {
+            width: 100%;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .fc .fc-button {
+            border-radius: 5px;
+        }
+
+        .fc .fc-event {
+            cursor: pointer;
+        }
+
+        .fc .fc-daygrid-day-number {
+            padding: 8px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .calendar-container {
+                padding: 10px;
+            }
+
+            .fc .fc-toolbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .fc .fc-toolbar-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="calendar-container">
+    <div id="calendar"></div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const calendarElement = document.getElementById("calendar");
+
+        // Generate sample dates relative to today.
+        const today = new Date();
+
+        function getDateOffset(days) {
+            const date = new Date(today);
+            date.setDate(date.getDate() + days);
+
+            return date;
+        }
+
+        const calendar = new FullCalendar.Calendar(calendarElement, {
+
+            // Calendar configuration
+            initialView: "dayGridMonth",
+            firstDay: 1,
+            height: "auto",
+            nowIndicator: true,
+
+            // Navigation
+            headerToolbar: {
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
+            },
+
+            // Calendar interaction
+            selectable: true,
+            selectMirror: true,
+            editable: true,
+            dayMaxEvents: true,
+
+            // Event appearance
+            eventTimeFormat: {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true
+            },
+
+            // Sample events
+            events: [
+                {
+                    title: "Team Meeting",
+                    start: getDateOffset(0),
+                    className: "meeting"
+                },
+                {
+                    title: "Project Review",
+                    start: getDateOffset(1),
+                    allDay: true
+                },
+                {
+                    title: "Client Consultation",
+                    start: getDateOffset(2).toISOString().slice(0, 10) + "T10:00:00",
+                    end: getDateOffset(2).toISOString().slice(0, 10) + "T11:00:00"
+                },
+                {
+                    title: "Project Deadline",
+                    start: getDateOffset(5),
+                    allDay: true
+                },
+                {
+                    title: "Planning Session",
+                    start: getDateOffset(7).toISOString().slice(0, 10) + "T14:00:00",
+                    end: getDateOffset(7).toISOString().slice(0, 10) + "T15:30:00"
+                }
+            ],
+
+            // Create events by selecting a date or date range.
+            select: function (info) {
+
+                const title = prompt("Enter event title:");
+
+                if (title && title.trim()) {
+
+                    calendar.addEvent({
+                        title: title.trim(),
+                        start: info.start,
+                        end: info.end,
+                        allDay: info.allDay
+                    });
+
+                }
+
+                calendar.unselect();
+            },
+
+            // Edit an event by clicking it.
+            eventClick: function (info) {
+
+                const title = prompt(
+                    "Update event title:",
+                    info.event.title
+                );
+
+                if (title !== null && title.trim()) {
+                    info.event.setProp("title", title.trim());
+                }
+            }
+
+        });
+
+        calendar.render();
+
+    });
+</script>
+
+</body>
+{% endblock %}

@@ -13,4 +13,9 @@ urlpatterns = [
              path("roles/", role_list, name="role-list", ),
              path("roles/add/", role_create, name="role-create", ),
          ])),
+    path(
+        "calendar/",
+        calendar_view,
+        name="calendar"
+    ),
 ]

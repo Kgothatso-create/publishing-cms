@@ -171,5 +171,18 @@ def role_create(request):
     return render(
         request,
         "employment/add_role.html",
-        {"form": form,},
+        {"form": form},
     )
+
+
+def calendar_view(request):
+    """
+    Display the calendar page.
+
+    Args:
+        request: HTTP request object.
+
+    Returns:
+        Rendered calendar template.
+    """
+    return render(request, "layouts/calendar.html")

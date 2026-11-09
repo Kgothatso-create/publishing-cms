@@ -22,7 +22,7 @@ def home(request):
 
     context = {
         "latest_articles": articles.order_by("-created_at"),  # main content
-        "oldest_articles": articles.order_by("created_at"),   # sidebar
+        "oldest_articles": articles.order_by("created_at"),  # sidebar
     }
 
     return render(request, "articles/home.html", context)
@@ -122,7 +122,7 @@ def view_article(request: HttpRequest, slug: str, review=False) -> HttpResponse:
     return render(request, template, context)
 
 
-def article_list(request, category_slug=None, author_slug=None,):
+def article_list(request, category_slug=None, author_slug=None):
 
     articles = Article.objects.select_related(
         "author", "category"
@@ -334,6 +334,7 @@ def approve_article(request: HttpRequest, slug: str) -> HttpResponse:
         return redirect("review_article", slug=article.slug)
 
     article.approve()
+    article.publish()
     article.mark_reviewed(Article.REVIEW_APPROVED)
 
     return redirect("review_article", slug=article.slug)
@@ -658,6 +659,7 @@ def resolve_article_report(request: HttpRequest, slug: str, report_id: int) -> H
     )
 
     return redirect("review_article", slug=slug)
+
 
 @login_required
 @require_POST
