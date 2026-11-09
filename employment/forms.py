@@ -1,7 +1,7 @@
 from django import forms
 
 from people.models import User
-from .models import CompanyEvent, Employment, EmployeeProfile, Role
+from .models import CompanyEvent, Employment, EmployeeProfile, Notification, Role
 
 
 def generate_role_code():
@@ -189,3 +189,34 @@ class CompanyEventForm(forms.ModelForm):
                 "type": "date",
             }),
         }
+
+
+class NotificationForm(forms.ModelForm):
+
+    class Meta:
+        model = Notification
+        fields = ["title", "message", "link", "recipients"]
+
+        widgets = {
+            "title": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Notification title"
+            }),
+            "message": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 5,
+                "placeholder": "Write your notification..."
+            }),
+            "link": forms.URLInput(attrs={
+                "class": "form-control",
+                "placeholder": "Optional URL"
+            }),
+            "recipients": forms.CheckboxSelectMultiple(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["recipients"].queryset = Employment.objects.filter(
+            status=Employment.EmploymentStatus.ACTIVE
+        ).select_related("user")

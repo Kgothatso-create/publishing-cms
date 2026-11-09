@@ -184,10 +184,17 @@ class Notification(models.Model):
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    employee = models.ForeignKey(
+    created_by = models.ForeignKey(
         Employment,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="created_notifications"
+    )
+    recipients = models.ManyToManyField(
+        Employment,
         related_name="notifications",
+        blank=True
     )
     title = models.CharField(max_length=150)
     message = models.TextField()

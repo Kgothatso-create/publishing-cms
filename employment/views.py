@@ -10,7 +10,7 @@ from django.utils import timezone
 from articles.models import ArticleReport
 from job.models import Job
 from .models import CompanyEvent, Employment, Role
-from .forms import CompanyEventForm, EmployeeCreateForm, RoleCreateForm
+from .forms import CompanyEventForm, EmployeeCreateForm, NotificationForm, RoleCreateForm
 
 
 def employee_dashboard(request):
@@ -318,3 +318,32 @@ def delete_company_event(request, event_id):
             "event": event,
         },
     )
+
+
+@login_required
+def create_notification(request):
+    employee = get_object_or_404(
+        Employment,
+        user=request.user,
+        status=Employment.EmploymentStatus.ACTIVE
+    )
+
+    if request.method == "POST":
+        form = NotificationForm(request.POST)
+
+        if form.is_valid():
+            notification = form.save(commit=False)
+            notification.created_by = employee
+            notification.save()
+            form.save_m2m()
+
+            messages.success(request, "Notification created successfully.")
+            return redirect("employee_dashboard")
+
+    else:
+        form = NotificationForm()
+
+    return render(request, "employment/create_notification.html", {
+        "form": form,
+    })
+

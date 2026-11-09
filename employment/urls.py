@@ -20,8 +20,14 @@ urlpatterns = [
         path(
             "company-events/<uuid:event_id>/", include([
                 path("", company_event_detail, name="company_event_detail"),
-                path("edit/", edit_company_event, name="edit_company_event",),
-                path("delete/", delete_company_event, name="delete_company_event",),
+                path("edit/", edit_company_event, name="edit_company_event", ),
+                path("delete/", delete_company_event, name="delete_company_event", ),
             ])),
     ])),
+    path("notifications/", include([
+        path("create/",
+             create_notification,
+             name="create_notification"
+             ),
+    ]), )
 ]
