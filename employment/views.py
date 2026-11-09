@@ -9,7 +9,8 @@ from django.utils import timezone
 
 from articles.models import ArticleReport
 from job.models import Job
-from .models import CompanyEvent, Employment, Role
+from people.models import User
+from .models import CompanyEvent, EmployeeProfile, Employment, Role
 from .forms import CompanyEventForm, EmployeeCreateForm, EmployeeEditForm, NotificationForm, RoleCreateForm
 
 
@@ -20,6 +21,7 @@ def employee_dashboard(request):
     ).order_by("-created_at")[:4]
 
     active_job_count = Job.objects.filter(is_active=True).distinct().count()
+    active_users = User.objects.filter(employment__isnull=True, is_active=True).count()
     active_employee_count = Employment.objects.filter(
         status=Employment.EmploymentStatus.ACTIVE
     ).distinct().count()
@@ -33,6 +35,7 @@ def employee_dashboard(request):
     context = {
         "reported_article_count": reported_article_count,
         "active_job_count": active_job_count,
+        "active_users": active_users,
         "active_employee_count": active_employee_count,
         "company_events": company_events,
     }
@@ -603,3 +606,116 @@ def create_notification(request):
         "form": form,
     })
 
+
+@login_required
+def employee_profile(request):
+    """
+    Display the logged-in employee's profile and employment information.
+
+    Args:
+        request: HTTP request.
+
+    Returns:
+        Rendered employee profile page.
+    """
+
+    employment = get_object_or_404(
+        Employment.objects.select_related(
+            "user",
+            "job",
+            "job__department",
+            "role",
+            "manager",
+        ),
+        user=request.user,
+    )
+
+    profile = get_object_or_404(
+        EmployeeProfile,
+        employment=employment,
+    )
+
+    context = {
+        "employment": employment,
+        "profile": profile,
+    }
+
+    return render(
+        request,
+        "employment/employee_profile.html",
+        context,
+    )
+
+
+@login_required
+def user_list(request):
+    users = User.objects.filter(employment__isnull=True)
+
+    # Alphabet filter
+    letter = request.GET.get("letter")
+
+    if letter:
+        users = users.filter(username__istartswith=letter)
+
+    # Search
+    search = request.GET.get("q")
+
+    if search:
+        users = users.filter(
+            Q(username__istartswith=search) |
+            Q(email__icontains=search)
+        )
+
+    users = users.order_by("username")
+
+    # Pagination
+    paginator = Paginator(users, 100)
+    page_number = request.GET.get("page")
+    users = paginator.get_page(page_number)
+
+    context = {
+        "page_title": "Users",
+        "create_url": None,
+        "create_label": None,
+        "create_icon": None,
+        "search_placeholder": "Search users...",
+        "list_url": "user_list",
+        "items": users,
+        "pagination_object": users,
+        "icon": "fas fa-users",
+        "empty_message": "No users found.",
+        "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "selected_letter": letter,
+        "search": search,
+        "detail_url_name": "user_detail",
+    }
+
+    return render(
+        request,
+        "layouts/list_view.html",
+        context
+    )
+
+
+def user_detail(request, id):
+    user_account = get_object_or_404(
+        User.objects.filter(employment__isnull=True),
+        id=id
+    )
+
+    reports = user_account.article_reports.select_related(
+        "article"
+    ).all()
+
+    context = {
+        "user_account": user_account,
+        "page_title": user_account.get_full_name() or user_account.username,
+        "reported_articles_count": reports.count(),
+        "reported_articles": reports,
+    }
+
+    return render(
+        request,
+        "employment/user_detail.html",
+        context
+    )

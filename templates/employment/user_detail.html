@@ -1,0 +1,159 @@
+{% extends "employment/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-5 fw-bold article-title mb-1">
+                User Details
+            </h1>
+            <p class="text-muted mb-0">
+                Registered User
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <!-- Personal Information -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Personal Information</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <strong>Email Address</strong>
+                    <p>{{ user_account.email|default:"-" }}</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Username</strong>
+                    <p>{{ user_account.username }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Information -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Account Information</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <strong>Account Status</strong>
+                    <p>
+                        {% if user_account.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Inactive</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Account Type</strong>
+                    <p>
+                        {% if user_account.is_superuser %}
+                            Superuser
+                        {% elif user_account.is_staff %}
+                            Staff
+                        {% else %}
+                            Standard User
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Date Registered</strong>
+                    <p>{{ user_account.date_joined|date:"d M Y" }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Last Login</strong>
+                    <p>
+                        {{ user_account.last_login|date:"d M Y, H:i"|default:"Never logged in" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Reported Articles -->
+<div class="card mb-4">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Reported Articles</h5>
+
+        <span class="badge bg-primary">
+            {{ reported_articles_count }}
+        </span>
+    </div>
+
+    <div class="card-body">
+
+        {% if reported_articles %}
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Reason</th>
+                            <th>Date Reported</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for report in reported_articles %}
+                            <tr>
+                                <td>
+                                    {{ report.article.title }}
+                                </td>
+
+                                <td>
+                                    {{ report.get_reason_display }}
+                                </td>
+
+                                <td>
+                                    {{ report.created_at|date:"d M Y" }}
+                                </td>
+
+                                <td>
+                                    {% if report.resolved %}
+                                        <span class="badge bg-success">Resolved</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        {% else %}
+
+            <p class="text-muted mb-0">
+                This user has not reported any articles.
+            </p>
+
+        {% endif %}
+
+    </div>
+</div>
+</div>
+
+{% endblock %}

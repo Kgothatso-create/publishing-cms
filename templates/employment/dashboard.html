@@ -29,9 +29,9 @@
                         Users
                     </h5>
                     <p class="display-6 fw-bold">
-                        0
+                        {{ active_users }}
                     </p>
-                    <a href="#" class="btn"
+                    <a href="{% url 'user_list' %}" class="btn"
                        style="border-color:#bf9b30; background-color:#bf9b30;">
                         View Users
                     </a>

@@ -1,6 +1,8 @@
 import random
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.db import transaction
 
 from job.models import Job
 from people.models import User
@@ -90,44 +92,53 @@ class RoleCreateForm(forms.ModelForm):
         return role
 
 
+
 class EmployeeCreateForm(forms.Form):
+
+    # -------------------------
+    # PERSONAL INFORMATION
+    # -------------------------
 
     first_name = forms.CharField(
         max_length=150,
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Enter first name",
-            }
-        )
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter first name",
+        })
     )
 
     last_name = forms.CharField(
         max_length=150,
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Enter last name",
-            }
-        )
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter last name",
+        })
     )
 
     email = forms.EmailField(
-        widget=forms.EmailInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Enter email address",
-            }
-        )
+        widget=forms.EmailInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter email address",
+        })
     )
 
+    date_of_birth = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            "class": "form-control",
+            "type": "date",
+        })
+    )
+
+    # -------------------------
+    # EMPLOYMENT INFORMATION
+    # -------------------------
+
     role = forms.ModelChoiceField(
-        queryset=Role.objects.filter(is_active=True),
-        widget=forms.Select(
-            attrs={
-                "class": "form-select",
-            }
-        ),
+        queryset=Role.objects.all(),
+        widget=forms.Select(attrs={
+            "class": "form-select",
+        }),
         empty_label="Select role"
     )
 
@@ -135,63 +146,240 @@ class EmployeeCreateForm(forms.Form):
         queryset=Job.objects.all(),
         required=False,
         empty_label="Select job (optional)",
-        widget=forms.Select(
-            attrs={"class": "form-select"}
-        )
+        widget=forms.Select(attrs={
+            "class": "form-select",
+        })
+    )
+
+    manager = forms.ModelChoiceField(
+        queryset=Employment.objects.all(),
+        required=False,
+        empty_label="Select manager (optional)",
+        widget=forms.Select(attrs={
+            "class": "form-select",
+        })
+    )
+
+    status = forms.ChoiceField(
+        choices=Employment.EmploymentStatus.choices,
+        initial=Employment.EmploymentStatus.ACTIVE,
+        widget=forms.Select(attrs={
+            "class": "form-select",
+        })
     )
 
     employment_type = forms.ChoiceField(
         choices=Employment.EmploymentType.choices,
-        widget=forms.Select(attrs={"class": "form-select",})
+        widget=forms.Select(attrs={
+            "class": "form-select",
+        })
     )
 
     hire_date = forms.DateField(
-        widget=forms.DateInput(
-            attrs={"class": "form-control", "type": "date",}
-        )
+        widget=forms.DateInput(attrs={
+            "class": "form-control",
+            "type": "date",
+        })
     )
 
+    probation_end_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            "class": "form-control",
+            "type": "date",
+        })
+    )
+
+    termination_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            "class": "form-control",
+            "type": "date",
+        })
+    )
+
+    location = forms.CharField(
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter work location",
+        })
+    )
+
+    cost_center = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter cost center",
+        })
+    )
+
+    # -------------------------
+    # CONTACT INFORMATION
+    # -------------------------
+
+    phone_number = forms.CharField(
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter phone number",
+        })
+    )
+
+    address_line_1 = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Address line 1",
+        })
+    )
+
+    address_line_2 = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Address line 2",
+        })
+    )
+
+    city = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter city",
+        })
+    )
+
+    province = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter province",
+        })
+    )
+
+    postal_code = forms.CharField(
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Enter postal code",
+        })
+    )
+
+    country = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+        })
+    )
+
+    # -------------------------
+    # EMERGENCY CONTACT
+    # -------------------------
+
+    emergency_contact_name = forms.CharField(
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Emergency contact name",
+        })
+    )
+
+    emergency_contact_phone = forms.CharField(
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Emergency contact phone",
+        })
+    )
+
+    # -------------------------
+    # VALIDATION
+    # -------------------------
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+
+        if Employment.objects.filter(
+            employee_email__iexact=email
+        ).exists():
+            raise ValidationError(
+                "This email address is already assigned to an employee."
+            )
+
+        if User.objects.filter(username__iexact=email).exists():
+            raise ValidationError(
+                "This email address is already being used as a username."
+            )
+
+        return email
+
+    # -------------------------
+    # SAVE
+    # -------------------------
+
+    @transaction.atomic
     def save(self):
+
+        data = self.cleaned_data
+
         DEFAULT_EMPLOYEE_PASSWORD = "ChangeMe123!"
 
+        # Create Django User
         user = User.objects.create_user(
-            username=self.cleaned_data["email"],
-            email=self.cleaned_data["email"],
-            first_name=self.cleaned_data["first_name"],
-            last_name=self.cleaned_data["last_name"],
+            username=data["email"],
+            email=data["email"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
             password=DEFAULT_EMPLOYEE_PASSWORD,
         )
 
+        # Create Employment
         employment = Employment.objects.create(
             user=user,
             employee_number=generate_employee_number(),
-            employee_email=self.cleaned_data["email"],
-            role=self.cleaned_data["role"],
-            job=self.cleaned_data["job"],
-            employment_type=self.cleaned_data["employment_type"],
-            hire_date=self.cleaned_data["hire_date"],
+            employee_email=data["email"],
+            role=data["role"],
+            job=data["job"],
+            manager=data["manager"],
+            status=data["status"],
+            employment_type=data["employment_type"],
+            hire_date=data["hire_date"],
+            probation_end_date=data["probation_end_date"],
+            termination_date=data["termination_date"],
+            location=data["location"],
+            cost_center=data["cost_center"],
         )
 
+        # Create Employee Profile
         EmployeeProfile.objects.create(
             employment=employment,
-            first_name=self.cleaned_data["first_name"],
-            last_name=self.cleaned_data["last_name"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+            date_of_birth=data["date_of_birth"],
+            phone_number=data["phone_number"],
+            address_line_1=data["address_line_1"],
+            address_line_2=data["address_line_2"],
+            city=data["city"],
+            province=data["province"],
+            postal_code=data["postal_code"],
+            country=data["country"],
+            emergency_contact_name=data["emergency_contact_name"],
+            emergency_contact_phone=data["emergency_contact_phone"],
         )
 
         return employment
-
-
-
-from django import forms
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.db import transaction
-
-from job.models import Job
-from .models import Employment, EmployeeProfile, Role
-
-
-User = get_user_model()
 
 
 class EmployeeEditForm(forms.Form):

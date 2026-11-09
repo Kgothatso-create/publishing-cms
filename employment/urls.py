@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
     path("", employee_dashboard, name="employee_dashboard"),
+    path("my-profile/", employee_profile, name="employee_profile"),
     path("employees/",
          include([
              path("", employee_list, name="employee_list"),
@@ -34,6 +35,8 @@ urlpatterns = [
                 path("delete/", delete_company_event, name="delete_company_event", ),
             ])),
     ])),
+    path("users/", user_list, name="user_list"),
+    path("users/<str:id>/", user_detail, name="user_detail"),
     path("notifications/", include([
         path("create/",
              create_notification,
