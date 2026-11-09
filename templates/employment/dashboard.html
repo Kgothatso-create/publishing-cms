@@ -74,9 +74,15 @@
     <div class="row mt-5 g-4">
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-                <div class="card-header fw-bold">
-                    <i class="fas fa-bell me-2"></i>
-                    Notifications
+                <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                    <span>
+                        <i class="fas fa-bell me-2"></i>
+                        Notifications
+                    </span>
+                    <button type="button" class="btn btn-info btn-sm">
+                        <i class="fas fa-plus me-2"></i>
+                        Add Notification
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="list-group">
@@ -103,31 +109,50 @@
         </div>
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-                <div class="card-header fw-bold">
-                    <i class="fas fa-calendar-alt me-2"></i>
-                    Upcoming Events
+                <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                    <span>
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Upcoming Events
+                    </span>
+                    <a href="{% url 'create_company_event' %}"
+                       class="btn btn-info btn-sm">
+                        <i class="fas fa-plus me-1"></i>
+                        Create Event
+                    </a>
                 </div>
                 <div class="card-body">
-                    <div class="list-group">
+                <div class="list-group">
+                    {% for event in company_events %}
                         <div class="list-group-item">
                             <strong>
-                                🎂 Employee Birthday
+                                {% if event.event_type == "BIRTHDAY" %}
+                                    🎂
+                                {% elif event.event_type == "MEETING" %}
+                                    📅
+                                {% elif event.event_type == "HOLIDAY" %}
+                                    🌴
+                                {% elif event.event_type == "TRAINING" %}
+                                    📚
+                                {% else %}
+                                    📢
+                                {% endif %}
+                                {{ event.title }}
                             </strong>
                             <br>
                             <small class="text-muted">
-                                John Smith - 15 July
+                                {{ event.event_date|date:"d F Y" }}
+                                {% if event.description %}
+                                    - {{ event.description|truncatewords:10 }}
+                                {% endif %}
                             </small>
                         </div>
-                        <div class="list-group-item">
-                            <strong>
-                                📅 Company Meeting
-                            </strong>
-                            <br>
-                            <small class="text-muted">
-                                Monthly operations meeting - 20 July
-                            </small>
-                        </div>
-                        <a href="{% url 'calendar' %}" class=" list-group-item list-group-item-action text-center">
+                        {% empty %}
+                            <div class="list-group-item text-center text-muted">
+                                No events have been created yet.
+                            </div>
+                        {% endfor %}
+                        <a href="{% url 'calendar' %}"
+                           class="list-group-item list-group-item-action text-center">
                             View Calendar
                         </a>
                     </div>

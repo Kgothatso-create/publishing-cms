@@ -1,7 +1,7 @@
 from django import forms
 
 from people.models import User
-from .models import Employment, EmployeeProfile, Role
+from .models import CompanyEvent, Employment, EmployeeProfile, Role
 
 
 def generate_role_code():
@@ -159,3 +159,33 @@ class EmployeeCreateForm(forms.Form):
         )
 
         return employment
+
+
+class CompanyEventForm(forms.ModelForm):
+    class Meta:
+        model = CompanyEvent
+        fields = [
+            "title",
+            "description",
+            "event_type",
+            "event_date",
+        ]
+
+        widgets = {
+            "title": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Enter event title",
+            }),
+            "description": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 3,
+                "placeholder": "Enter event description (optional)",
+            }),
+            "event_type": forms.Select(attrs={
+                "class": "form-select",
+            }),
+            "event_date": forms.DateInput(attrs={
+                "class": "form-control",
+                "type": "date",
+            }),
+        }

@@ -1,14 +1,23 @@
+from datetime import timedelta
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.utils import timezone
 
 from articles.models import ArticleReport
 from job.models import Job
-from .models import Employment, Role
-from .forms import EmployeeCreateForm, RoleCreateForm
+from .models import CompanyEvent, Employment, Role
+from .forms import CompanyEventForm, EmployeeCreateForm, RoleCreateForm
 
 
 def employee_dashboard(request):
+
+    company_events = CompanyEvent.objects.select_related(
+        "created_by"
+    ).order_by("-created_at")[:4]
 
     active_job_count = Job.objects.filter(is_active=True).distinct().count()
     active_employee_count = Employment.objects.filter(
@@ -25,6 +34,7 @@ def employee_dashboard(request):
         "reported_article_count": reported_article_count,
         "active_job_count": active_job_count,
         "active_employee_count": active_employee_count,
+        "company_events": company_events,
     }
 
     return render(request, "employment/dashboard.html", context)
@@ -176,13 +186,43 @@ def role_create(request):
 
 
 def calendar_view(request):
-    """
-    Display the calendar page.
+    events = CompanyEvent.objects.all().order_by("event_date")
 
-    Args:
-        request: HTTP request object.
+    calendar_events = [
+        {
+            "title": event.title,
+            "start": event.event_date.isoformat(),
+            "allDay": True,
+        }
+        for event in events
+    ]
 
-    Returns:
-        Rendered calendar template.
-    """
-    return render(request, "layouts/calendar.html")
+    return render(request, "layouts/calendar.html", {
+        "calendar_events": calendar_events,
+    })
+
+
+@login_required
+def create_company_event(request):
+    if request.method == "POST":
+        form = CompanyEventForm(request.POST)
+
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.created_by = request.user
+            event.save()
+
+            messages.success(
+                request,
+                "Calendar event created successfully."
+            )
+
+            return redirect("calendar")
+    else:
+        form = CompanyEventForm()
+
+    return render(
+        request,
+        "employment/create_event.html",
+        {"form": form},
+    )

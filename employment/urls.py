@@ -18,4 +18,9 @@ urlpatterns = [
         calendar_view,
         name="calendar"
     ),
+    path(
+        "calendar/create-event/",
+        create_company_event,
+        name="create_company_event",
+    ),
 ]

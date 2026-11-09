@@ -31,23 +31,6 @@
             width: 100%;
         }
 
-        .fc .fc-toolbar-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-
-        .fc .fc-button {
-            border-radius: 5px;
-        }
-
-        .fc .fc-event {
-            cursor: pointer;
-        }
-
-        .fc .fc-daygrid-day-number {
-            padding: 8px;
-        }
-
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -55,15 +38,6 @@
 
             .calendar-container {
                 padding: 10px;
-            }
-
-            .fc .fc-toolbar {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .fc .fc-toolbar-title {
-                font-size: 1.1rem;
             }
         }
     </style>
@@ -74,13 +48,19 @@
 <div class="calendar-container">
     <div id="calendar"></div>
 </div>
+{{ calendar_events|json_script:"calendar-events" }}
+{% endblock %}
 
+{% block scripts %}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
         const calendarElement = document.getElementById("calendar");
 
-        // Generate sample dates relative to today.
+        const events = JSON.parse(
+            document.getElementById("calendar-events").textContent
+        );
+
         const today = new Date();
 
         function getDateOffset(days) {
@@ -118,66 +98,8 @@
                 hour12: true
             },
 
-            // Sample events
-            events: [
-                {
-                    title: "Team Meeting",
-                    start: getDateOffset(0),
-                    className: "meeting"
-                },
-                {
-                    title: "Project Review",
-                    start: getDateOffset(1),
-                    allDay: true
-                },
-                {
-                    title: "Client Consultation",
-                    start: getDateOffset(2).toISOString().slice(0, 10) + "T10:00:00",
-                    end: getDateOffset(2).toISOString().slice(0, 10) + "T11:00:00"
-                },
-                {
-                    title: "Project Deadline",
-                    start: getDateOffset(5),
-                    allDay: true
-                },
-                {
-                    title: "Planning Session",
-                    start: getDateOffset(7).toISOString().slice(0, 10) + "T14:00:00",
-                    end: getDateOffset(7).toISOString().slice(0, 10) + "T15:30:00"
-                }
-            ],
-
-            // Create events by selecting a date or date range.
-            select: function (info) {
-
-                const title = prompt("Enter event title:");
-
-                if (title && title.trim()) {
-
-                    calendar.addEvent({
-                        title: title.trim(),
-                        start: info.start,
-                        end: info.end,
-                        allDay: info.allDay
-                    });
-
-                }
-
-                calendar.unselect();
-            },
-
-            // Edit an event by clicking it.
-            eventClick: function (info) {
-
-                const title = prompt(
-                    "Update event title:",
-                    info.event.title
-                );
-
-                if (title !== null && title.trim()) {
-                    info.event.setProp("title", title.trim());
-                }
-            }
+            // Database events
+            events: events,
 
         });
 
@@ -185,6 +107,4 @@
 
     });
 </script>
-
-</body>
 {% endblock %}
