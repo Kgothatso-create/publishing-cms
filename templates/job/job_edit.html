@@ -1,0 +1,140 @@
+{% extends "employment/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mb-1">Edit Job</h3>
+            <p class="text-muted mb-0">Update job information and organizational details.</p>
+        </div>
+
+        <a href="{% url 'job_detail' job.id %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Job
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h5 class="mb-3">Job Information</h5>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Job Code</label>
+                        <input
+                            type="text"
+                            name="job_code"
+                            class="form-control"
+                            value="{{ job.job_code }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Job Title</label>
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-control"
+                            value="{{ job.title }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Department</label>
+                        <select name="department" class="form-select" required>
+                            {% for department in departments %}
+                                <option
+                                    value="{{ department.id }}"
+                                    {% if job.department_id == department.id %}selected{% endif %}
+                                >
+                                    {{ department.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Employment Level</label>
+                        <select name="level" class="form-select">
+                            <option value="">Select Level</option>
+                            {% for value, label in job.LEVEL_CHOICES %}
+                                <option
+                                    value="{{ value }}"
+                                    {% if job.level == value %}selected{% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Job Grade</label>
+                        <select name="grade" class="form-select">
+                            <option value="">Select Grade</option>
+                            {% for value, label in job.GRADE_CHOICES %}
+                                <option
+                                    value="{{ value }}"
+                                    {% if job.grade == value %}selected{% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Status</label>
+                        <div class="form-check form-switch mt-2">
+                            <input
+                                type="checkbox"
+                                name="is_active"
+                                class="form-check-input"
+                                id="is_active"
+                                {% if job.is_active %}checked{% endif %}
+                            >
+                            <label class="form-check-label" for="is_active">
+                                Active
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            rows="5"
+                        >{{ job.description|default_if_none:"" }}</textarea>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'job_detail' job.id %}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Save Changes
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

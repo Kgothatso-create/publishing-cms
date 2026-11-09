@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -39,7 +41,7 @@ def job_list(request):
         "create_label": "Add Job",
         "create_icon": "fas fa-briefcase",
         "search_placeholder": "Search jobs...",
-        "list_url": "job-list",
+        "list_url": "job_list",
         "items": jobs,
         "pagination_object": jobs,
         "icon": "fas fa-briefcase",
@@ -81,7 +83,7 @@ def job_create(request):
         form = JobCreateForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("job-list")
+            return redirect("job_list")
     else:
         form = JobCreateForm()
 
@@ -89,6 +91,85 @@ def job_create(request):
         request,
         "job/add_job.html",
         {"form": form}
+    )
+
+
+@login_required
+def job_edit(request, id):
+    """
+    Edit an existing job definition.
+
+    Args:
+        request: HTTP request.
+        id: UUID of the job.
+
+    Returns:
+        Rendered job edit page or redirect after successful update.
+    """
+    job = get_object_or_404(Job, id=id)
+
+    if request.method == "POST":
+        job.job_code = request.POST.get("job_code", "").strip()
+        job.title = request.POST.get("title", "").strip()
+        job.description = request.POST.get("description", "").strip() or None
+        job.department_id = request.POST.get("department")
+        job.is_active = request.POST.get("is_active") == "on"
+        job.level = request.POST.get("level") or None
+        job.grade = request.POST.get("grade") or None
+
+        job.save()
+
+        messages.success(request, "Job updated successfully.")
+
+        return redirect("job_detail", id=job.id)
+
+    context = {
+        "job": job,
+        "departments": Department.objects.all(),
+        "page_title": f"Edit {job.title}",
+    }
+
+    return render(
+        request,
+        "job/job_edit.html",
+        context
+    )
+
+
+@login_required
+def job_delete(request, id):
+    """
+    Delete an existing job definition.
+
+    Args:
+        request: HTTP request.
+        id: UUID of the job.
+
+    Returns:
+        Rendered confirmation page or redirect after deletion.
+    """
+    job = get_object_or_404(Job, id=id)
+
+    if request.method == "POST":
+        job_title = job.title
+        job.delete()
+
+        messages.success(
+            request,
+            f"Job '{job_title}' deleted successfully."
+        )
+
+        return redirect("job_list")
+
+    context = {
+        "job": job,
+        "page_title": f"Delete {job.title}",
+    }
+
+    return render(
+        request,
+        "job/job_delete.html",
+        context
     )
 
 

@@ -4,12 +4,12 @@ from .views import *
 urlpatterns = [
     path("job/",
          include([
-             path("", job_list, name="job-list"),
-             path(
-                 "<uuid:id>/",
-                 job_detail,
-                 name="job_detail"
-             ),
+             path("", job_list, name="job_list"),
+             path("<uuid:id>/", include([
+                 path("", job_detail, name="job_detail"),
+                 path("edit/", job_edit, name="job_edit"),
+                 path("delete/", job_delete, name="job_delete",)
+             ])),
              path("add/", job_create, name="job-create")
          ])),
     path("department/", include([
