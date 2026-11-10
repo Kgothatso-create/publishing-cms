@@ -671,3 +671,7 @@ def toggle_article_like(request, slug):
         "liked": created,
         "like_count": article.likes.count()
     })
+
+
+def roadmap_view(request):
+    return render(request, "roadmap/roadmap.html")

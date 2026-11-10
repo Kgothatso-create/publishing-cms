@@ -1,0 +1,477 @@
+
+{% extends "employment/base.html" %}
+{% load static %}
+
+{% block title %}Development Roadmap | Inkflow{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <span class="badge rounded-pill bg-warning text-dark mb-3">
+            Development Roadmap
+        </span>
+        <h1 class="display-5 fw-bold">
+            Building <span class="text-warning">Inkflow</span>
+        </h1>
+        <p class="text-muted mx-auto" style="max-width: 650px;">
+            Follow the development journey of Inkflow.
+            Explore completed features, current improvements
+            and what is planned for the future.
+        </p>
+    </div>
+    <div class="row g-3 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-check-circle fa-2x text-success mb-3"></i>
+                    <h5 class="fw-bold">Completed</h5>
+                    <p class="text-muted small mb-0">
+                        Features implemented and delivered.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-code fa-2x text-primary mb-3"></i>
+                    <h5 class="fw-bold">In Progress</h5>
+                    <p class="text-muted small mb-0">
+                        Features currently being developed.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-lightbulb fa-2x text-warning mb-3"></i>
+                    <h5 class="fw-bold">Planned</h5>
+                    <p class="text-muted small mb-0">
+                        Improvements and upcoming features.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="mb-5">
+        <div class="d-flex align-items-center mb-4">
+            <i class="fas fa-check-circle text-success fa-lg me-3"></i>
+            <div>
+                <h3 class="fw-bold mb-0">Completed</h3>
+                <p class="text-muted small mb-0">
+                    Features implemented in Inkflow.
+                </p>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-users me-2 text-secondary"></i>
+                            User Management
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Custom user model
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                User registration and authentication
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                User profiles
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Profile information editing
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Password management
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-newspaper me-2 text-secondary"></i>
+                            Article Management
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Article creation and editing
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Publishing and unpublishing
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Article retraction
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Draft and published content visibility
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Article categories and featured content
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Article search and filtering
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Article likes
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-shield-alt me-2 text-secondary"></i>
+                            Moderation and Reporting
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Article reporting system
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Report reasons and resolution tracking
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Duplicate report prevention
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Moderator approval and rejection
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Article review tracking
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-briefcase me-2 text-secondary"></i>
+                            Employment Management
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Department management
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Role management
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Employee management foundations
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="mb-5">
+        <div class="d-flex align-items-center mb-4">
+            <i class="fas fa-code text-primary fa-lg me-3"></i>
+            <div>
+                <h3 class="fw-bold mb-0">In Progress</h3>
+                <p class="text-muted small mb-0">
+                    Areas currently receiving development attention.
+                </p>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="fw-bold mb-0">Employee Management</h5>
+                            <span class="badge bg-primary">In Progress</span>
+                        </div>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle-dot text-primary me-2"></i>
+                                Employee creation and editing
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-circle-dot text-primary me-2"></i>
+                                Employee profile management
+                            </li>
+                            <li>
+                                <i class="fas fa-circle-dot text-primary me-2"></i>
+                                Department and role administration
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="fw-bold mb-0">Moderation Refinement</h5>
+                            <span class="badge bg-primary">In Progress</span>
+                        </div>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle-dot text-primary me-2"></i>
+                                Review-status consistency
+                            </li>
+                            <li>
+                                <i class="fas fa-circle-dot text-primary me-2"></i>
+                                Moderation workflow refinement
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="mb-5">
+        <div class="d-flex align-items-center mb-4">
+            <i class="fas fa-lightbulb text-warning fa-lg me-3"></i>
+            <div>
+                <h3 class="fw-bold mb-0">Planned</h3>
+                <p class="text-muted small mb-0">
+                    Upcoming improvements and development goals.
+                </p>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-edit me-2 text-secondary"></i>
+                            Form Improvements
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Centralise labels and placeholders in Django forms
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Add stricter form validation
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Improve form error handling and feedback
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-user-cog me-2 text-secondary"></i>
+                            Profile Improvements
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Separate personal information editing
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Separate password management
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-flag me-2 text-secondary"></i>
+                            Reporting Improvements
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Display report counts on article report buttons
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Disable reporting after a user has reported an article
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-bell me-2 text-secondary"></i>
+                            Messaging and Notifications
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Standardise Django message tags
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Display consistent messages across relevant pages
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-shield-alt me-2 text-secondary"></i>
+                            Moderation Improvements
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Clean up review-status model constants and methods
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Refine review and moderation buttons
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-money-bill-wave me-2 text-secondary"></i>
+                            Job Management
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Add job budget details to the Job model
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Include budget fields in job forms
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Display budget information in job details
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-user-tie me-2 text-secondary"></i>
+                            Recruiter Exploration
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Dedicated passwordless explorer access
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Controlled Django group permissions
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-vial me-2 text-secondary"></i>
+                            Testing and Quality Assurance
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Model and form testing
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                View and permission testing
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                End-to-end workflow testing
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-server me-2 text-secondary"></i>
+                            Production Readiness
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Production environment configuration
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Static and media file configuration
+                            </li>
+                            <li>
+                                <i class="fas fa-circle text-secondary me-2 small"></i>
+                                Deployment to inkflow.kpdev.co.za
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="text-center border-top pt-4 mt-5">
+        <h5 class="fw-bold">Continuous Improvement</h5>
+        <p class="text-muted small mx-auto" style="max-width: 650px;">
+            Inkflow is an evolving project. This roadmap reflects
+            current development progress and planned improvements.
+            Priorities may change as the project grows and new
+            requirements are identified.
+        </p>
+        <span class="text-muted small">
+            Built with Django, Python, Bootstrap and PostgreSQL.
+        </span>
+    </div>
+</div>
+{% endblock %}

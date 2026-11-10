@@ -38,5 +38,6 @@ urlpatterns = [
     path("terms/", include([
         path("terms/", terms_view, name="terms"),
         path("privacy-policy/", privacy_policy_view, name="privacy_policy"),
-    ]))
+    ])),
+    path("roadmap/", roadmap_view, name="roadmap")
 ]
