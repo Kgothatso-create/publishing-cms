@@ -22,22 +22,35 @@
                 {% endfor %}
             </div>
         {% endif %}
-        <a href="{% url 'article_reported_list' %}" class="btn btn-outline-secondary btn-sm ms-auto">
-            Back
+        <a href="{% url 'article_reported_list' %}" class="btn btn-secondary btn-sm ms-auto text-dark">
+            <i class="fas fa-arrow-left me-1"></i> Back
         </a>
     </div>
     <div class="mb-3">
+        {% if article.status == "draft" %}
+            <span class="badge bg-secondary">Draft</span>
+
+        {% elif article.status == "published" %}
+            <span class="badge bg-primary">Published</span>
+
+        {% elif article.status == "approved" %}
+            <span class="badge bg-success">Approved</span>
+
+        {% elif article.status == "rejected" %}
+            <span class="badge bg-danger">Rejected</span>
+
+        {% elif article.status == "retracted" %}
+            <span class="badge bg-warning text-dark">Retracted</span>
+        {% endif %}
+
         {% if article.review_status == "not_reviewed" %}
-            <span class="badge bg-secondary">
+            <span class="badge bg-warning text-dark">
                 Not Reviewed
             </span>
-        {% elif article.review_status == "approved" %}
+
+        {% elif article.review_status == "reviewed" %}
             <span class="badge bg-success">
-                Approved
-            </span>
-        {% elif article.review_status == "rejected" %}
-            <span class="badge bg-danger">
-                Rejected
+                Reviewed
             </span>
         {% endif %}
     </div>

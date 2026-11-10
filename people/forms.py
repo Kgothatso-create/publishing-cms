@@ -55,6 +55,8 @@ class NewsletterSubscriberForm(forms.ModelForm):
 
 
 class UserRegisterForm(OnboardingBaseForm):
+    first_name = forms.CharField(max_length=150, widget=forms.TextInput(attrs={"class": "form-control"}))
+    last_name = forms.CharField(max_length=150, widget=forms.TextInput(attrs={"class": "form-control"}))
     username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
 
@@ -63,7 +65,7 @@ class UserRegisterForm(OnboardingBaseForm):
 
     class Meta:
         model = User
-        fields = ["username", "email"]
+        fields = ["first_name", "last_name", "username", "email"]
 
     def clean(self):
         cleaned_data = super().clean()
@@ -98,19 +100,13 @@ class ProfileUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["username", "email",]
+        fields = ["first_name", "last_name", "username", "email"]
 
         widgets = {
-            "username": forms.TextInput(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
-            "email": forms.EmailInput(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "last_name": forms.EmailInput(attrs={"class": "form-control"}),
+            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
         }
 
 

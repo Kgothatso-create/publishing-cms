@@ -8,7 +8,7 @@
             <h3 class="mb-1">Delete Department</h3>
             <p class="text-muted mb-0">Confirm the deletion of this department.</p>
         </div>
-        <a href="{% url 'department_detail' department.id %}" class="btn btn-outline-secondary">
+        <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary text-dark">
             <i class="fas fa-arrow-left me-1"></i> Back to Department
         </a>
     </div>
@@ -29,7 +29,7 @@
                             {{ department.jobs.count }} Associated Job(s)
                         </span>
                     </div>
-                    <a href="{% url 'department_detail' department.id %}" class="btn btn-outline-secondary">
+                    <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary text-dark">
                         Back to Department
                     </a>
                 {% else %}
@@ -48,10 +48,10 @@
                     <form method="POST">
                         {% csrf_token %}
                         <div class="d-flex justify-content-center gap-2">
-                            <a href="{% url 'department_detail' department.id %}" class="btn btn-outline-secondary">
+                            <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary text-dark">
                                 Cancel
                             </a>
-                            <button type="submit" class="btn btn-danger">
+                            <button type="submit" class="btn btn-danger text-dark">
                                 <i class="fas fa-trash me-1"></i> Delete Department
                             </button>
                         </div>

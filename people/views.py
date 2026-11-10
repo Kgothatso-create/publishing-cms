@@ -87,18 +87,16 @@ def logout_view(request):
 def profile_view(request):
 
     user = request.user
+
     if request.method == "POST":
-        profile_form = ProfileUpdateForm(
-            request.POST,
-            instance=user
-        )
-        password_form = UserPasswordChangeForm(
-            user,
-            request.POST
-        )
+
         if "update_profile" in request.POST:
+            profile_form = ProfileUpdateForm(request.POST, instance=user)
+            password_form = UserPasswordChangeForm(user)
+
             if profile_form.is_valid():
                 profile_form.save()
+
                 messages.success(
                     request,
                     "Your profile has been updated."
@@ -106,24 +104,25 @@ def profile_view(request):
                 return redirect("profile")
 
         elif "change_password" in request.POST:
+            profile_form = ProfileUpdateForm(
+                instance=user
+            )
+            password_form = UserPasswordChangeForm(user,request.POST)
+
             if password_form.is_valid():
                 password_form.save()
-                update_session_auth_hash(
-                    request,
-                    password_form.user
-                )
+
+                update_session_auth_hash(request, password_form.user)
+
                 messages.success(
                     request,
                     "Your password has been changed."
                 )
                 return redirect("profile")
+
     else:
-        profile_form = ProfileUpdateForm(
-            instance=user
-        )
-        password_form = UserPasswordChangeForm(
-            user
-        )
+        profile_form = ProfileUpdateForm(instance=user)
+        password_form = UserPasswordChangeForm(user)
 
     context = {
         "profile_form": profile_form,

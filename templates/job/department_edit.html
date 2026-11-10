@@ -8,7 +8,7 @@
             <h3 class="mb-1">Edit Department</h3>
             <p class="text-muted mb-0">Update department information and settings.</p>
         </div>
-        <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary">
+        <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary text-dark">
             <i class="fas fa-arrow-left me-1"></i> Back to Department
         </a>
     </div>
@@ -44,10 +44,10 @@
                 </div>
                 <hr>
                 <div class="d-flex justify-content-end gap-2">
-                    <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary">
+                    <a href="{% url 'department_detail' department.id %}" class="btn btn-secondary text-dark">
                         Cancel
                     </a>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary text-dark">
                         <i class="fas fa-save me-1"></i> Save Changes
                     </button>
                 </div>

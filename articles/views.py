@@ -1,8 +1,6 @@
 from collections import OrderedDict
-from datetime import timedelta
 
 from django.contrib import messages
-from django.utils import timezone
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -335,7 +333,8 @@ def approve_article(request: HttpRequest, slug: str) -> HttpResponse:
 
     article.approve()
     article.publish()
-    article.mark_reviewed(Article.REVIEW_APPROVED)
+    article.reviewed()
+    article.mark_reviewed(Article.REVIEW_REVIEWED)
 
     return redirect("review_article", slug=article.slug)
 
@@ -355,17 +354,16 @@ def reject_article(request: HttpRequest, slug: str) -> HttpResponse:
         HttpResponse: Redirects the admin back to the article page.
     """
 
-    article = get_object_or_404(
-        Article,
-        slug=slug,
-    )
+    article = get_object_or_404(Article,slug=slug)
 
     if article.has_reports():
         messages.warning(request, "You cannot reject an article with reports.")
         return redirect("review_article", slug=article.slug)
 
     article.reject()
-    article.mark_reviewed(Article.REVIEW_REJECTED)
+    article.unpublish()
+    article.reviewed()
+    article.mark_reviewed(Article.REVIEW_REVIEWED)
 
     return redirect("review_article", slug=article.slug)
 
@@ -592,10 +590,7 @@ def report_article(request, slug):
         if form.is_valid():
 
             # prevent duplicate reports
-            if article.reports.filter(
-                user=request.user,
-                resolved=False
-            ).exists():
+            if article.reports.filter(user=request.user,resolved=False).exists():
 
                 messages.warning(
                     request,
@@ -604,14 +599,12 @@ def report_article(request, slug):
 
             else:
 
-                report = form.save(
-                    commit=False
-                )
-
+                report = form.save(commit=False)
                 report.article = article
                 report.user = request.user
-
                 report.save()
+
+                article.not_reviewed()
 
                 messages.success(
                     request,

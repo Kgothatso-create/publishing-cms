@@ -40,17 +40,15 @@ class Article(BaseModel):
         (STATUS_PUBLISHED, "Published"),
         (STATUS_REJECTED, "Rejected"),
         (STATUS_APPROVED, "Approved"),
-        (STATUS_RETRACTED, "Retracted"),
+        (STATUS_RETRACTED, "Retracted")
     )
 
     REVIEW_NOT_REVIEWED = "not_reviewed"
-    REVIEW_APPROVED = "approved"
-    REVIEW_REJECTED = "rejected"
+    REVIEW_REVIEWED = "reviewed"
 
     REVIEW_STATUS_CHOICES = (
         (REVIEW_NOT_REVIEWED, "Not Reviewed"),
-        (REVIEW_APPROVED, "Approved"),
-        (REVIEW_REJECTED, "rejected"),
+        (REVIEW_REVIEWED, "Reviewed")
     )
 
     category = models.ForeignKey(
@@ -127,6 +125,28 @@ class Article(BaseModel):
         """
         self.status = self.STATUS_RETRACTED
         self.save(update_fields=["status", "updated_at"])
+
+    def not_reviewed(self):
+        """
+        Marks an article as not reviewed.
+        """
+        self.review_status = self.REVIEW_NOT_REVIEWED
+        self.last_reviewed_at = None
+
+        self.save(
+            update_fields=["review_status", "last_reviewed_at", "updated_at"]
+        )
+
+    def reviewed(self):
+        """
+        Marks an article as reviewed.
+        """
+        self.review_status = self.REVIEW_REVIEWED
+        self.last_reviewed_at = timezone.now()
+
+        self.save(
+            update_fields=["review_status", "last_reviewed_at", "updated_at"]
+        )
 
     def approve(self):
         """
