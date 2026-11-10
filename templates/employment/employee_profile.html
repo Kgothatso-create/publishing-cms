@@ -1,0 +1,187 @@
+
+{% extends "employment/base.html" %}
+
+{% block title %}My Employee Profile{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row g-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+        <h1 class="mb-1">My Profile</h1>
+        <p class="mb-0 text-muted">View your personal and employment information.</p>
+    </div>
+    <a href="{% url 'employee_edit' employment.id %}" class="btn btn-warning">
+        <i class="fas fa-edit me-2"></i>Edit Profile
+    </a>
+    </div>
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center"
+                             style="width: 70px; height: 70px;">
+                            <i class="fas fa-user fa-2x text-secondary"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1">{{ profile.first_name }} {{ profile.last_name }}</h4>
+                            <p class="text-muted mb-1">{{ employment.job.title|default:"No job assigned" }}</p>
+                            <span class="badge bg-success">{{ employment.get_status_display }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2 text-warning"></i>Personal Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <small class="text-muted">First Name</small>
+                        <p class="mb-0">{{ profile.first_name|default:"—" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Last Name</small>
+                        <p class="mb-0">{{ profile.last_name|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <small class="text-muted">Date of Birth</small>
+                        <p class="mb-0">{{ profile.date_of_birth|date:"d M Y"|default:"—" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-briefcase me-2 text-warning"></i>Employment Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <small class="text-muted">Employee Number</small>
+                        <p class="mb-0">{{ employment.employee_number }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Email Address</small>
+                        <p class="mb-0">{{ employment.user.email|default:"—" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Job Title</small>
+                        <p class="mb-0">{{ employment.job.title|default:"—" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Department</small>
+                        <p class="mb-0">{{ employment.job.department.name|default:"—" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Role</small>
+                        <p class="mb-0">{{ employment.role.name|default:"—" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Employment Type</small>
+                        <p class="mb-0">{{ employment.get_employment_type_display }}</p>
+                    </div>
+                    <div>
+                        <small class="text-muted">Manager</small>
+                        <p class="mb-0">
+                            {{ employment.manager.user.get_full_name|default:"—" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-address-card me-2 text-warning"></i>Contact Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <small class="text-muted">Phone Number</small>
+                        <p class="mb-0">{{ profile.phone_number|default:"—" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Address</small>
+                        <p class="mb-0">
+                            {{ profile.address_line_1|default:"" }}
+                            {% if profile.address_line_2 %}
+                                <br>{{ profile.address_line_2 }}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">City</small>
+                        <p class="mb-0">{{ profile.city|default:"—" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Province</small>
+                        <p class="mb-0">{{ profile.province|default:"—" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Postal Code</small>
+                        <p class="mb-0">{{ profile.postal_code|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <small class="text-muted">Country</small>
+                        <p class="mb-0">{{ profile.country|default:"—" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-phone-alt me-2 text-warning"></i>Emergency Contact
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <small class="text-muted">Contact Name</small>
+                        <p class="mb-0">{{ profile.emergency_contact_name|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <small class="text-muted">Contact Number</small>
+                        <p class="mb-0">{{ profile.emergency_contact_phone|default:"—" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-alt me-2 text-warning"></i>Employment Dates
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <small class="text-muted">Hire Date</small>
+                            <p class="mb-0">{{ employment.hire_date|date:"d M Y"|default:"—" }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted">Probation End Date</small>
+                            <p class="mb-0">{{ employment.probation_end_date|date:"d M Y"|default:"—" }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted">Termination Date</small>
+                            <p class="mb-0">{{ employment.termination_date|date:"d M Y"|default:"—" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

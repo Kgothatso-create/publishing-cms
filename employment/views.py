@@ -621,11 +621,7 @@ def employee_profile(request):
 
     employment = get_object_or_404(
         Employment.objects.select_related(
-            "user",
-            "job",
-            "job__department",
-            "role",
-            "manager",
+            "user", "job", "job__department", "role"
         ),
         user=request.user,
     )
